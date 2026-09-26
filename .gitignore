@@ -1,0 +1,68 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+
+# Next.js & Build outputs
+.next/
+frontend/.next/
+out/
+frontend/out/
+build/
+frontend/build/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment & Secrets (NEVER COMMIT)
+.env
+.env*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Typescript & Cache
+*.tsbuildinfo
+frontend/next-env.d.ts
+.turbo/
+.cache/
+
+# Python / Backend (future-proofing)
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Mockup & Design Assets
+/00a5601c-ef12-40af-ac15-8a65ad42bf07.png
+/32968fbb-5980-4b4a-9479-a339a4d22331.png
+/ae97807f-039f-4d8a-b36b-78371ff3ee06.png
+frontend/public/brand-sheet.png
+frontend/public/wireframe.png
+
+# Root ghost lockfile (real lockfile is in frontend/)
+/package-lock.json
+
+# Project Documentation & Specifications
+/medlens_complete_product_requirements_document.md
+/MedLens_Complete_Project_Documentation_final.docx
+/medlens_system_architecture_and_software_design_document.md
+/codebase_understanding_report.md
