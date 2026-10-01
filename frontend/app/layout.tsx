@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { LenisProvider } from "@/components/LenisProvider";
 
-const outfit = Outfit({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-heading",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -17,11 +17,11 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${plusJakarta.variable} ${spaceMono.variable}`}>
       <body className="min-h-[100dvh] antialiased">
         <LenisProvider>{children}</LenisProvider>
       </body>

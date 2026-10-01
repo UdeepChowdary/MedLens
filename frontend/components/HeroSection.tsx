@@ -125,8 +125,9 @@ export const HeroSection = () => (
             style={{
               fontFamily: "var(--font-heading)",
               fontSize: "clamp(38px, 4.2vw, 58px)",
-              fontWeight: 900,
-              letterSpacing: "-0.03em",
+              fontWeight: 700, // Space Grotesk max is 700
+              WebkitTextStroke: "1.5px currentColor", // Thicken the font artificially
+              letterSpacing: "-0.035em",
               lineHeight: 1.08,
               marginBottom: 18,
               color: "#0F172A",
