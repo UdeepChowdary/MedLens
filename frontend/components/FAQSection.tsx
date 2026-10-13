@@ -11,12 +11,12 @@ export const FAQSection = () => {
     {
       cat: "Verification Technology",
       q: "How does MedLens prevent AI hallucinations in medicine data?",
-      a: "MedLens uses a deterministic verification pipeline: the LLM is never a medical knowledge source — only a plain-language synthesis formatter (temperature=0.0). Any ingredient or dosage claim in the output that was not verified in the OCR text and reference database is strictly purged. Output schemas are enforced via strict validation.",
+      a: "MedLens uses a deterministic verification pipeline: the LLM is never a medical knowledge source; it acts solely as a plain-language synthesis formatter (temperature=0.0). Any ingredient or dosage claim in the output that was not verified in the OCR text and reference database is strictly purged. Output schemas are enforced via strict validation.",
     },
     {
       cat: "Privacy & Data",
       q: "Is my uploaded packaging photo stored?",
-      a: "No. Images are processed in ephemeral volatile server RAM and discarded immediately after feature extraction. Only a cryptographic SHA-256 hash and extracted text tokens are stored for audit — raw patient or packaging pixels are never persisted.",
+      a: "No. Images are processed in ephemeral volatile server RAM and discarded immediately after feature extraction. Only a cryptographic SHA-256 hash and extracted text tokens are stored for audit: raw patient or packaging pixels are never persisted.",
     },
     {
       cat: "Verification Technology",

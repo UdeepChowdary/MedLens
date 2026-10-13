@@ -58,8 +58,8 @@ export const Navbar = () => {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <a href="#scan" className="btn-primary hidden md:inline-flex" style={{ padding: "9px 20px", fontSize: 14 }}>
-            Try MedLens <IcoArrow />
+          <a href="/dashboard/scan" className="btn-primary hidden md:inline-flex" style={{ padding: "8px 18px", fontSize: 13.5, borderRadius: 6 }}>
+            Launch Scanner <IcoArrow />
           </a>
           <button
             onClick={() => setMobileOpen((o) => !o)}
@@ -94,8 +94,8 @@ export const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <a href="#scan" className="btn-primary" onClick={() => setMobileOpen(false)} style={{ marginTop: 18, width: "100%", justifyContent: "center" }}>
-            Try MedLens <IcoArrow />
+          <a href="/dashboard/scan" className="btn-primary" onClick={() => setMobileOpen(false)} style={{ marginTop: 18, width: "100%", justifyContent: "center", borderRadius: 6 }}>
+            Launch Scanner <IcoArrow />
           </a>
         </div>
       )}

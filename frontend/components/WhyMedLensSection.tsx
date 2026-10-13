@@ -4,7 +4,7 @@ import { IcoArrow, IcoX, IcoCheck } from "./Icons";
 export const WhyMedLensSection = () => {
   const tableRows = [
     { label: "Design", ai: "General-purpose conversational chatbot", ml: "Purpose-built for pharmaceutical label analysis" },
-    { label: "Input", ai: "User must formulate exact medical prompts", ml: "Image-first — label composition parsed automatically" },
+    { label: "Input", ai: "User must formulate complex medical prompts", ml: "Optical capture: label composition parsed automatically" },
     { label: "Analysis", ai: "Unconstrained text generation (hallucination risk)", ml: "Deterministic entity extraction & INN normalization" },
     { label: "Evidence", ai: "Unverified internal training memory", ml: "Real-time grounding in OpenFDA, PubChem & DailyMed" },
     { label: "Output", ai: "Unstructured conversational paragraphs", ml: "Clinically structured report + confidence telemetry" },
@@ -22,7 +22,7 @@ export const WhyMedLensSection = () => {
                 Built for Zero-Tolerance Medicine Verification
               </h2>
               <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-secondary)", maxWidth: 520 }}>
-                General AI models are built for conversational fluency, not clinical correctness. MedLens constrains AI to a deterministic verification layer.
+                General conversational chatbots lack clinical validation. MedLens enforces deterministic entity extraction and authoritative pharmacopeial grounding.
               </p>
             </div>
             <a href="#brand-comparison" style={{ fontFamily: "var(--font-heading)", fontSize: 14, color: "var(--blue)", textDecoration: "none", display: "flex", alignItems: "center", gap: 4, fontWeight: 700 }}>
@@ -37,10 +37,10 @@ export const WhyMedLensSection = () => {
           <div className="card" style={{ padding: 26 }}>
             <div style={{ minHeight: 80, display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: 20, borderBottom: "1px solid var(--border)", paddingBottom: 14 }}>
               <div style={{ fontFamily: "var(--font-heading)", fontSize: 18, fontWeight: 800, color: "#0F172A", marginBottom: 4 }}>
-                General AI
+                Generic Chatbots
               </div>
               <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-muted)" }}>
-                Unconstrained Large Language Models (ChatGPT · Gemini · Claude)
+                Unconstrained Large Language Models
               </div>
             </div>
             {tableRows.map((row) => (
@@ -61,7 +61,7 @@ export const WhyMedLensSection = () => {
                 <div style={{ fontFamily: "var(--font-heading)", fontSize: 18, fontWeight: 800, color: "#fff" }}>
                   MedLens
                 </div>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "#60A5FA", padding: "3px 10px", background: "rgba(37,99,235,0.25)", borderRadius: 999, border: "1px solid rgba(37,99,235,0.35)" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "#60A5FA", padding: "3px 10px", background: "rgba(37,99,235,0.25)", borderRadius: 6, border: "1px solid rgba(37,99,235,0.35)" }}>
                   Clinical Protocol
                 </span>
               </div>

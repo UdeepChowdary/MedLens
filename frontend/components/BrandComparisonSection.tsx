@@ -57,8 +57,8 @@ export const BrandComparisonSection = () => {
               key={p.title}
               onClick={() => setSelectedPair(idx)}
               style={{
-                padding: "10px 18px",
-                borderRadius: 999,
+                padding: "9px 16px",
+                borderRadius: 6,
                 border: selectedPair === idx ? "1.5px solid var(--blue)" : "1px solid var(--border)",
                 background: selectedPair === idx ? "var(--blue)" : "#fff",
                 color: selectedPair === idx ? "#fff" : "var(--text-primary)",
@@ -75,15 +75,15 @@ export const BrandComparisonSection = () => {
           ))}
         </div>
 
-        {/* Tab content — keyed so React remounts on tab switch, triggering CSS fade animation */}
+        {/* Tab content */}
         <div key={selectedPair} className="tab-content-enter">
 
         {/* Savings & Clinical Delta Strip */}
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
-          <div style={{ padding: "6px 14px", borderRadius: 999, background: "#DCFCE7", border: "1px solid #86EFAC", color: "#166534", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <div style={{ padding: "5px 12px", borderRadius: 6, background: "#DCFCE7", border: "1px solid #86EFAC", color: "#166534", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
             <IcoCheck size={12} color="#166534" /> {curr.savingsPill}
           </div>
-          <div style={{ padding: "6px 14px", borderRadius: 999, background: "var(--surface-blue)", border: "1px solid var(--blue-border)", color: "#1E40AF", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <div style={{ padding: "5px 12px", borderRadius: 6, background: "var(--surface-blue)", border: "1px solid var(--blue-border)", color: "#1E40AF", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
             <IcoShield size={12} color="#1E40AF" /> {curr.allergyCheck}
           </div>
         </div>

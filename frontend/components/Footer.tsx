@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Logo } from "./Logo";
 import { IcoGithub, IcoLinkedIn, IcoTwitterX, IcoYouTube } from "./Icons";
@@ -10,9 +12,9 @@ export const Footer = () => (
         <div style={{ maxWidth: 360 }}>
           <Logo height={38} />
           <p style={{ fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.7, marginTop: 16 }}>
-            MedLens is an AI-powered medicine composition analyzer that helps patients understand ingredients, verify safety against canonical databases, and compare brand bioequivalence.
+            MedLens is a pharmaceutical composition verification engine that helps patients understand ingredients, verify active salts against canonical databases, and compare brand bioequivalence.
           </p>
-          <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", borderRadius: 999, background: "var(--blue-dim)", border: "1px solid var(--blue-border)" }}>
+          <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 6, background: "var(--blue-dim)", border: "1px solid var(--blue-border)" }}>
             <span style={{ fontFamily: "var(--font-heading)", fontSize: 12, fontWeight: 700, color: "var(--blue)" }}>
               Complex Medicine Labels. Clear Answers.
             </span>
@@ -73,11 +75,22 @@ export const Footer = () => (
             Clinical & Privacy
           </div>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-            {["Zero-PII Storage Policy", "Ephemeral Volatile RAM", "Non-Prescription Boundary", "Deterministic OCR Verification", "Terms of Service"].map((l) => (
-              <li key={l}>
-                <span style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)" }}>
-                  {l}
-                </span>
+            {[
+              { label: "Zero-PII Storage Policy", href: "/privacy" },
+              { label: "Ephemeral Volatile RAM", href: "/privacy" },
+              { label: "Non-Prescription Boundary", href: "/terms" },
+              { label: "Deterministic Verification", href: "/#how-it-works" },
+              { label: "Terms and Conditions", href: "/terms" },
+            ].map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.15s" }}
+                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
+                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-secondary)")}
+                >
+                  {item.label}
+                </a>
               </li>
             ))}
           </ul>
@@ -93,21 +106,34 @@ export const Footer = () => (
           © {new Date().getFullYear()} MedLens. All rights reserved.
         </span>
         <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textAlign: "center" }}>
-          Informational tool — not a clinical diagnosis, medical advice, or prescription.
+          Informational tool: not a clinical diagnosis, medical advice, or prescription.
         </p>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ display: "flex", gap: 16 }}>
-            {["Privacy Policy", "Clinical Disclaimer", "Contact"].map((l) => (
-              <a
-                key={l}
-                href="#"
-                style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textDecoration: "none", transition: "color 0.15s" }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-muted)")}
-              >
-                {l}
-              </a>
-            ))}
+            <a
+              href="/privacy"
+              style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textDecoration: "none", transition: "color 0.15s" }}
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-muted)")}
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="/terms"
+              style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textDecoration: "none", transition: "color 0.15s" }}
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-muted)")}
+            >
+              Terms & Conditions
+            </a>
+            <a
+              href="/terms"
+              style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textDecoration: "none", transition: "color 0.15s" }}
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-muted)")}
+            >
+              Clinical Disclaimer
+            </a>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: 8 }}>
             <a

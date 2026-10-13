@@ -48,7 +48,7 @@ export const ProblemSection = () => (
                 key={tag}
                 style={{
                   padding: "5px 12px",
-                  borderRadius: 999,
+                  borderRadius: 6,
                   border: "1px solid var(--border)",
                   fontFamily: "var(--font-mono)",
                   fontSize: 11.5,
@@ -99,7 +99,7 @@ export const ProblemSection = () => (
                   Dense formulation panel • Active salts, RDA% & Excipients
                 </div>
               </div>
-              <span style={{ padding: "4px 10px", borderRadius: 999, background: "#FEF2F2", border: "1px solid #FECACA", color: "#DC2626", fontSize: 11, fontWeight: 700, fontFamily: "var(--font-mono)" }}>
+              <span style={{ padding: "4px 10px", borderRadius: 6, background: "#FEF2F2", border: "1px solid #FECACA", color: "#DC2626", fontSize: 11, fontWeight: 700, fontFamily: "var(--font-mono)" }}>
                 Hard-to-Read Label
               </span>
             </div>

@@ -28,11 +28,11 @@ npm run start
 
 ---
 
-## 📁 Frontend File Hierarchy
+## Frontend File Hierarchy
 
-- `app/page.tsx` — Complete interactive MedLens UI, live verification engine, prescription inspection cards, and safety breakdown.
-- `app/layout.tsx` — App root layout, font optimization, and SEO metadata.
-- `app/globals.css` — Modern glassmorphic theme tokens, animations, and custom scrollbar styling.
-- `public/` — Optimized assets and demonstration images for testing the verification engine.
-- `next.config.ts` — Next.js configuration.
-- `tailwind.config.ts` / PostCSS — Design styling pipeline.
+- `app/page.tsx`: Complete interactive MedLens UI, live verification engine, prescription inspection cards, and safety breakdown.
+- `app/layout.tsx`: App root layout, font optimization, and SEO metadata.
+- `app/globals.css`: Modern clinical theme tokens and custom scrollbar styling.
+- `public/`: Optimized assets and demonstration images for testing the verification engine.
+- `next.config.ts`: Next.js configuration.
+- `tailwind.config.ts` / PostCSS: Design styling pipeline.

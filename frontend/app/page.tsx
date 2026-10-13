@@ -23,7 +23,7 @@ export default function HomePage() {
     <main>
       <Navbar />
 
-      {/* Hero is above the fold — no reveal needed */}
+      {/* Hero section */}
       <HeroSection />
 
       <ScrollReveal variant="fade-up" delay={0}>

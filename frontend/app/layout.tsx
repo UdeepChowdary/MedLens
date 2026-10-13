@@ -11,13 +11,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MedLens — Scan. Understand. Verify.",
+  title: "MedLens: Pharmaceutical Packaging Verification and Composition Intelligence",
   description:
-    "MedLens is an AI-powered medicine composition analyzer. Upload a photo of any medicine label and get a clear, verified breakdown of every ingredient — active, inactive, and their purposes.",
-  keywords: ["medicine analyzer", "drug composition", "ingredient verification", "OCR medicine", "pharmacy tool"],
+    "Clinical medicine composition analyzer. Inspect medicine blister packs, verify active chemical salts, and check ingredient equivalence against authoritative pharmacopeias.",
+  keywords: ["medicine analyzer", "drug composition", "pharmaceutical salt verification", "RxNorm", "pharmacopeia"],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" }
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   openGraph: {
-    title: "MedLens — Scan. Understand. Verify.",
-    description: "Turn any medicine label into clear, verified, structured information — in seconds.",
+    title: "MedLens: Pharmaceutical Packaging Verification",
+    description: "Verify active pharmaceutical salts, calculate dosage equivalence, and inspect ingredient compositions directly from physical medicine packaging.",
     type: "website",
   },
 };
