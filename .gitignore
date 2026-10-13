@@ -43,13 +43,17 @@ frontend/next-env.d.ts
 .turbo/
 .cache/
 
-# Python / Backend (future-proofing)
+# Python / Backend
 __pycache__/
 *.py[cod]
 *$py.class
 venv/
 .venv/
 env/
+.pytest_cache/
+backend/.pytest_cache/
+*.db
+*.sqlite3
 
 # Mockup & Design Assets
 /00a5601c-ef12-40af-ac15-8a65ad42bf07.png
