@@ -1,0 +1,36 @@
+{
+  "split": "train",
+  "seed": 42,
+  "total_images": 3,
+  "product_families": [
+    "cetirizine-10",
+    "brufen-400",
+    "calpol-500"
+  ],
+  "images": [
+    {
+      "annotation_file": "img-cetirizine-10-strip.json",
+      "image_id": "img-cetirizine-10-strip",
+      "file_name": "cetirizine_10_strip.png",
+      "product_family": "cetirizine-10",
+      "packaging_type": "blister_foil",
+      "entity_count": 8
+    },
+    {
+      "annotation_file": "img-brufen-400-strip.json",
+      "image_id": "img-brufen-400-strip",
+      "file_name": "brufen_400_strip.png",
+      "product_family": "brufen-400",
+      "packaging_type": "blister_foil",
+      "entity_count": 7
+    },
+    {
+      "annotation_file": "img-calpol-500-strip.json",
+      "image_id": "img-calpol-500-strip",
+      "file_name": "calpol_500_strip.jpg",
+      "product_family": "calpol-500",
+      "packaging_type": "strip_pack",
+      "entity_count": 7
+    }
+  ]
+}

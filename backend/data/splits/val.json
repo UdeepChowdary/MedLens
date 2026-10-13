@@ -1,0 +1,18 @@
+{
+  "split": "val",
+  "seed": 42,
+  "total_images": 1,
+  "product_families": [
+    "augmentin-625"
+  ],
+  "images": [
+    {
+      "annotation_file": "img-augmentin-625-box.json",
+      "image_id": "img-augmentin-625-box",
+      "file_name": "augmentin_625_box.jpg",
+      "product_family": "augmentin-625",
+      "packaging_type": "paper_box",
+      "entity_count": 10
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-dolo-650-blister",
+    "file_name": "dolo_650_blister.jpg",
+    "format": "jpeg",
+    "dimensions": {
+      "width": 260,
+      "height": 220
+    },
+    "sha256": "97a629274415d3690d2b90d9f67de3704fe19bc1ebe3bf79f35f53c029dfad25",
+    "packaging_type": "blister_foil",
+    "product_family": "dolo-650",
+    "brand_name": "Dolo 650",
+    "manufacturer": "Micro Labs Ltd",
+    "provenance": {
+      "source": "MedLens Clinical Lab Physical Archive",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-10-13T10:30:00Z",
+      "notes": "Metallic foil blister pack, high specular reflection on curvature."
+    }
+  },
+  "quality_flags": {
+    "glare": true,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": -3.5
+  },
+  "transcription": "Dolo 650. Each uncoated tablet contains: Paracetamol IP 650 mg. Excipients q.s. Dosage: As directed by the physician. Storage: Store in a dry place. Mfg. Lic. No.: M/552/2010. Micro Labs Limited.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Dolo 650",
+      "normalized_value": "Dolo 650",
+      "bbox": [80, 50, 220, 480],
+      "char_span": [0, 8]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Each uncoated tablet contains:",
+      "normalized_value": null,
+      "bbox": [250, 40, 340, 680],
+      "char_span": [10, 40]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [250, 210, 340, 360],
+      "char_span": [24, 30]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Paracetamol",
+      "normalized_value": "Paracetamol",
+      "bbox": [370, 50, 460, 420],
+      "char_span": [41, 52]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [375, 430, 455, 490],
+      "char_span": [53, 55]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "650 mg",
+      "normalized_value": "650 mg",
+      "bbox": [370, 510, 460, 720],
+      "char_span": [56, 62]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [250, 210, 340, 360],
+      "char_span": [24, 30]
+    }
+  ],
+  "canonical_product_id": "dolo-650",
+  "review_status": "verified_by_human"
+}

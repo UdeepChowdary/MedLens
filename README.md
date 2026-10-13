@@ -203,7 +203,7 @@ MedLens/
    ```bash
    python -m pytest tests/
    ```
-   *(Expected output: 24/24 tests passing in ~1s)*
+   *(Expected output: 31/31 tests passing in ~1s)*
 
 7. Start the local API development server:
    ```bash

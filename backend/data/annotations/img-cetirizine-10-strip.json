@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-cetirizine-10-strip",
+    "file_name": "cetirizine_10_strip.png",
+    "format": "png",
+    "dimensions": {
+      "width": 800,
+      "height": 400
+    },
+    "sha256": "a5ef8cddb4252dbc44b0d8c998223bf3ca34323c2a24f31d0f66d0e5c8cf9cfd",
+    "packaging_type": "blister_foil",
+    "product_family": "cetirizine-10",
+    "brand_name": "CETIRIZINE 10 mg",
+    "manufacturer": "Cipla Ltd",
+    "provenance": {
+      "source": "MedLens Reference Packaging Dataset",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-10-13T10:45:00Z",
+      "notes": "Verified antihistamine generic strip presentation."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "CETIRIZINE 10 mg. Each film coated tablet contains: Cetirizine Hydrochloride IP 10 mg. Dosage: As directed by the Physician. Mfg. Lic. No.: M/742/2016 Cipla Ltd.",
+  "entities": [
+    {
+      "label": "PRODUCT_NAME",
+      "raw_text": "CETIRIZINE 10 mg",
+      "normalized_value": "Cetirizine 10 mg",
+      "bbox": [90, 60, 160, 480],
+      "char_span": [0, 16]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Each film coated tablet contains:",
+      "normalized_value": null,
+      "bbox": [210, 60, 270, 720],
+      "char_span": [18, 51]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [210, 240, 270, 360],
+      "char_span": [35, 41]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Cetirizine",
+      "normalized_value": "Cetirizine",
+      "bbox": [330, 60, 400, 310],
+      "char_span": [52, 62]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Hydrochloride",
+      "normalized_value": "Hydrochloride",
+      "bbox": [330, 320, 400, 610],
+      "char_span": [63, 76]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [335, 620, 395, 680],
+      "char_span": [77, 79]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "10 mg",
+      "normalized_value": "10 mg",
+      "bbox": [330, 690, 400, 840],
+      "char_span": [80, 85]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [210, 240, 270, 360],
+      "char_span": [35, 41]
+    }
+  ],
+  "canonical_product_id": "cetirizine-10",
+  "review_status": "verified_by_human"
+}

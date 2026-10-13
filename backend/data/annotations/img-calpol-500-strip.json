@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-calpol-500-strip",
+    "file_name": "calpol_500_strip.jpg",
+    "format": "jpeg",
+    "dimensions": {
+      "width": 220,
+      "height": 220
+    },
+    "sha256": "9aef79b3a39e476adfe45047b5f95332959dd65fe00dd8f107558d99b6fd6999",
+    "packaging_type": "strip_pack",
+    "product_family": "calpol-500",
+    "brand_name": "Calpol 500",
+    "manufacturer": "GlaxoSmithKline Pharmaceuticals Ltd",
+    "provenance": {
+      "source": "MedLens Clinical Lab Physical Archive",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-10-13T10:35:00Z",
+      "notes": "Paper-aluminum strip pack, distinct brand font."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Calpol 500. Fast Acting Pain Relief. Each tablet contains: Paracetamol IP 500 mg. GSK. GlaxoSmithKline Pharmaceuticals Ltd.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Calpol 500",
+      "normalized_value": "Calpol 500",
+      "bbox": [70, 40, 180, 520],
+      "char_span": [0, 10]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Each tablet contains:",
+      "normalized_value": null,
+      "bbox": [260, 40, 350, 620],
+      "char_span": [37, 58]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [260, 190, 350, 320],
+      "char_span": [42, 48]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Paracetamol",
+      "normalized_value": "Paracetamol",
+      "bbox": [390, 40, 480, 410],
+      "char_span": [59, 70]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [395, 420, 475, 480],
+      "char_span": [71, 73]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "500 mg",
+      "normalized_value": "500 mg",
+      "bbox": [390, 500, 480, 710],
+      "char_span": [74, 80]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [260, 190, 350, 320],
+      "char_span": [42, 48]
+    }
+  ],
+  "canonical_product_id": "calpol-500",
+  "review_status": "verified_by_human"
+}

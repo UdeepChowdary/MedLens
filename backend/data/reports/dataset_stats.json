@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-10-13T10:32:16.328973+00:00",
+  "total_images": 5,
+  "total_product_families": 5,
+  "total_annotated_entities": 39,
+  "avg_entities_per_image": 7.8,
+  "human_verified_percentage": 100.0,
+  "entity_distribution": {
+    "SALT_FORM": 7,
+    "INGREDIENT": 6,
+    "STRENGTH": 6,
+    "COMPOSITION_HEADER": 5,
+    "DOSAGE_FORM": 5,
+    "STRENGTH_BASIS": 5,
+    "BRAND": 4,
+    "PRODUCT_NAME": 1
+  },
+  "packaging_distribution": {
+    "blister_foil": 3,
+    "paper_box": 1,
+    "strip_pack": 1
+  },
+  "quality_flags_distribution": {
+    "small_text": 2,
+    "glare": 1
+  },
+  "sources_distribution": {
+    "MedLens Clinical Lab Physical Archive": 3,
+    "MedLens Reference Packaging Dataset": 2
+  },
+  "license_distribution": {
+    "CC-BY-4.0": 5
+  },
+  "splits": {
+    "train": {
+      "count": 3,
+      "families": 3
+    },
+    "val": {
+      "count": 1,
+      "families": 1
+    },
+    "test": {
+      "count": 1,
+      "families": 1
+    }
+  }
+}

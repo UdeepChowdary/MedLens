@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MedLens Medicine Packaging Annotation Document",
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-example-product-01",
+    "file_name": "example_product_strip.png",
+    "format": "png",
+    "dimensions": {
+      "width": 1200,
+      "height": 800
+    },
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "packaging_type": "blister_foil",
+    "product_family": "example-brand",
+    "brand_name": "Example Brand",
+    "manufacturer": "Example Pharma Ltd",
+    "provenance": {
+      "source": "NIH DailyMed / MedLens Clinical Lab",
+      "license": "Public Domain (US Gov) / CC-BY-4.0",
+      "annotator_id": "annotator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-10-13T10:00:00Z",
+      "notes": "Standard foil blister strip with reflective metallic print."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Example Brand 500 mg. Each tablet contains: Paracetamol IP 500 mg.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Example Brand",
+      "normalized_value": "Example Brand",
+      "bbox": [100, 150, 180, 520],
+      "char_span": [0, 13]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "500 mg",
+      "normalized_value": "500 mg",
+      "bbox": [105, 540, 175, 710],
+      "char_span": [14, 20]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Each tablet contains:",
+      "normalized_value": null,
+      "bbox": [250, 120, 310, 480],
+      "char_span": [22, 43]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Paracetamol",
+      "normalized_value": "Paracetamol",
+      "bbox": [330, 120, 390, 450],
+      "char_span": [44, 55]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [335, 460, 385, 510],
+      "char_span": [56, 58]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "500 mg",
+      "normalized_value": "500 mg",
+      "bbox": [335, 520, 385, 690],
+      "char_span": [59, 65]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [250, 210, 310, 320],
+      "char_span": [27, 33]
+    }
+  ],
+  "canonical_product_id": null,
+  "review_status": "verified_by_human"
+}

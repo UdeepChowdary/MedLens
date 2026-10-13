@@ -1,0 +1,18 @@
+{
+  "split": "test",
+  "seed": 42,
+  "total_images": 1,
+  "product_families": [
+    "dolo-650"
+  ],
+  "images": [
+    {
+      "annotation_file": "img-dolo-650-blister.json",
+      "image_id": "img-dolo-650-blister",
+      "file_name": "dolo_650_blister.jpg",
+      "product_family": "dolo-650",
+      "packaging_type": "blister_foil",
+      "entity_count": 7
+    }
+  ]
+}

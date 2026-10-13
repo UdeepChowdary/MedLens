@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-brufen-400-strip",
+    "file_name": "brufen_400_strip.png",
+    "format": "png",
+    "dimensions": {
+      "width": 800,
+      "height": 400
+    },
+    "sha256": "2605d9155541f6abf5ddc0dbf687d1b87f03db55e551a642ffc4d172924d5e5b",
+    "packaging_type": "blister_foil",
+    "product_family": "brufen-400",
+    "brand_name": "BRUFEN 400",
+    "manufacturer": "Abbott Healthcare Pvt Ltd",
+    "provenance": {
+      "source": "MedLens Reference Packaging Dataset",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-10-13T10:50:00Z",
+      "notes": "Verified NSAID commercial blister presentation."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "BRUFEN 400. Each film coated tablet contains: Ibuprofen IP 400 mg. Manufactured by: Abbott Healthcare Pvt Ltd.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "BRUFEN 400",
+      "normalized_value": "Brufen 400",
+      "bbox": [90, 60, 160, 360],
+      "char_span": [0, 10]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Each film coated tablet contains:",
+      "normalized_value": null,
+      "bbox": [210, 60, 270, 720],
+      "char_span": [12, 45]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [210, 240, 270, 360],
+      "char_span": [29, 35]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Ibuprofen",
+      "normalized_value": "Ibuprofen",
+      "bbox": [330, 60, 400, 290],
+      "char_span": [46, 55]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [335, 300, 395, 360],
+      "char_span": [56, 58]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "400 mg",
+      "normalized_value": "400 mg",
+      "bbox": [330, 370, 400, 520],
+      "char_span": [59, 65]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [210, 240, 270, 360],
+      "char_span": [29, 35]
+    }
+  ],
+  "canonical_product_id": "brufen-400",
+  "review_status": "verified_by_human"
+}
