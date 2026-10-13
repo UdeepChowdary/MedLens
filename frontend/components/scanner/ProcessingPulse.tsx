@@ -58,14 +58,11 @@ export default function ProcessingPulse({ onComplete }: ProcessingPulseProps) {
           const isCurrent = index === currentStageIndex;
           const Icon = stage.icon;
           
-          let statusColor = "text-slate-300";
           let iconColor = "#cbd5e1"; // slate-300
           
           if (isPast) {
-            statusColor = "text-emerald-500";
             iconColor = "#10B981"; // emerald-500
           } else if (isCurrent) {
-            statusColor = "text-[var(--blue)] font-medium";
             iconColor = "var(--blue)";
           }
 

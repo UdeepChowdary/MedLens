@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IcoScan, IcoArrow } from "@/components/Icons";
+import { IcoScan } from "@/components/Icons";
 import { Logo } from "@/components/Logo";
 
 // Minimal icons for the sidebar

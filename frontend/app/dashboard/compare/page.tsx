@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { IcoArrow } from "@/components/Icons";
 
 // --- MOCK DATA ---
 const brands = [

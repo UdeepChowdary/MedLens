@@ -15,11 +15,13 @@ export default function LiveCamera({ onCapture, onClose }: LiveCameraProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let currentStream: MediaStream | null = null;
     async function startCamera() {
       try {
         const mediaStream = await navigator.mediaDevices.getUserMedia({ 
           video: { facingMode: "environment" } 
         });
+        currentStream = mediaStream;
         setStream(mediaStream);
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
@@ -33,9 +35,8 @@ export default function LiveCamera({ onCapture, onClose }: LiveCameraProps) {
     startCamera();
 
     return () => {
-      // Cleanup stream on unmount
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
       }
     };
   }, []);

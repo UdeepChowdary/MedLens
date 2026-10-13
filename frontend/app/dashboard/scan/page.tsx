@@ -9,12 +9,10 @@ import Image from "next/image";
 
 export default function ScanPage() {
   const router = useRouter();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const handleFileSelected = (file: File) => {
-    setSelectedFile(file);
     setPreviewUrl(URL.createObjectURL(file));
     setIsProcessing(true);
     

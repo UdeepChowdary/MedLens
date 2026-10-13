@@ -11,7 +11,7 @@ export default function DashboardOverviewPage() {
         Welcome back, Udeep
       </h1>
       <p style={{ color: "var(--text-secondary)", marginBottom: "32px" }}>
-        Here's an overview of your recent scans and activity.
+        Here&apos;s an overview of your recent scans and activity.
       </p>
 
       {/* Quick Actions */}

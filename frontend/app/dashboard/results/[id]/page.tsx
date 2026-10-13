@@ -68,7 +68,9 @@ export default function ResultsPage() {
   React.useEffect(() => {
     const savedImage = sessionStorage.getItem("scanned_image");
     if (savedImage) {
-      setSourceImage(savedImage);
+      requestAnimationFrame(() => {
+        setSourceImage(savedImage);
+      });
     }
   }, []);
 

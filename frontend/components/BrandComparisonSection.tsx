@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IcoArrow, IcoCheck, IcoShield } from "./Icons";
+import { IcoCheck, IcoShield } from "./Icons";
 
 export const BrandComparisonSection = () => {
   const [selectedPair, setSelectedPair] = useState(0);

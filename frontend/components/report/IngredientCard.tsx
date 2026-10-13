@@ -31,7 +31,7 @@ export default function IngredientCard(props: IngredientReportProps) {
           <h3 style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px", margin: "0 0 4px 0" }}>
             {props.canonical_name}
           </h3>
-          <p style={{ fontSize: "14px", color: "var(--text-muted)", fontFamily: "monospace", margin: 0 }}>Found as: "{props.raw_label_text}"</p>
+          <p style={{ fontSize: "14px", color: "var(--text-muted)", fontFamily: "monospace", margin: 0 }}>Found as: &ldquo;{props.raw_label_text}&rdquo;</p>
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
           <MonospaceValue value={props.numeric_value || props.strength} unit={props.unit} className="text-xl text-[var(--blue)] bg-[var(--blue)]/5 px-3 py-1 rounded-lg" />
