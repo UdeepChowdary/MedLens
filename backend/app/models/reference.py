@@ -24,3 +24,4 @@ class ExternalReferenceCache(Base):
         nullable=False,
         index=True,
     )
+

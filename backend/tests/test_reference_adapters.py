@@ -304,3 +304,4 @@ async def test_reference_coordinator_error_tolerance(db_session):
     lookups = await coordinator.lookup_ingredient("Paracetamol", use_cache=False)
     assert lookups["CrashingAdapter"] is None
     assert lookups["Indian Pharmacopoeia & CDSCO"] is not None
+

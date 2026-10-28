@@ -165,3 +165,4 @@ class ReferenceCoordinator:
             "smiles": smiles,
             "molecular_formula": molecular_formula,
         }
+

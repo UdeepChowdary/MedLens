@@ -99,3 +99,4 @@ class PubChemAdapter(BaseReferenceAdapter):
                 "IUPACName": iupac,
             },
         )
+

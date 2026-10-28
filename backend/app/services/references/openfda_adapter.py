@@ -123,3 +123,4 @@ class OpenFDAAdapter(BaseReferenceAdapter):
                 if len(cleaned) >= limit:
                     return cleaned
         return cleaned
+

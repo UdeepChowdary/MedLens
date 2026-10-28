@@ -210,3 +210,4 @@ class IndianReferenceAdapter(BaseReferenceAdapter):
             adverse_reactions=[],
             raw_payload={"schedule": schedule, "inferred": True},
         )
+
