@@ -206,7 +206,8 @@ sources                       analyses & extracted_entities
 | **Rule Baseline Extractor**| `pytest tests/test_rule_extractor.py`| ✅ Passed | Asserts composition header detection, dual-API extraction, and strength pairing. |
 | **Image Preprocessor** | `pytest tests/test_preprocessor.py` | ✅ Passed | Asserts magic-byte decoding, corrupt rejection, Laplacian blur variance ($\sigma^2$), and SHA-256 audit digest. |
 | **OCR Dispatcher** | `pytest tests/test_ocr_dispatcher.py` | ✅ Passed | Asserts multi-engine registry (PaddleOCR, Tesseract, Mock), bounding boxes, token confidence, and runtime crash recovery. |
-| **Full Pytest Suite** | `pytest tests/ -v` | ✅ **84 / 84 Passed** | Complete suite across 8 modules executes in $2.57\text{ seconds}$. |
+| **Scan-to-Database Pipeline** | `pytest tests/test_analysis_pipeline.py` | ✅ Passed | Asserts end-to-end image ingestion, OCR, extraction, INN normalization, DB persistence, and dynamic report retrieval. |
+| **Full Pytest Suite** | `pytest tests/ -v` | ✅ **87 / 87 Passed** | Complete suite across 9 modules executes in $2.85\text{ seconds}$. |
 | **Frontend Linting** | `npm run lint` | ✅ **0 Errors** | ESLint with React 19 rules completely clean. |
 | **Frontend Production Build**| `npm run build` | ✅ **13 / 13 Routes**| All static and dynamic pages generated with Turbopack. |
 

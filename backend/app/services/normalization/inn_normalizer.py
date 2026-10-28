@@ -49,6 +49,54 @@ class NormalizationResult:
         self.candidates = candidates or []
         self.abstention_reason = abstention_reason
 
+    @property
+    def is_inn_match(self) -> bool:
+        return self.verification_state in (VerificationState.VERIFIED, VerificationState.PARTIALLY_VERIFIED)
+
+    @property
+    def confidence(self) -> float:
+        return self.match_score
+
+    @property
+    def match_type(self) -> str:
+        return self.match_method
+
+
+DEFAULT_ALIAS_MAP = {
+    "paracetamol": ("Paracetamol", "ing-paracetamol"),
+    "acetaminophen": ("Paracetamol", "ing-paracetamol"),
+    "apap": ("Paracetamol", "ing-paracetamol"),
+    "metformin": ("Metformin", "ing-metformin"),
+    "metformin hydrochloride": ("Metformin", "ing-metformin"),
+    "metformin hcl": ("Metformin", "ing-metformin"),
+    "atorvastatin": ("Atorvastatin", "ing-atorvastatin"),
+    "atorvastatin calcium": ("Atorvastatin", "ing-atorvastatin"),
+    "omeprazole": ("Omeprazole", "ing-omeprazole"),
+    "pantoprazole": ("Pantoprazole", "ing-pantoprazole"),
+    "pantoprazole sodium": ("Pantoprazole", "ing-pantoprazole"),
+    "azithromycin": ("Azithromycin", "ing-azithromycin"),
+    "azithromycin dihydrate": ("Azithromycin", "ing-azithromycin"),
+    "amoxicillin": ("Amoxicillin", "ing-amoxicillin"),
+    "amoxycillin": ("Amoxicillin", "ing-amoxicillin"),
+    "amoxicillin trihydrate": ("Amoxicillin", "ing-amoxicillin"),
+    "clavulanic acid": ("Clavulanic Acid", "ing-clavulanic-acid"),
+    "potassium clavulanate": ("Clavulanic Acid", "ing-clavulanic-acid"),
+    "clavulanate potassium": ("Clavulanic Acid", "ing-clavulanic-acid"),
+    "cetirizine": ("Cetirizine", "ing-cetirizine"),
+    "cetirizine dihydrochloride": ("Cetirizine", "ing-cetirizine"),
+    "cetirizine hydrochloride": ("Cetirizine", "ing-cetirizine"),
+    "ibuprofen": ("Ibuprofen", "ing-ibuprofen"),
+    "losartan": ("Losartan", "ing-losartan"),
+    "losartan potassium": ("Losartan", "ing-losartan"),
+    "amlodipine": ("Amlodipine", "ing-amlodipine"),
+    "amlodipine besylate": ("Amlodipine", "ing-amlodipine"),
+    "aspirin": ("Aspirin", "ing-aspirin"),
+    "acetylsalicylic acid": ("Aspirin", "ing-aspirin"),
+    "domperidone": ("Domperidone", "ing-domperidone"),
+    "montelukast": ("Montelukast", "ing-montelukast"),
+    "montelukast sodium": ("Montelukast", "ing-montelukast"),
+}
+
 
 class INNNormalizer:
     """
@@ -62,12 +110,12 @@ class INNNormalizer:
     5. < 70 → unable_to_verify
     """
     
-    def __init__(self, alias_map: dict):
+    def __init__(self, alias_map: Optional[dict] = None):
         """
         alias_map: dict mapping normalized_alias (lowercase) → (canonical_name, ingredient_id)
-        Built from the database at startup.
+        Built from the database at startup or uses default curated aliases.
         """
-        self.alias_map = alias_map  # {normalized_alias: (preferred_name, ingredient_id)}
+        self.alias_map = alias_map if alias_map is not None else DEFAULT_ALIAS_MAP
     
     def _normalize_text(self, text: str) -> str:
         """Safe, non-destructive text cleanup for matching."""

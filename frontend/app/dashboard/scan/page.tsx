@@ -39,9 +39,8 @@ export default function ScanPage() {
 
     if (data) {
       sessionStorage.setItem("analysis_id", data.analysis_id);
-      // Redirect to results — backend returns fixture for demo-scan
-      // Once OCR pipeline is live, replace "demo-scan" with data.analysis_id
-      router.push(`/dashboard/results/demo-scan`);
+      // Route directly to real persisted analysis record
+      router.push(`/dashboard/results/${data.analysis_id}`);
     }
   };
 
