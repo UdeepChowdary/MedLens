@@ -42,7 +42,10 @@ jobs:
       - name: Run Full Pytest Suite (110 Tests)
         run: |
           cd backend
-          pytest tests/ -v --tb=short
+          python -m pytest tests/ -v --tb=short
+        env:
+          PYTHONPATH: .
+          DATABASE_URL: sqlite+aiosqlite:///./test_ci.db
 
   frontend-checks:
     name: Frontend Lint & Production Build
@@ -97,3 +100,4 @@ jobs:
           file: ./frontend/Dockerfile
           push: false
           tags: medlens-frontend:ci-check
+

@@ -12,3 +12,4 @@ venv/
 medlens.db
 tests/test_images/
 scratch/
+
