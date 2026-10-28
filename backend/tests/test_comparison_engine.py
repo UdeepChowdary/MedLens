@@ -245,3 +245,4 @@ async def test_api_comparisons_endpoint():
         assert data["strength_delta"]["numeric_delta"] == 150.0
         assert data["therapeutic_equivalence"]["status"] == "not_established"
         assert len(data["attributes"]) >= 4
+

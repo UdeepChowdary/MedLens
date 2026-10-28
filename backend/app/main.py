@@ -1,5 +1,6 @@
 """MedLens FastAPI Application Entry Point."""
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +10,24 @@ from app.core.config import settings
 from app.core.errors import MedLensException, ErrorResponse
 from app.core.logging import logger
 from app.api.v1.api import api_router
+from app.database.session import engine, Base, async_session_factory
+import app.models  # Ensure all SQLAlchemy models are registered on Base.metadata
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initializes database schema and ensures baseline pharmaceutical seed catalog exists."""
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        async with async_session_factory() as session:
+            from app.database.seed import seed_database
+            await seed_database(session)
+            await session.commit()
+        logger.info("Database schemas and seed monographs successfully verified.")
+    except Exception as exc:
+        logger.warning(f"Database auto-initialization warning: {exc}")
+    yield
 
 
 def create_application() -> FastAPI:
@@ -23,6 +42,7 @@ def create_application() -> FastAPI:
         openapi_url=f"{settings.API_V1_STR}/openapi.json",
         docs_url="/docs",
         redoc_url="/redoc",
+        lifespan=lifespan,
     )
 
     # 1. CORS Configuration

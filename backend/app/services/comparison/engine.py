@@ -534,3 +534,4 @@ class ComparisonEngine:
             return "partially_comparable"
 
         return "comparable"
+
