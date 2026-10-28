@@ -28,6 +28,8 @@ from .interaction import (
     InteractionRecord,
     InteractionCheckResponse,
 )
+from .image import ImageQualityReport
+from .ocr import BoundingBox, OCRToken, OCRLine, OCRResult
 
 __all__ = [
     "VerificationState",
@@ -49,4 +51,9 @@ __all__ = [
     "StrengthDelta",
     "InteractionRecord",
     "InteractionCheckResponse",
+    "ImageQualityReport",
+    "BoundingBox",
+    "OCRToken",
+    "OCRLine",
+    "OCRResult",
 ]
