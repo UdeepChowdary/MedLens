@@ -42,6 +42,8 @@ from app.services.scoring.confidence import (
     compute_confidence,
     determine_verification_state,
 )
+from app.services.references.coordinator import ReferenceCoordinator
+from app.services.references.cache import ReferenceCache
 
 logger = logging.getLogger(__name__)
 
@@ -56,12 +58,16 @@ class AnalysisPipelineService:
         ocr_dispatcher: Optional[OCRDispatcher] = None,
         rule_extractor: Optional[RuleBasedExtractor] = None,
         inn_normalizer: Optional[INNNormalizer] = None,
+        reference_coordinator: Optional[ReferenceCoordinator] = None,
     ):
         self.session = db_session
         self.preprocessor = preprocessor or ImagePreprocessor()
         self.ocr_dispatcher = ocr_dispatcher or OCRDispatcher()
         self.rule_extractor = rule_extractor or RuleBasedExtractor()
         self.inn_normalizer = inn_normalizer or INNNormalizer()
+        self.reference_coordinator = reference_coordinator or ReferenceCoordinator(
+            cache=ReferenceCache(session=db_session)
+        )
 
     async def process_image(
         self,
@@ -155,28 +161,31 @@ class AnalysisPipelineService:
                                 jurisdiction=cl.source.jurisdiction,
                             )
                         )
-
-                # Add default pharmacopeial references
-                evidence_sources.append(
-                    EvidenceSourceSchema(
-                        name="Indian Pharmacopoeia Commission (IPC)",
-                        url="https://ipc.gov.in/",
-                        source_id="IP-2022",
-                        jurisdiction="IN",
-                    )
-                )
-                evidence_sources.append(
-                    EvidenceSourceSchema(
-                        name="National Library of Medicine / PubChem",
-                        url=f"https://pubchem.ncbi.nlm.nih.gov/#query={canonical_name}",
-                        source_id=f"pubchem-{canonical_name.lower()}",
-                        jurisdiction="GLOBAL",
-                    )
-                )
             else:
                 uncertainties.append(
                     f"Ingredient '{raw_name}' ({canonical_name}) has no local clinical monograph on file."
                 )
+
+            # Query external reference authorities (openFDA, PubChem, Indian Pharmacopoeia / CDSCO)
+            try:
+                ext_lookups = await self.reference_coordinator.lookup_ingredient(canonical_name)
+                ext_sources = self.reference_coordinator.build_evidence_sources(ext_lookups)
+                clinical_profile = self.reference_coordinator.consolidate_clinical_profile(ext_lookups)
+
+                existing_urls = {s.url for s in evidence_sources}
+                for s in ext_sources:
+                    if s.url not in existing_urls:
+                        evidence_sources.append(s)
+                        existing_urls.add(s.url)
+
+                for w in clinical_profile.get("warnings", []):
+                    warnings_set.add(w)
+                for c in clinical_profile.get("contraindications", []):
+                    contraindications_set.add(c)
+                for ind in clinical_profile.get("indications", []):
+                    indications_set.add(ind)
+            except Exception as exc:
+                logger.warning("External reference resolution failed for %s: %s", canonical_name, exc)
 
             active_ingredients.append(
                 IngredientReport(
@@ -253,12 +262,13 @@ class AnalysisPipelineService:
 
         elapsed_ms = int((time.perf_counter() - start_time) * 1000)
 
-        # Deduplicate sources by source_id
+        # Deduplicate sources by source_id or URL
         unique_sources: List[EvidenceSourceSchema] = []
-        seen_ids = set()
+        seen_keys = set()
         for src in evidence_sources:
-            if src.source_id not in seen_ids:
-                seen_ids.add(src.source_id)
+            dedup_key = src.source_id or src.url
+            if dedup_key not in seen_keys:
+                seen_keys.add(dedup_key)
                 unique_sources.append(src)
 
         report = AnalysisResponse(
