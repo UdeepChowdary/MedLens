@@ -10,16 +10,16 @@
     },
     "sha256": "a5ef8cddb4252dbc44b0d8c998223bf3ca34323c2a24f31d0f66d0e5c8cf9cfd",
     "packaging_type": "blister_foil",
-    "product_family": "cetirizine-10",
+    "product_family": "cetirizine-10-fixture",
     "brand_name": "CETIRIZINE 10 mg",
-    "manufacturer": "Cipla Ltd",
+    "manufacturer": "Cipla Ltd (Fixture)",
     "provenance": {
-      "source": "MedLens Reference Packaging Dataset",
+      "source": "MedLens Synthetic Test Fixture (Pillow rendered)",
       "license": "CC-BY-4.0",
-      "annotator_id": "clinical-curator-01",
-      "verified_by_human": true,
+      "annotator_id": "pipeline-generator",
+      "verified_by_human": false,
       "date_annotated": "2026-10-13T10:45:00Z",
-      "notes": "Verified antihistamine generic strip presentation."
+      "notes": "SYNTHETIC TEST FIXTURE: Programmatically generated typography for code and tokenizer alignment testing. Do NOT treat as proof of real-world OCR performance or clinical ground truth."
     }
   },
   "quality_flags": {
@@ -90,5 +90,5 @@
     }
   ],
   "canonical_product_id": "cetirizine-10",
-  "review_status": "verified_by_human"
+  "review_status": "draft"
 }

@@ -1,0 +1,71 @@
+[
+  {
+    "id": "img-paracetamol-500-box",
+    "image_id": "img-paracetamol-500-box",
+    "product_family": "paracetamol-generic-500",
+    "packaging_type": "paper_box",
+    "is_synthetic_fixture": false,
+    "review_status": "verified_by_human",
+    "eligible_for_real_training": true,
+    "text": "Paracetamol Tablets IP 500 mg",
+    "tokens": [
+      "Paracetamol",
+      "Tablets",
+      "IP",
+      "500",
+      "mg"
+    ],
+    "ner_labels": [
+      "B-INGREDIENT",
+      "B-DOSAGE_FORM",
+      "B-SALT_FORM",
+      "B-STRENGTH",
+      "I-STRENGTH"
+    ],
+    "ner_tags": [
+      5,
+      15,
+      7,
+      9,
+      10
+    ],
+    "spans": [
+      {
+        "label": "PRODUCT_NAME",
+        "start_char": 0,
+        "end_char": 29,
+        "raw_text": "Paracetamol Tablets IP 500 mg",
+        "normalized_value": "Paracetamol Tablets IP 500 mg"
+      },
+      {
+        "label": "INGREDIENT",
+        "start_char": 0,
+        "end_char": 11,
+        "raw_text": "Paracetamol",
+        "normalized_value": "Paracetamol"
+      },
+      {
+        "label": "DOSAGE_FORM",
+        "start_char": 12,
+        "end_char": 19,
+        "raw_text": "Tablets",
+        "normalized_value": "Tablet"
+      },
+      {
+        "label": "SALT_FORM",
+        "start_char": 20,
+        "end_char": 22,
+        "raw_text": "IP",
+        "normalized_value": "Indian Pharmacopoeia"
+      },
+      {
+        "label": "STRENGTH",
+        "start_char": 23,
+        "end_char": 29,
+        "raw_text": "500 mg",
+        "normalized_value": "500 mg"
+      }
+    ],
+    "alignment_warnings": []
+  }
+]

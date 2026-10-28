@@ -3,34 +3,43 @@
   "seed": 42,
   "total_images": 3,
   "product_families": [
-    "cetirizine-10",
-    "brufen-400",
-    "calpol-500"
+    "dolo-650",
+    "brufen-400-fixture",
+    "cetirizine-10-fixture"
   ],
   "images": [
     {
-      "annotation_file": "img-cetirizine-10-strip.json",
-      "image_id": "img-cetirizine-10-strip",
-      "file_name": "cetirizine_10_strip.png",
-      "product_family": "cetirizine-10",
+      "annotation_file": "img-dolo-650-blister.json",
+      "image_id": "img-dolo-650-blister",
+      "file_name": "dolo_650_blister.jpg",
+      "product_family": "dolo-650",
       "packaging_type": "blister_foil",
-      "entity_count": 8
+      "entity_count": 7,
+      "review_status": "flagged_for_review",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": false
     },
     {
       "annotation_file": "img-brufen-400-strip.json",
       "image_id": "img-brufen-400-strip",
       "file_name": "brufen_400_strip.png",
-      "product_family": "brufen-400",
+      "product_family": "brufen-400-fixture",
       "packaging_type": "blister_foil",
-      "entity_count": 7
+      "entity_count": 7,
+      "review_status": "draft",
+      "is_synthetic_fixture": true,
+      "eligible_for_real_training": false
     },
     {
-      "annotation_file": "img-calpol-500-strip.json",
-      "image_id": "img-calpol-500-strip",
-      "file_name": "calpol_500_strip.jpg",
-      "product_family": "calpol-500",
-      "packaging_type": "strip_pack",
-      "entity_count": 7
+      "annotation_file": "img-cetirizine-10-strip.json",
+      "image_id": "img-cetirizine-10-strip",
+      "file_name": "cetirizine_10_strip.png",
+      "product_family": "cetirizine-10-fixture",
+      "packaging_type": "blister_foil",
+      "entity_count": 8,
+      "review_status": "draft",
+      "is_synthetic_fixture": true,
+      "eligible_for_real_training": false
     }
   ]
 }

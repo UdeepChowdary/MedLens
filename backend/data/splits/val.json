@@ -12,7 +12,10 @@
       "file_name": "augmentin_625_box.jpg",
       "product_family": "augmentin-625",
       "packaging_type": "paper_box",
-      "entity_count": 10
+      "entity_count": 10,
+      "review_status": "flagged_for_review",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": false
     }
   ]
 }

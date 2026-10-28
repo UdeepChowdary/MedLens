@@ -1,0 +1,81 @@
+{
+  "title": "MedLens Local Transformer Feasibility Report",
+  "environment": {
+    "python_version": "3.13.9",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "processor": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD",
+    "torch_installed": true,
+    "torch_version": "2.7.0+cpu",
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "cuda_device_name": null,
+    "cuda_vram_gb": 0.0,
+    "transformers_installed": true,
+    "transformers_version": "4.51.3",
+    "ram_total_gb": 15.29,
+    "ram_available_gb": 1.83,
+    "cpu_physical_cores": 8,
+    "cpu_logical_cores": 16
+  },
+  "dataset_readiness": {
+    "total_annotations": 5,
+    "verified_human_annotations": 1,
+    "synthetic_test_fixtures": 2,
+    "flagged_or_unverified": 2,
+    "blueprint_target_minimum": 100,
+    "dataset_ready_for_finetuning": false,
+    "readiness_verdict": "BLOCKED: Dataset has only 1 verified real image and 2 synthetic fixtures. Fine-tuning a neural transformer now would overfit and violate Blueprint Section 6.4 (minimum 100-200 annotated images required before fine-tuning)."
+  },
+  "candidate_models": [
+    {
+      "model_id": "distilbert-base-uncased",
+      "architecture": "DistilBertForTokenClassification",
+      "parameters_m": 66.4,
+      "disk_size_mb": 268.0,
+      "runtime_ram_mb_fp32": 480.0,
+      "runtime_ram_mb_int8": 140.0,
+      "domain": "General English (fast, 6 layers)",
+      "cpu_latency_est_ms": "30 - 75 ms",
+      "cpu_finetune_viable": true,
+      "suitability": "Optimal local baseline (low latency, minimal CPU overhead)"
+    },
+    {
+      "model_id": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract",
+      "architecture": "BertForTokenClassification",
+      "parameters_m": 108.9,
+      "disk_size_mb": 440.0,
+      "runtime_ram_mb_fp32": 880.0,
+      "runtime_ram_mb_int8": 260.0,
+      "domain": "Biomedical Literature (PubMed abstracts, 12 layers)",
+      "cpu_latency_est_ms": "90 - 200 ms",
+      "cpu_finetune_viable": false,
+      "suitability": "Strong domain vocabulary, but noticeably slower on CPU-only machines"
+    },
+    {
+      "model_id": "emilyalsentzer/Bio_ClinicalBERT",
+      "architecture": "BertForTokenClassification",
+      "parameters_m": 108.3,
+      "disk_size_mb": 436.0,
+      "runtime_ram_mb_fp32": 870.0,
+      "runtime_ram_mb_int8": 255.0,
+      "domain": "Clinical Notes (MIMIC-III EHR notes)",
+      "cpu_latency_est_ms": "90 - 200 ms",
+      "cpu_finetune_viable": false,
+      "suitability": "EHR-focused rather than packaging labels; domain mismatch with medicine cartons"
+    }
+  ],
+  "hardware_verdict": {
+    "acceleration": "CPU-only",
+    "cpu_inference_ready": true,
+    "cpu_finetuning_feasible": true,
+    "recommended_local_model": "distilbert-base-uncased",
+    "estimated_cpu_inference_latency": "30 - 75 ms per label transcription",
+    "memory_headroom": "1.83 GB available of 15.29 GB total"
+  },
+  "phase4_recommendation": {
+    "immediate_baseline": "Deterministic Rule-Based Extractor (RuleBasedExtractor)",
+    "rule_baseline_advantage": "Deterministic, zero hallucination, 0ms latency, handles salt forms and strength units strictly.",
+    "ml_model_strategy": "Pre-configure token classification pipeline (BIO preprocessing ready); defer neural fine-tuning until Phase 4 dataset expands to >= 100 verified packaging images."
+  }
+}

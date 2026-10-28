@@ -83,3 +83,30 @@ def test_compare_nonexistent_product_returns_404(client: TestClient) -> None:
     assert response.status_code == 404
     data = response.json()
     assert data["error_code"] == "ERR_PRODUCT_NOT_FOUND"
+
+
+def test_check_interactions_endpoint(client: TestClient) -> None:
+    """Verifies interaction checking endpoint identifies documented pair."""
+    response = client.post(
+        "/api/v1/interactions/check",
+        json={"ingredient_ids": ["ing-paracetamol", "ing-ibuprofen"]},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) >= 1
+    assert data[0]["severity"] == "minor"
+    assert "renal" in data[0]["clinical_effect"].lower()
+    assert data[0]["coverage_note"] is not None
+
+
+def test_check_interactions_empty_when_no_record(client: TestClient) -> None:
+    """Verifies no interaction record returned for undocumented pair without false positives."""
+    response = client.post(
+        "/api/v1/interactions/check",
+        json={"ingredient_ids": ["ing-cetirizine", "ing-omeprazole"]},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 0

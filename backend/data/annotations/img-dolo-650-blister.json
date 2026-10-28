@@ -14,12 +14,12 @@
     "brand_name": "Dolo 650",
     "manufacturer": "Micro Labs Ltd",
     "provenance": {
-      "source": "MedLens Clinical Lab Physical Archive",
+      "source": "MedLens Reference Packaging Archive",
       "license": "CC-BY-4.0",
       "annotator_id": "clinical-curator-01",
-      "verified_by_human": true,
+      "verified_by_human": false,
       "date_annotated": "2026-10-13T10:30:00Z",
-      "notes": "Metallic foil blister pack, high specular reflection on curvature."
+      "notes": "FLAGGED FOR REVIEW: Source image is a 3D generic illustration lacking readable Dolo 650 packaging typography. Pending authentic physical packaging photograph. Do NOT use as ground truth for model training."
     }
   },
   "quality_flags": {
@@ -83,5 +83,5 @@
     }
   ],
   "canonical_product_id": "dolo-650",
-  "review_status": "verified_by_human"
+  "review_status": "flagged_for_review"
 }
