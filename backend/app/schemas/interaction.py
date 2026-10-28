@@ -15,6 +15,19 @@ class InteractionRecord(BaseModel):
     documented_date: Optional[str] = Field(default=None, description="Source publication date.")
 
 
+class InteractionReport(BaseModel):
+    """User-facing interaction evidence record."""
+    ingredient_a: str = Field(description="First ingredient ID.")
+    ingredient_b: str = Field(description="Second ingredient ID.")
+    severity: str = Field(description="Documented severity: major, moderate, minor, unknown.")
+    clinical_effect: str = Field(description="Source-backed description of the interaction effect.")
+    source_id: str = Field(description="Reference source identifier.")
+    coverage_note: str = Field(
+        default="Coverage is limited to curated sources. Absence of a record is not proof of safety.",
+        description="Mandatory limitation disclaimer for interaction data."
+    )
+
+
 class InteractionCheckResponse(BaseModel):
     """Result of cross-referencing two or more medications for documented interactions."""
     has_documented_interactions: bool = Field(description="True if one or more interaction records were found.")

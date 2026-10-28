@@ -18,6 +18,7 @@ from .analysis import (
     MultidimensionalConfidence,
     AnalysisCreateResponse,
     AnalysisResponse,
+    AnalysisSummary,
 )
 from .comparison import (
     AttributeComparison,
@@ -28,6 +29,8 @@ from .interaction import (
     InteractionRecord,
     InteractionCheckResponse,
 )
+from .image import ImageQualityReport
+from .ocr import BoundingBox, OCRToken, OCRLine, OCRResult
 
 __all__ = [
     "VerificationState",
@@ -44,9 +47,15 @@ __all__ = [
     "MultidimensionalConfidence",
     "AnalysisCreateResponse",
     "AnalysisResponse",
+    "AnalysisSummary",
     "AttributeComparison",
     "ComparisonResponse",
     "StrengthDelta",
     "InteractionRecord",
     "InteractionCheckResponse",
+    "ImageQualityReport",
+    "BoundingBox",
+    "OCRToken",
+    "OCRLine",
+    "OCRResult",
 ]

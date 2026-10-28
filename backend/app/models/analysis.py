@@ -18,6 +18,7 @@ class Analysis(Base):
     processing_time_ms: Mapped[int] = mapped_column(Integer, default=0)
     confidence_aggregate: Mapped[float] = mapped_column(Float, default=0.0)
     model_version: Mapped[str] = mapped_column(String(50), default="v0.1.0")
+    report_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[str] = mapped_column(
         String(50), default=lambda: datetime.now(timezone.utc).isoformat()
     )

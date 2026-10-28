@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { LenisProvider } from "@/components/LenisProvider";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: "MedLens: Pharmaceutical Packaging Verification and Composition Intelligence",
@@ -32,11 +24,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
+    <html lang="en">
       <body className="min-h-[100dvh] antialiased">
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );
 }
-

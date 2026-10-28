@@ -124,10 +124,18 @@ def render_markdown_report(stats: Dict[str, Any]) -> str:
         "COMPOSITION_HEADER": "Structural composition section heading",
     }
 
+    # Display all 11 canonical blueprint labels explicitly
+    for lbl, desc in label_desc.items():
+        count = stats["entity_distribution"].get(lbl, 0)
+        pct = round((count / total_ents) * 100, 1) if count > 0 else 0.0
+        status_note = "" if count > 0 else " *(0 instances in current sample)*"
+        lines.append(f"| `{lbl}` | {count} | {pct}% | {desc}{status_note} |")
+
+    # Include any custom labels not in the canonical 11 if present
     for lbl, count in stats["entity_distribution"].items():
-        pct = round((count / total_ents) * 100, 1)
-        desc = label_desc.get(lbl, "Custom sequence token")
-        lines.append(f"| `{lbl}` | {count} | {pct}% | {desc} |")
+        if lbl not in label_desc:
+            pct = round((count / total_ents) * 100, 1)
+            lines.append(f"| `{lbl}` | {count} | {pct}% | Non-canonical label |")
 
     lines.extend([
         "",

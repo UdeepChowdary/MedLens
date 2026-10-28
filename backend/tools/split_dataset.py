@@ -76,14 +76,27 @@ def split_dataset(
     for split_name, fam_list in [("train", train_families), ("val", val_families), ("test", test_families)]:
         for fam in fam_list:
             for fname, doc in product_groups[fam]:
+                meta = doc["image_metadata"]
+                prov = meta.get("provenance", {})
+                review_status = doc.get("review_status", "draft")
+                is_synthetic = (
+                    "fixture" in fam.lower()
+                    or "synthetic" in prov.get("source", "").lower()
+                    or "synthetic" in prov.get("notes", "").lower()
+                )
+                is_eligible = (review_status == "verified_by_human") and not is_synthetic
+
                 splits_data[split_name]["items"].append(
                     {
                         "annotation_file": fname,
-                        "image_id": doc["image_metadata"]["image_id"],
-                        "file_name": doc["image_metadata"]["file_name"],
+                        "image_id": meta["image_id"],
+                        "file_name": meta["file_name"],
                         "product_family": fam,
-                        "packaging_type": doc["image_metadata"]["packaging_type"],
+                        "packaging_type": meta["packaging_type"],
                         "entity_count": len(doc.get("entities", [])),
+                        "review_status": review_status,
+                        "is_synthetic_fixture": is_synthetic,
+                        "eligible_for_real_training": is_eligible,
                     }
                 )
 

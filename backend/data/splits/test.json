@@ -3,16 +3,19 @@
   "seed": 42,
   "total_images": 1,
   "product_families": [
-    "dolo-650"
+    "paracetamol-generic-500"
   ],
   "images": [
     {
-      "annotation_file": "img-dolo-650-blister.json",
-      "image_id": "img-dolo-650-blister",
-      "file_name": "dolo_650_blister.jpg",
-      "product_family": "dolo-650",
-      "packaging_type": "blister_foil",
-      "entity_count": 7
+      "annotation_file": "img-paracetamol-500-box.json",
+      "image_id": "img-paracetamol-500-box",
+      "file_name": "paracetamol_500_box.jpg",
+      "product_family": "paracetamol-generic-500",
+      "packaging_type": "paper_box",
+      "entity_count": 5,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
     }
   ]
 }

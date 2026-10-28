@@ -14,12 +14,12 @@
     "brand_name": "Augmentin 625 Duo",
     "manufacturer": "GlaxoSmithKline Pharmaceuticals Ltd",
     "provenance": {
-      "source": "MedLens Clinical Lab Physical Archive",
+      "source": "MedLens Reference Packaging Archive",
       "license": "CC-BY-4.0",
       "annotator_id": "clinical-curator-01",
-      "verified_by_human": true,
+      "verified_by_human": false,
       "date_annotated": "2026-10-13T10:40:00Z",
-      "notes": "Secondary paper carton with dual-active antimicrobial formulation."
+      "notes": "FLAGGED FOR REVIEW: Source image is a tight crop of blank tablet pockets with zero visible typography. Pending authentic physical carton photograph. Do NOT use as ground truth for model training."
     }
   },
   "quality_flags": {
@@ -44,65 +44,65 @@
       "raw_text": "Each film-coated tablet contains:",
       "normalized_value": null,
       "bbox": [220, 30, 310, 750],
-      "char_span": [68, 101]
+      "char_span": [69, 102]
     },
     {
       "label": "DOSAGE_FORM",
       "raw_text": "tablet",
       "normalized_value": "Tablet",
       "bbox": [220, 240, 310, 380],
-      "char_span": [85, 91]
+      "char_span": [86, 92]
     },
     {
       "label": "INGREDIENT",
       "raw_text": "Amoxicillin",
       "normalized_value": "Amoxicillin",
       "bbox": [340, 30, 430, 350],
-      "char_span": [102, 113]
+      "char_span": [103, 114]
     },
     {
       "label": "SALT_FORM",
       "raw_text": "Trihydrate",
       "normalized_value": "Trihydrate",
       "bbox": [340, 360, 430, 520],
-      "char_span": [114, 124]
+      "char_span": [115, 125]
     },
     {
       "label": "STRENGTH",
       "raw_text": "500 mg",
       "normalized_value": "500 mg",
       "bbox": [340, 680, 430, 880],
-      "char_span": [150, 156]
-    },
-    {
-      "label": "INGREDIENT",
-      "raw_text": "Clavulanic Acid",
-      "normalized_value": "Clavulanic Acid",
-      "bbox": [460, 30, 550, 480],
-      "char_span": [190, 205]
+      "char_span": [148, 154]
     },
     {
       "label": "SALT_FORM",
       "raw_text": "Potassium Clavulanate",
       "normalized_value": "Potassium Salt",
       "bbox": [460, 30, 550, 520],
-      "char_span": [158, 179]
+      "char_span": [156, 177]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Clavulanic Acid",
+      "normalized_value": "Clavulanic Acid",
+      "bbox": [460, 30, 550, 480],
+      "char_span": [188, 203]
     },
     {
       "label": "STRENGTH",
       "raw_text": "125 mg",
       "normalized_value": "125 mg",
       "bbox": [460, 680, 550, 880],
-      "char_span": [206, 212]
+      "char_span": [204, 210]
     },
     {
       "label": "STRENGTH_BASIS",
       "raw_text": "tablet",
       "normalized_value": "per tablet",
       "bbox": [220, 240, 310, 380],
-      "char_span": [85, 91]
+      "char_span": [86, 92]
     }
   ],
   "canonical_product_id": "augmentin-625",
-  "review_status": "verified_by_human"
+  "review_status": "flagged_for_review"
 }

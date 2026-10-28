@@ -1,6 +1,6 @@
 # 📊 MedLens Medicine Label Dataset Quality Report
 
-> **Generated:** 2026-10-13T10:32:16.328973+00:00  
+> **Generated:** 2026-10-13T11:18:27.518765+00:00  
 > **Specification:** MedLens Capstone Implementation Blueprint (Section 06)
 
 ---
@@ -9,9 +9,9 @@
 
 - **Total Medicine Images:** `5`
 - **Unique Product Families:** `5` (Leakage-isolation key)
-- **Total Annotated Entity Tokens:** `39`
-- **Mean Entities per Image:** `7.8`
-- **Human-Verified Ratio:** `100.0%`
+- **Total Annotated Entity Tokens:** `37`
+- **Mean Entities per Image:** `7.4`
+- **Human-Verified Ratio:** `20.0%`
 
 ---
 
@@ -19,14 +19,17 @@
 
 | Entity Label | Instances | Percentage | Description |
 | :--- | :--- | :--- | :--- |
-| `SALT_FORM` | 7 | 17.9% | Chemical salt or pharmacopeial notation (IP, BP, USP, HCl) |
-| `INGREDIENT` | 6 | 15.4% | Active pharmaceutical ingredient chemical moiety |
-| `STRENGTH` | 6 | 15.4% | Quantitative dosage strength with unit |
-| `COMPOSITION_HEADER` | 5 | 12.8% | Structural composition section heading |
-| `DOSAGE_FORM` | 5 | 12.8% | Physical presentation (Tablet, Capsule, Syrup) |
-| `STRENGTH_BASIS` | 5 | 12.8% | Dosing unit basis (per tablet, per 5 mL) |
-| `BRAND` | 4 | 10.3% | Trade name / packaging commercial branding |
-| `PRODUCT_NAME` | 1 | 2.6% | Descriptive generic product title |
+| `BRAND` | 3 | 8.1% | Trade name / packaging commercial branding |
+| `PRODUCT_NAME` | 2 | 5.4% | Descriptive generic product title |
+| `INGREDIENT` | 6 | 16.2% | Active pharmaceutical ingredient chemical moiety |
+| `SALT_FORM` | 7 | 18.9% | Chemical salt or pharmacopeial notation (IP, BP, USP, HCl) |
+| `STRENGTH` | 6 | 16.2% | Quantitative dosage strength with unit |
+| `CONCENTRATION` | 0 | 0.0% | Mass-per-volume dosage formulation *(0 instances in current sample)* |
+| `STRENGTH_BASIS` | 4 | 10.8% | Dosing unit basis (per tablet, per 5 mL) |
+| `DOSAGE_FORM` | 5 | 13.5% | Physical presentation (Tablet, Capsule, Syrup) |
+| `ROUTE` | 0 | 0.0% | Administration route (Oral, Topical) *(0 instances in current sample)* |
+| `RELEASE_TYPE` | 0 | 0.0% | Modified release modifier (SR, ER, CR) *(0 instances in current sample)* |
+| `COMPOSITION_HEADER` | 4 | 10.8% | Structural composition section heading |
 
 ---
 
@@ -35,8 +38,7 @@
 | Packaging Presentation | Count | Percentage |
 | :--- | :--- | :--- |
 | `blister_foil` | 3 | 60.0% |
-| `paper_box` | 1 | 20.0% |
-| `strip_pack` | 1 | 20.0% |
+| `paper_box` | 2 | 40.0% |
 
 ---
 
@@ -63,8 +65,8 @@
 
 | Source Organization / Origin | License | Count |
 | :--- | :--- | :--- |
-| MedLens Clinical Lab Physical Archive | CC-BY-4.0 | 3 |
-| MedLens Reference Packaging Dataset | CC-BY-4.0 | 2 |
+| MedLens Reference Packaging Archive | CC-BY-4.0 | 3 |
+| MedLens Synthetic Test Fixture (Pillow rendered) | CC-BY-4.0 | 2 |
 
 ---
 
