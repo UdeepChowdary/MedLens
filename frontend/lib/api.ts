@@ -57,6 +57,18 @@ export interface ProductReport {
   is_verified: boolean;
 }
 
+export interface AnalysisSummary {
+  analysis_id: string;
+  status: string;
+  image_sha256: string;
+  detected_name: string;
+  dosage_form: string;
+  active_ingredients: string[];
+  confidence_score: number;
+  created_at: string;
+  processing_time_ms: number;
+}
+
 export interface MultidimensionalConfidence {
   ocr_quality: number;
   extraction_quality: number;
@@ -226,6 +238,13 @@ export async function pollAnalysis(
     }
   }
   return null;
+}
+
+/** Get list of historical scans. */
+export async function getAnalyses(
+  limit = 50
+): Promise<{ data: AnalysisSummary[] | null; error: ApiError | null }> {
+  return request<AnalysisSummary[]>(`/analyses?limit=${limit}`);
 }
 
 /** Search the product catalog. */

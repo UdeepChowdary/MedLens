@@ -91,3 +91,17 @@ def test_demo_scan_fallback_route(client: TestClient):
     data = res.json()
     assert data["analysis_id"] == "demo-scan"
     assert data["product"]["detected_name"] == "Dolo 650"
+
+
+def test_list_analyses_endpoint(client: TestClient):
+    """Verifies GET /api/v1/analyses returns history summaries (ML-047, ML-048)."""
+    res = client.get("/api/v1/analyses?limit=10")
+    assert res.status_code == 200
+    data = res.json()
+    assert isinstance(data, list)
+    if len(data) > 0:
+        first = data[0]
+        assert "analysis_id" in first
+        assert "status" in first
+        assert "detected_name" in first
+        assert "created_at" in first

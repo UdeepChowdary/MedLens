@@ -38,3 +38,13 @@ class AnalysisRepository:
         """Batch saves extracted OCR and ML tokens."""
         self.session.add_all(entities)
         await self.session.commit()
+
+    async def list_recent(self, limit: int = 50) -> List[Analysis]:
+        """Fetches recent analyses ordered by creation timestamp descending."""
+        stmt = (
+            select(Analysis)
+            .order_by(Analysis.created_at.desc())
+            .limit(limit)
+        )
+        result = await self.session.execute(stmt)
+        return list(result.scalars().all())

@@ -2,7 +2,7 @@
 
 import hashlib
 import uuid
-from typing import Optional
+from typing import List, Optional
 from fastapi import APIRouter, Depends, File, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,7 +11,7 @@ from app.core.errors import ImageValidationError, AnalysisNotFoundError
 from app.database.session import get_db
 from app.models.analysis import Analysis
 from app.repositories.analysis_repository import AnalysisRepository
-from app.schemas.analysis import AnalysisCreateResponse, AnalysisResponse, MultidimensionalConfidence
+from app.schemas.analysis import AnalysisCreateResponse, AnalysisResponse, AnalysisSummary, MultidimensionalConfidence
 from app.schemas.common import VerificationState, RoleType
 from app.schemas.product import (
     ProductReport,
@@ -69,6 +69,46 @@ async def create_analysis(
         await repo.create(fallback_record)
 
     return AnalysisCreateResponse(analysis_id=analysis_id, status="received")
+
+
+@router.get("", response_model=List[AnalysisSummary])
+async def list_analyses(
+    limit: int = 50,
+    db: AsyncSession = Depends(get_db),
+) -> List[AnalysisSummary]:
+    """Retrieves list of past scanned analyses ordered by most recent (ML-047, ML-048)."""
+    repo = AnalysisRepository(db)
+    records = await repo.list_recent(limit=limit)
+
+    summaries: List[AnalysisSummary] = []
+    for r in records:
+        detected_name = "Packaging Scan"
+        dosage_form = "Tablet"
+        active_ingredients: List[str] = []
+
+        if r.report_json:
+            try:
+                parsed = AnalysisResponse.model_validate_json(r.report_json)
+                detected_name = parsed.product.detected_name
+                dosage_form = parsed.product.dosage_form
+                active_ingredients = [ing.canonical_name for ing in parsed.active_ingredients]
+            except Exception:
+                pass
+
+        summaries.append(
+            AnalysisSummary(
+                analysis_id=r.id,
+                status=r.status,
+                image_sha256=r.image_sha256,
+                detected_name=detected_name,
+                dosage_form=dosage_form,
+                active_ingredients=active_ingredients,
+                confidence_score=round(r.confidence_aggregate, 2),
+                created_at=r.created_at,
+                processing_time_ms=r.processing_time_ms,
+            )
+        )
+    return summaries
 
 
 @router.get("/{analysis_id}", response_model=AnalysisResponse)

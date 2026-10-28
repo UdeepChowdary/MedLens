@@ -46,3 +46,17 @@ class AnalysisResponse(BaseModel):
         ],
         description="Mandatory legal and clinical scope limitations."
     )
+
+
+class AnalysisSummary(BaseModel):
+    """Compact summary of a historical packaging scan for dashboard listing."""
+    analysis_id: str = Field(description="Unique UUID tracking this analysis.")
+    status: str = Field(description="Verification outcome or lifecycle state.")
+    image_sha256: str = Field(description="SHA-256 image fingerprint.")
+    detected_name: str = Field(description="Primary brand or generic medicine name.")
+    dosage_form: str = Field(default="Tablet", description="Pharmaceutical formulation.")
+    active_ingredients: List[str] = Field(default_factory=list, description="List of active canonical chemical salts.")
+    confidence_score: float = Field(ge=0.0, le=1.0, description="Aggregated confidence score.")
+    created_at: str = Field(description="ISO-8601 creation timestamp.")
+    processing_time_ms: int = Field(ge=0, description="Execution duration in milliseconds.")
+

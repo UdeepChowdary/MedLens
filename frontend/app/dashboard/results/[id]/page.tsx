@@ -24,6 +24,7 @@ export default function ResultsPage() {
   const [report, setReport] = useState<AnalysisResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [matchedAllergies, setMatchedAllergies] = useState<{ ingredient: string; allergy: string }[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -33,6 +34,33 @@ export default function ResultsPage() {
         setFetchError(error.message);
       } else if (data) {
         setReport(data);
+
+        // Cross-reference user allergies from Profile
+        try {
+          const stored = localStorage.getItem("medlens_user_allergies");
+          const userAllergies: string[] = stored ? JSON.parse(stored) : ["Penicillin", "Ibuprofen"];
+          const matches: { ingredient: string; allergy: string }[] = [];
+          const allIngredients = [
+            ...data.active_ingredients.map((a) => a.canonical_name),
+            ...data.active_ingredients.map((a) => a.raw_label_text),
+            ...data.inactive_ingredients.map((e) => e.canonical_name),
+          ];
+
+          for (const allergy of userAllergies) {
+            const al = allergy.toLowerCase().trim();
+            if (!al) continue;
+            for (const ing of allIngredients) {
+              const ingLower = ing.toLowerCase();
+              if (ingLower.includes(al) || al.includes(ingLower)) {
+                matches.push({ ingredient: ing, allergy });
+                break;
+              }
+            }
+          }
+          setMatchedAllergies(matches);
+        } catch {
+          // Ignore parse errors
+        }
       }
       setIsLoading(false);
     });
@@ -141,6 +169,58 @@ export default function ResultsPage() {
           {/* Report Content */}
           {!isLoading && report && (
             <>
+              {/* Critical Patient Allergy Alert */}
+              {matchedAllergies.length > 0 && (
+                <ScrollReveal variant="fade-up" delay={75}>
+                  <div style={{
+                    marginBottom: "28px",
+                    padding: "20px 24px",
+                    backgroundColor: "var(--red-dim, #fee2e2)",
+                    border: "2px solid var(--red, #ef4444)",
+                    borderRadius: "16px",
+                    boxShadow: "0 4px 14px rgba(239, 68, 68, 0.15)",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+                      <div style={{
+                        width: "40px",
+                        height: "40px",
+                        backgroundColor: "var(--red, #ef4444)",
+                        borderRadius: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                        color: "white"
+                      }}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                          <line x1="12" y1="9" x2="12" y2="13"></line>
+                          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: "17px", fontWeight: "bold", color: "var(--red, #b91c1c)", marginBottom: "6px" }}>
+                          CRITICAL PATIENT ALLERGY WARNING
+                        </h3>
+                        <p style={{ fontSize: "14px", color: "var(--text-primary)", marginBottom: "10px", lineHeight: "1.5" }}>
+                          This medicine packaging contains ingredients that match your documented profile allergies:
+                        </p>
+                        <ul style={{ margin: 0, paddingLeft: "20px", fontSize: "14px", color: "var(--red, #b91c1c)", fontWeight: 600 }}>
+                          {matchedAllergies.map((m, idx) => (
+                            <li key={idx} style={{ marginBottom: "4px" }}>
+                              Detected ingredient <strong>&ldquo;{m.ingredient}&rdquo;</strong> matches your documented allergy to <strong>&ldquo;{m.allergy}&rdquo;</strong>.
+                            </li>
+                          ))}
+                        </ul>
+                        <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "10px", marginBottom: 0 }}>
+                          <strong>Action Required:</strong> Do NOT ingest or administer this medicine without consulting your prescribing healthcare provider or pharmacist.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              )}
+
               <ScrollReveal variant="fade-up" delay={100}>
                 <div style={{ marginBottom: "32px" }}>
                   <ProductOverview

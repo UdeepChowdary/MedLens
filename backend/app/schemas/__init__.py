@@ -18,6 +18,7 @@ from .analysis import (
     MultidimensionalConfidence,
     AnalysisCreateResponse,
     AnalysisResponse,
+    AnalysisSummary,
 )
 from .comparison import (
     AttributeComparison,
@@ -46,6 +47,7 @@ __all__ = [
     "MultidimensionalConfidence",
     "AnalysisCreateResponse",
     "AnalysisResponse",
+    "AnalysisSummary",
     "AttributeComparison",
     "ComparisonResponse",
     "StrengthDelta",
