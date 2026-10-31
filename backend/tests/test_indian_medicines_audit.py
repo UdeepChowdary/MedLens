@@ -63,13 +63,13 @@ def test_suspicious_image_url_detection():
 
 
 # ============================================================================
-# 3. Parsing Yield & Ingestion Classification
+# 3. Parsing Outcomes & Diagnostic Coverage Classification
 # ============================================================================
 
 def test_audit_dataset_file_classification(tmp_path: Path):
-    """Verifies end-to-end classification into exact, partial, and failure categories."""
+    """Verifies end-to-end classification into full extraction, partial extraction, and unparsed categories."""
     sample_rows = [
-        # 1. Exact Match: Known ingredient with strength and INN match
+        # 1. Full Extraction with Strength: Known ingredient with strength and INN match
         {
             "name": "Dolo 650 Tablet",
             "composition": "Paracetamol (650mg)",
@@ -85,7 +85,7 @@ def test_audit_dataset_file_classification(tmp_path: Path):
             "side_effects": "None",
             "image_url": "https://onemg.gumlet.io/dolo_2.jpg",
         },
-        # 3. Partial Match: Known ingredient but missing numeric strength
+        # 3. Partial Extraction: Known ingredient but missing numeric strength
         {
             "name": "Generic Cetirizine Syrup",
             "composition": "Cetirizine Hydrochloride q.s.",
@@ -93,7 +93,7 @@ def test_audit_dataset_file_classification(tmp_path: Path):
             "side_effects": "Drowsiness",
             "image_url": "https://onemg.gumlet.io/cetirizine.jpg",
         },
-        # 4. Parse Failure: Unrecognized molecule not in current dictionary
+        # 4. Unparsed: Unrecognized molecule not in current dictionary
         {
             "name": "Exotic Herb Capsule",
             "composition": "Ashwagandha Extract (500mg)",
@@ -101,7 +101,7 @@ def test_audit_dataset_file_classification(tmp_path: Path):
             "side_effects": "Stomach upset",
             "image_url": "https://onemg.gumlet.io/ashwa.jpg",
         },
-        # 5. Parse Failure: Empty composition string
+        # 5. Unparsed: Empty composition string
         {
             "name": "Empty Drug",
             "composition": "",
@@ -119,10 +119,10 @@ def test_audit_dataset_file_classification(tmp_path: Path):
     assert summary["missing_fields"]["composition"] == 1
     assert summary["suspicious_image_url_count"] >= 1
 
-    pyield = summary["parsing_yield"]
-    assert pyield["exact_match_count"] >= 1
-    assert pyield["partial_match_count"] >= 1
-    assert pyield["parse_failure_count"] >= 2
+    outcomes = summary["parser_outcomes"]
+    assert outcomes["full_extraction_count"] >= 1
+    assert outcomes["partial_extraction_count"] >= 1
+    assert outcomes["unparsed_count"] >= 2
 
     # Verify failure log contains the unparsed row
     failures = summary["representative_failures"]
@@ -134,7 +134,7 @@ def test_audit_dataset_file_classification(tmp_path: Path):
 # ============================================================================
 
 def test_render_markdown_audit_report(tmp_path: Path):
-    """Verifies that markdown summary renders required sections and disclaimer."""
+    """Verifies that markdown summary renders required sections, diagnostic disclaimers, and URL notices."""
     sample_rows = [
         {
             "name": "Calpol 500",
@@ -148,7 +148,9 @@ def test_render_markdown_audit_report(tmp_path: Path):
     summary = audit_dataset_file(csv_file)
     md = render_markdown_audit_report(summary)
 
-    assert "# 📊 Indian Medicines Dataset Audit & Parser Benchmark Report" in md
+    assert "# 📊 Indian Medicines Dataset Audit & Parser Diagnostic Coverage Report" in md
     assert "Schema & Data Quality Summary" in md
-    assert "Text-Only Composition Parser Yield" in md
-    assert "algorithmic coverage metric, not a claim of clinical accuracy" in md
+    assert "Composition Parser Outcomes & Diagnostic Coverage" in md
+    assert "diagnostic parser coverage, not clinical accuracy" in md
+    assert "Image URLs Unverified" in md
+

@@ -1,6 +1,6 @@
 """Audit tool and composition parser benchmark for local Indian medicine datasets.
 
-Performs text-only inspection, schema validation, and parsing yield analysis
+Performs text-only inspection, schema validation, and parser outcome/coverage analysis
 against MedLens RuleBasedExtractor and INNNormalizer without database mutation.
 """
 
@@ -40,7 +40,7 @@ class AuditRecord:
         raw_uses: str,
         raw_side_effects: str,
         raw_image_url: str,
-        category: str,  # "EXACT_MATCH", "PARTIAL_MATCH", "PARSE_FAILURE"
+        category: str,  # "FULL_EXTRACTION_WITH_STRENGTH", "PARTIAL_EXTRACTION", "UNPARSED"
         parsed_ingredients: List[Dict[str, Any]],
         normalized_inns: List[Dict[str, Any]],
         failure_reasons: List[str],
@@ -106,7 +106,11 @@ def validate_schema_columns(columns: List[str]) -> Tuple[bool, List[str]]:
 
 
 def is_suspicious_image_url(url: Optional[str]) -> bool:
-    """Checks whether image URL is missing, non-https, or points to generic placeholder."""
+    """Heuristic check for missing, non-HTTP(S), or placeholder-pattern image links.
+    
+    Note: This is a string-level heuristic check only; it does not fetch or inspect image pixels.
+    All external image URLs remain unverified until manually reviewed.
+    """
     if not url or not str(url).strip():
         return True
     u = str(url).strip().lower()
@@ -123,7 +127,7 @@ def audit_dataset_file(
     normalizer: Optional[INNNormalizer] = None,
     max_rows: Optional[int] = None,
 ) -> Dict[str, Any]:
-    """Audits local dataset file and evaluates text-only parsing yield."""
+    """Audits local dataset file and evaluates text-only parsing outcomes."""
     rows = load_dataset_rows(file_path)
     if not rows:
         raise ValueError(f"Dataset file {file_path} contains zero records.")
@@ -145,9 +149,9 @@ def audit_dataset_file(
     missing_counts = {col: 0 for col in REQUIRED_COLUMNS}
     suspicious_url_count = 0
 
-    exact_match_count = 0
-    partial_match_count = 0
-    parse_failure_count = 0
+    full_extraction_count = 0
+    partial_extraction_count = 0
+    unparsed_count = 0
 
     failure_examples: List[Dict[str, Any]] = []
     audited_records: List[AuditRecord] = []
@@ -180,7 +184,7 @@ def audit_dataset_file(
             else:
                 seen_names[name_key] = row_id
 
-        # URL quality check
+        # URL heuristic check (string pattern only)
         suspicious_url = is_suspicious_image_url(raw_image_url)
         if suspicious_url:
             suspicious_url_count += 1
@@ -192,16 +196,16 @@ def audit_dataset_file(
 
         if not raw_comp:
             reasons.append("COMPOSITION_EMPTY")
-            category = "PARSE_FAILURE"
-            parse_failure_count += 1
+            category = "UNPARSED"
+            unparsed_count += 1
         else:
             # Run existing RuleBasedExtractor without modifying its internal weights
             extract_result = rule_extractor.extract(raw_comp)
 
             if not extract_result.ingredients:
                 reasons.append("NO_INGREDIENTS_RECOGNIZED")
-                category = "PARSE_FAILURE"
-                parse_failure_count += 1
+                category = "UNPARSED"
+                unparsed_count += 1
                 if len(failure_examples) < 15:
                     failure_examples.append({
                         "row_id": row_id,
@@ -237,11 +241,11 @@ def audit_dataset_file(
                         all_have_inn = False
 
                 if all_have_inn and all_have_strength:
-                    category = "EXACT_MATCH"
-                    exact_match_count += 1
+                    category = "FULL_EXTRACTION_WITH_STRENGTH"
+                    full_extraction_count += 1
                 else:
-                    category = "PARTIAL_MATCH"
-                    partial_match_count += 1
+                    category = "PARTIAL_EXTRACTION"
+                    partial_extraction_count += 1
                     if not all_have_strength:
                         reasons.append("MISSING_OR_UNPARSED_STRENGTH")
                     if not all_have_inn:
@@ -270,13 +274,13 @@ def audit_dataset_file(
         "duplicate_name_count": duplicate_names,
         "missing_fields": missing_counts,
         "suspicious_image_url_count": suspicious_url_count,
-        "parsing_yield": {
-            "exact_match_count": exact_match_count,
-            "exact_match_percentage": round((exact_match_count / total_rows) * 100, 2) if total_rows else 0.0,
-            "partial_match_count": partial_match_count,
-            "partial_match_percentage": round((partial_match_count / total_rows) * 100, 2) if total_rows else 0.0,
-            "parse_failure_count": parse_failure_count,
-            "parse_failure_percentage": round((parse_failure_count / total_rows) * 100, 2) if total_rows else 0.0,
+        "parser_outcomes": {
+            "full_extraction_count": full_extraction_count,
+            "full_extraction_percentage": round((full_extraction_count / total_rows) * 100, 2) if total_rows else 0.0,
+            "partial_extraction_count": partial_extraction_count,
+            "partial_extraction_percentage": round((partial_extraction_count / total_rows) * 100, 2) if total_rows else 0.0,
+            "unparsed_count": unparsed_count,
+            "unparsed_percentage": round((unparsed_count / total_rows) * 100, 2) if total_rows else 0.0,
         },
         "representative_failures": failure_examples,
     }
@@ -286,9 +290,9 @@ def audit_dataset_file(
 def render_markdown_audit_report(summary: Dict[str, Any]) -> str:
     """Renders clean GitHub-flavored Markdown audit report."""
     total = summary["total_records_analyzed"]
-    pyield = summary["parsing_yield"]
+    outcomes = summary["parser_outcomes"]
     lines = [
-        "# 📊 Indian Medicines Dataset Audit & Parser Benchmark Report",
+        "# 📊 Indian Medicines Dataset Audit & Parser Diagnostic Coverage Report",
         "",
         f"> **Generated:** {summary['audit_timestamp']}  ",
         f"> **Source File:** `{summary['source_file']}`  ",
@@ -301,7 +305,7 @@ def render_markdown_audit_report(summary: Dict[str, Any]) -> str:
         f"- **Total Records Analyzed:** `{total}`",
         f"- **Unique Medicine Names:** `{summary['unique_product_names']}`",
         f"- **Duplicate Brand Name Instances:** `{summary['duplicate_name_count']}`",
-        f"- **Suspicious or Placeholder Image URLs:** `{summary['suspicious_image_url_count']}`",
+        f"- **Flagged Placeholder/Non-HTTP URLs:** `{summary['suspicious_image_url_count']}` (String heuristic only; image pixels uninspected)",
         "",
         "### Field Completeness",
         "",
@@ -317,15 +321,15 @@ def render_markdown_audit_report(summary: Dict[str, Any]) -> str:
         "",
         "---",
         "",
-        "## 2. Text-Only Composition Parser Yield",
+        "## 2. Text-Only Composition Parser Outcomes & Diagnostic Coverage",
         "",
-        "> **Note on Terminology:** *Parser yield* measures string token extraction against the current rule dictionary. It is an algorithmic coverage metric, not a claim of clinical accuracy or medical validation.",
+        "> **Coverage Diagnostic Note:** These metrics measure heuristic parsing outcomes (token extraction, INN normalization, and numeric strength parsing) against the rule dictionary. Because this scraped dataset lacks verified ground-truth labels, these figures represent diagnostic parser coverage, not clinical accuracy or exact match against source truth.",
         "",
-        "| Category | Count | Percentage | Definition |",
+        "| Parser Outcome Category | Record Count | Diagnostic Coverage | Outcome Definition |",
         "| :--- | :---: | :---: | :--- |",
-        f"| **Exact Match** | `{pyield['exact_match_count']}` | `{pyield['exact_match_percentage']}%` | All extracted ingredients resolved to INN and valid strengths. |",
-        f"| **Partial Match** | `{pyield['partial_match_count']}` | `{pyield['partial_match_percentage']}%` | At least 1 ingredient recognized; strength or salt partially unparsed. |",
-        f"| **Parse Failure** | `{pyield['parse_failure_count']}` | `{pyield['parse_failure_percentage']}%` | Zero recognized ingredients in current dictionary or empty text. |",
+        f"| **Full Extraction with Strength** | `{outcomes['full_extraction_count']}` | `{outcomes['full_extraction_percentage']}%` | All extracted ingredients resolved to INN vocabulary with numeric strengths. |",
+        f"| **Partial Extraction** | `{outcomes['partial_extraction_count']}` | `{outcomes['partial_extraction_percentage']}%` | At least 1 ingredient recognized; strength or INN mapping partially unresolved. |",
+        f"| **Unparsed** | `{outcomes['unparsed_count']}` | `{outcomes['unparsed_percentage']}%` | Zero recognized ingredients in baseline dictionary or empty composition string. |",
         "",
         "---",
         "",
@@ -349,9 +353,9 @@ def render_markdown_audit_report(summary: Dict[str, Any]) -> str:
         "",
         "## 4. Key Findings & Next Steps",
         "",
-        "1. **Catalog Development:** Unparsed failure cases indicate active ingredients currently absent from `KNOWN_INGREDIENTS` (e.g. multi-ingredient vitamins, herbal supplements, or newer molecules).",
+        "1. **Catalog Development:** Unparsed failure cases indicate active ingredients currently absent from `KNOWN_INGREDIENTS` (e.g. multi-ingredient combinations, vitamins, herbal supplements, or newer molecules).",
         "2. **Zero Database Pollution:** This audit executed completely in-memory with zero writes to development or production databases.",
-        "3. **Image Disqualification:** The presence of empty, placeholder, or CDN web thumbnail URLs confirms that `image_url` cannot be used as packaging ground truth for OCR benchmarking.",
+        "3. **Image URLs Unverified:** The image URLs in this scraped dataset are unverified and excluded from OCR evaluation until manually reviewed. Heuristic checks flagged blank, non-HTTP, or placeholder links without inspecting image pixels, and the remaining URLs point to unverified remote assets rather than ground-truth packaging photos.",
     ])
 
     return "\n".join(lines)
@@ -388,3 +392,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

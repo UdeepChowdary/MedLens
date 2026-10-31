@@ -57,7 +57,7 @@ backend/.pytest_cache/
 
 # External & Downloaded Datasets (Prompt 2 Data Policy)
 backend/data/external/
-*.parquet
+backend/data/external/*.parquet
 
 
 # Mockup & Design Assets
