@@ -35,12 +35,28 @@ class PaddleOCREngine(BaseOCREngine):
             return "unavailable"
 
     def is_available(self) -> bool:
-        return self._version != "unavailable"
+        if self._version == "unavailable":
+            # Re-check in case package was installed after class loading
+            self._version = self._detect_version()
+            if self._version == "unavailable":
+                return False
+        try:
+            import paddle  # PaddlePaddle runtime must be present
+            import paddleocr
+            return True
+        except Exception:
+            return False
 
     def _get_ocr_instance(self):
+        """Lazy-loads the PaddleOCR model instance on first inference request."""
         if self._ocr_instance is None:
-            from paddleocr import PaddleOCR
-            self._ocr_instance = PaddleOCR(use_angle_cls=self._use_angle_cls, lang=self._lang)
+            try:
+                from paddleocr import PaddleOCR
+                self._ocr_instance = PaddleOCR(use_angle_cls=self._use_angle_cls, lang=self._lang)
+            except Exception as e:
+                raise RuntimeError(
+                    f"Failed to initialize PaddleOCR engine (model weights download or runtime error): {e}"
+                ) from e
         return self._ocr_instance
 
     def extract_text(
@@ -50,7 +66,9 @@ class PaddleOCREngine(BaseOCREngine):
         np_array: Optional[np.ndarray] = None,
     ) -> OCRResult:
         if not self.is_available():
-            raise RuntimeError("PaddleOCR is not installed in this environment.")
+            raise RuntimeError(
+                "PaddleOCR is not installed or runtime dependencies (paddlepaddle, paddleocr) are missing."
+            )
 
         start_time = time.perf_counter()
 
@@ -59,8 +77,11 @@ class PaddleOCREngine(BaseOCREngine):
                 pil_image = Image.open(io.BytesIO(image_bytes))
             np_array = np.array(pil_image)
 
-        ocr = self._get_ocr_instance()
-        raw_results = ocr.ocr(np_array, cls=self._use_angle_cls)
+        try:
+            ocr = self._get_ocr_instance()
+            raw_results = ocr.ocr(np_array, cls=self._use_angle_cls)
+        except Exception as e:
+            raise RuntimeError(f"PaddleOCR inference execution failed: {e}") from e
 
         lines_out: List[OCRLine] = []
         all_confs: List[float] = []

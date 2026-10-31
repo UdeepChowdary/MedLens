@@ -53,6 +53,68 @@ uvicorn app.main:app --reload --port 8000
 
 ---
 
+## 🔍 Pretrained OCR Engine Setup & Benchmark (ML-026, ML-027)
+
+MedLens uses a real deep-learning pretrained OCR pipeline with **Baidu PaddleOCR** (DBNet detection + SVTR/CRNN recognition) as primary engine, and **Google Tesseract-OCR** as an optional local fallback.
+
+> [!IMPORTANT]
+> **Zero Silent Mock Fallback Policy**: Real user packaging uploads and benchmark runs never silently substitute mock OCR data. If real OCR dependencies are not installed in the environment, the API returns `HTTP 503 Service Unavailable (ERR_OCR_ENGINE_UNAVAILABLE)` with actionable remediation hints. Mock OCR is strictly reserved for unit tests or explicitly marked demo fixtures (`X-OCR-Engine: mock` or `ocr_engine="mock"`).
+
+### 1. Installation & OS Prerequisites
+
+#### Python Packages
+```bash
+# Core CPU deep-learning OCR runtime
+pip install "paddlepaddle>=3.0.0" "paddleocr>=3.7.0"
+
+# Optional fallback engine wrapper
+pip install "pytesseract>=0.3.13"
+```
+
+#### OS-Specific Binary Prerequisites
+
+- **Windows**:
+  - PaddlePaddle CPU requires the standard Microsoft Visual C++ 2015-2022 Redistributable (x64).
+  - For Tesseract fallback, install UB-Mannheim Tesseract:
+    ```powershell
+    winget install UB-Mannheim.TesseractOCR
+    # Add C:\Program Files\Tesseract-OCR to your PATH environment variable
+    ```
+- **Linux (Debian / Ubuntu)**:
+  - System OpenMP runtime and Tesseract binaries:
+    ```bash
+    sudo apt-get update && sudo apt-get install -y libgomp1 tesseract-ocr
+    ```
+- **macOS**:
+  - Homebrew Tesseract:
+    ```bash
+    brew install tesseract
+    ```
+
+### 2. First-Run Pretrained Model Weight Download
+
+Model initialization is strictly **lazy**: importing FastAPI does not download model weights or contact external networks. On the **first live inference request**, PaddleOCR automatically downloads and verifies pretrained detection (`ch_PP-OCRv4_det`) and recognition (`ch_PP-OCRv4_rec`) model weights into `~/.paddleocr/` (~15–30 MB). Ensure outbound HTTPS access is available during first inference, or pre-populate `~/.paddleocr/` in air-gapped environments.
+
+### 3. Running the OCR Benchmark Tool
+
+MedLens provides an automated OCR benchmarking tool (`tools/benchmark_ocr.py`) to evaluate Character Error Rate (CER), Word Error Rate (WER), latency, and error distributions on human-verified packaging annotations:
+
+```bash
+# Run benchmark on test split with primary PaddleOCR engine
+python tools/benchmark_ocr.py --annotations data/annotations --raw data/raw --split test --engine paddleocr
+
+# Run benchmark evaluating both PaddleOCR and Tesseract fallback
+python tools/benchmark_ocr.py --annotations data/annotations --raw data/raw --split test --engine paddleocr tesseract
+
+# Run in mock demo mode for testing pipeline scaffolding
+python tools/benchmark_ocr.py --annotations data/annotations --raw data/raw --split test --allow-mock
+```
+
+> [!NOTE]
+> Pretrained OCR enables optical transcription of packaging text out-of-the-box without fine-tuning, but does not prove clinical or domain accuracy on Indian medicine packaging. Accurate evaluation requires human-verified physical packaging photographs and transcriptions.
+
+---
+
 ## 📂 Architecture Overview
 
 ```

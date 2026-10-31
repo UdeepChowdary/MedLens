@@ -74,3 +74,36 @@ class VerificationError(MedLensException):
             status_code=422,
             details=details,
         )
+
+
+class OCREngineUnavailableError(MedLensException):
+    """Raised when real OCR engine dependencies are not installed and mock OCR is not explicitly requested."""
+    def __init__(
+        self,
+        message: str = "No real OCR engine (PaddleOCR, Tesseract) is available in this environment.",
+        details: Optional[Dict[str, Any]] = None,
+    ):
+        super().__init__(
+            message=message,
+            error_code="ERR_OCR_ENGINE_UNAVAILABLE",
+            status_code=503,
+            details=details or {
+                "hint": "Install PaddleOCR ('pip install paddlepaddle paddleocr') or Tesseract-OCR, or explicitly request 'mock' for tests/demos."
+            },
+        )
+
+
+class OCRExecutionError(MedLensException):
+    """Raised when an OCR engine encounters an unrecoverable failure during inference."""
+    def __init__(
+        self,
+        message: str = "OCR extraction failed during inference execution.",
+        details: Optional[Dict[str, Any]] = None,
+    ):
+        super().__init__(
+            message=message,
+            error_code="ERR_OCR_EXECUTION_FAILED",
+            status_code=500,
+            details=details,
+        )
+
