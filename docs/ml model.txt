@@ -1,0 +1,101 @@
+# MedLens dataset and OCR workflow prompts
+
+Run these prompts one at a time, in order. Review each result before moving to the next.
+
+## Prompt 1 — Inspect the repo and audit the proposed dataset
+
+You are working in the MedLens repository: https://github.com/UdeepChowdary/MedLens
+
+Goal: determine whether `dmedhi/indian-medicines` is suitable for composition-text parsing and catalog development. Do not treat its rows or image URLs as verified truth, and do not use it as image-to-composition training data.
+
+First inspect the current code and documentation, especially:
+- `backend/app/services/extraction/rule_baseline.py`
+- `backend/app/services/normalization/inn_normalizer.py`
+- `backend/app/services/ocr/`
+- `backend/app/services/analysis_service.py`
+- `backend/data/`
+- existing dataset tools, tests, and dataset documentation
+
+Then inspect the Hugging Face dataset card and schema for `dmedhi/indian-medicines`. Do not download or commit the dataset yet. Report:
+1. Available fields, row count, license/terms information, and any documented source information.
+2. Whether `image_url` appears to be packaging imagery suitable for reading composition text. Do not assume it is.
+3. What can safely be tested with this dataset: composition parsing, normalization, or catalog seeding.
+4. What cannot be evaluated with it: OCR or image-to-composition accuracy, unless the images and labels are independently checked.
+5. Existing repo support and gaps for importing, auditing, testing, and documenting this dataset.
+
+Cite repository paths and dataset sources. Do not invent facts. Finish with a proposed minimal implementation plan. Do not modify files in this step.
+
+## Prompt 2 — Build a safe dataset audit and parser benchmark
+
+Implement the approved text-only audit workflow for `dmedhi/indian-medicines` in the MedLens backend.
+
+Requirements:
+- Follow existing repository conventions and inspect `AGENTS.md` or other local instructions first.
+- Keep downloaded or source dataset files out of Git unless the repository’s data policy explicitly allows them. Prefer a documented command that reads a user-provided local CSV/Parquet file.
+- Do not seed production or development databases automatically.
+- Do not change the clinical meaning of source records or silently “correct” ingredient names.
+- Record source row identifiers and original composition text in every result.
+- Validate required columns and types; report missing values, duplicate records, malformed rows, unparseable compositions, and suspicious image URLs.
+- Preserve original values. Put proposed normalized values in separate columns/fields.
+- Reuse the existing parser and normalizer where appropriate. Do not alter their behavior just to make this dataset score better.
+- Generate machine-readable output plus a concise Markdown summary, including counts and representative failure examples.
+- Use exact-match, partial-match, and parse-failure categories. Do not call parser yield “accuracy” or claim medical correctness.
+- Add focused tests for input validation, duplicate detection, malformed compositions, and output generation.
+- Do not fabricate expected results. Run the focused tests and report the actual commands and results.
+
+Before making changes, summarize the files you plan to add or edit. Then implement the audit tool and documentation. Do not start model training.
+
+## Prompt 3 — Create a real packaging photo collection and annotation workflow
+
+Build a human-reviewed pilot dataset workflow for actual medicine packaging photos.
+
+Inspect existing MedLens data schemas and tools first. Then propose and implement only the minimum additions needed for:
+- A documented folder structure for locally supplied photos and annotations.
+- An annotation schema that records image ID, source/permission notes, product family, image side/type, verbatim visible composition text, ingredient spans, strength spans, dosage form, annotator, review status, and uncertainty.
+- A validator that rejects missing required fields, invalid spans, nonexistent image files, and unreviewed records in evaluation splits.
+- A review queue/report that makes uncertain or unreadable labels easy for a human to inspect.
+- Group-aware train/validation/test splitting by product family, preventing near-duplicate package leakage.
+- A clear policy that synthetic illustrations and unreadable promotional images cannot be counted as real packaging ground truth.
+- A README explaining how to add photos, annotate, review, validate, and split them.
+
+Important:
+- Do not source, scrape, or download packaging images automatically.
+- Do not commit private photos or personal information.
+- Do not mark model-generated annotations as verified. Require a human review state.
+- Do not claim that a 15–20 image pilot represents all medicines or supports robust model training.
+- Keep the existing dataset untouched. Add tests for schema validation, span validation, image linkage, and product-family leakage.
+- Do not train a model in this step.
+
+Summarize planned files before editing, then implement and run the focused tests. Report the exact test results and any unresolved data or permission questions.
+
+## Prompt 4 — Benchmark pretrained OCR on the reviewed pilot set
+
+Use only real packaging images that have permission notes and human-verified verbatim text annotations. Do not use fake illustrations or unreviewed images as ground truth.
+
+Inspect the existing OCR dispatcher and preprocessing pipeline. Add a reproducible benchmark command that:
+- Runs the configured OCR engines on the same held-out images.
+- Stores per-image OCR output and engine/version/configuration metadata.
+- Compares OCR output to the human transcription using clearly named text metrics, including character error rate and word error rate.
+- Reports aggregate and per-image results, with examples of the largest errors.
+- Keeps a product-family-separated held-out test split untouched during tuning.
+- Handles unavailable engines explicitly; never silently substitute a mock OCR result in benchmark scoring.
+- Does not use composition-parser success as an OCR metric.
+- Does not claim medical accuracy from OCR scores.
+
+Add focused tests using small generated text fixtures where appropriate, but do not let generated fixtures count as real-package evaluation. Do not modify source images or annotations. Run the benchmark only if a reviewed pilot dataset is available; otherwise implement the command and state that no valid run was possible.
+
+## Prompt 5 — Decide whether a learned model is justified
+
+Review the text-parser benchmark and reviewed-photo OCR benchmark results. Do not train a model just because model training is planned.
+
+Write a short decision report that answers:
+1. Is OCR the main failure point, or is downstream composition parsing/normalization the main failure point?
+2. Which error types occur most often, with examples and counts?
+3. Is the real, human-reviewed dataset large and diverse enough for training, or only for a pilot evaluation?
+4. What is the smallest next experiment that could answer the remaining question?
+5. What additional images, permissions, annotations, or product families are needed?
+6. What claims are supported now, and what claims are not supported?
+
+If training is not justified, recommend targeted parser/OCR improvements and more data collection. If it is justified, propose a training plan with a frozen product-family test split, baselines, metrics, artifact/version tracking, and a rollback path. Do not produce inflated percentages or imply clinical validation.
+
+End with a prioritized next-step list, citing repository files and actual benchmark outputs.
