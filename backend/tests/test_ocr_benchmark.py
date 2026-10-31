@@ -272,3 +272,4 @@ def test_synthetic_test_fixture_execution(tmp_path: Path):
     assert "dummy_test_ocr" in md
     assert "READY" in md
     assert "Methodological Disclaimers" in md
+
