@@ -74,6 +74,7 @@ class AnalysisPipelineService:
         raw_bytes: bytes,
         analysis_id: Optional[str] = None,
         requested_ocr_engine: Optional[str] = None,
+        session_id: Optional[str] = None,
     ) -> AnalysisResponse:
         """Executes full zero-hallucination analysis pipeline and persists report."""
         start_time = time.perf_counter()
@@ -288,6 +289,7 @@ class AnalysisPipelineService:
         # Step 6: Persist in SQLite / PostgreSQL (ML-030, ML-031, ML-032)
         analysis_record = Analysis(
             id=target_id,
+            session_id=session_id,
             status=verification_state.value,
             image_sha256=image_quality.sha256,
             processing_time_ms=elapsed_ms,
