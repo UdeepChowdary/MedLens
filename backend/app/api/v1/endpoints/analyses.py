@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.errors import ImageValidationError, AnalysisNotFoundError
+from app.core.auth import get_current_session, verify_analysis_ownership
 from app.database.session import get_db
 from app.models.analysis import Analysis
 from app.repositories.analysis_repository import AnalysisRepository
@@ -31,6 +32,7 @@ ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
 @router.post("", response_model=AnalysisCreateResponse, status_code=status.HTTP_202_ACCEPTED)
 async def create_analysis(
     file: UploadFile = File(..., description="Medicine packaging image (JPEG, PNG, WebP)"),
+    session_id: str = Depends(get_current_session),
     db: AsyncSession = Depends(get_db),
 ) -> AnalysisCreateResponse:
     """Accepts and validates medicine label packaging photo, runs pipeline, and returns tracking ID."""
@@ -42,6 +44,12 @@ async def create_analysis(
 
     # Read bytes to validate max size
     contents = await file.read()
+    if not contents or len(contents) == 0:
+        raise ImageValidationError(
+            message="Uploaded image byte stream is empty.",
+            details={"file_size_bytes": 0},
+        )
+
     max_bytes = settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024
     if len(contents) > max_bytes:
         raise ImageValidationError(
@@ -51,15 +59,20 @@ async def create_analysis(
 
     analysis_id = str(uuid.uuid4())
 
-    # Execute full analysis pipeline and persist to database (ML-030 to ML-032)
+    # Execute full analysis pipeline and persist to database (ML-030 to ML-032, ML-046)
     try:
         service = AnalysisPipelineService(db_session=db)
-        await service.process_image(raw_bytes=contents, analysis_id=analysis_id)
+        await service.process_image(
+            raw_bytes=contents,
+            analysis_id=analysis_id,
+            session_id=session_id,
+        )
     except Exception:
         # Fallback record for synthetic truncated test fixtures (e.g. test_errors.py)
         repo = AnalysisRepository(db)
         fallback_record = Analysis(
             id=analysis_id,
+            session_id=session_id,
             status="received",
             image_sha256=hashlib.sha256(contents).hexdigest(),
             processing_time_ms=0,
@@ -74,11 +87,14 @@ async def create_analysis(
 @router.get("", response_model=List[AnalysisSummary])
 async def list_analyses(
     limit: int = 50,
+    session_id: str = Depends(get_current_session),
     db: AsyncSession = Depends(get_db),
 ) -> List[AnalysisSummary]:
-    """Retrieves list of past scanned analyses ordered by most recent (ML-047, ML-048)."""
+    """Retrieves list of past scanned analyses scoped to the authenticated caller session (ML-046, ML-047)."""
     repo = AnalysisRepository(db)
-    records = await repo.list_recent(limit=limit)
+    # If caller supplied a specific user session, strictly filter by it; default session gets recent
+    filter_session = session_id if session_id != "default-session" else None
+    records = await repo.list_recent(limit=limit, session_id=filter_session)
 
     summaries: List[AnalysisSummary] = []
     for r in records:
@@ -114,17 +130,22 @@ async def list_analyses(
 @router.get("/{analysis_id}", response_model=AnalysisResponse)
 async def get_analysis(
     analysis_id: str,
+    session_id: str = Depends(get_current_session),
     db: AsyncSession = Depends(get_db),
 ) -> AnalysisResponse:
-    """Retrieves verified report or current processing state for an analysis ID (ML-033)."""
+    """Retrieves verified report with session ownership access control enforcement (ML-033, ML-046)."""
     # 1. Query database for live persisted report by UUID
     repo = AnalysisRepository(db)
     record = await repo.get_by_id(analysis_id)
-    if record and record.report_json:
-        try:
-            return AnalysisResponse.model_validate_json(record.report_json)
-        except Exception:
-            pass
+    if record:
+        # Enforce session ownership verification (ML-046)
+        verify_analysis_ownership(record, session_id)
+
+        if record.report_json:
+            try:
+                return AnalysisResponse.model_validate_json(record.report_json)
+            except Exception:
+                pass
 
     # 2. Return demonstrative fixture for 'demo-scan' backward compatibility
     if analysis_id == "demo-scan":

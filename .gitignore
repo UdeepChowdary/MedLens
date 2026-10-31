@@ -55,6 +55,11 @@ backend/.pytest_cache/
 *.db
 *.sqlite3
 
+# External & Downloaded Datasets (Prompt 2 Data Policy)
+backend/data/external/
+backend/data/external/*.parquet
+
+
 # Mockup & Design Assets
 /00a5601c-ef12-40af-ac15-8a65ad42bf07.png
 /32968fbb-5980-4b4a-9479-a339a4d22331.png

@@ -20,12 +20,16 @@ from tools.split_dataset import split_dataset
 from tools.generate_dataset_report import generate_statistics, render_markdown_report
 from tools.annotate import initialize_annotation, add_entity_to_annotation
 
+# Dynamically anchored data directory paths (works from repo root, backend dir, or CI)
+BASE_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+ANN_DIR = BASE_DATA_DIR / "annotations"
+RAW_DIR = BASE_DATA_DIR / "raw"
+SPLITS_DIR = BASE_DATA_DIR / "splits"
+
 
 def test_valid_dataset_passes_validation():
     """Verifies that all baseline annotations in data/annotations pass validation."""
-    ann_dir = Path("data/annotations")
-    raw_dir = Path("data/raw")
-    result = validate_dataset(ann_dir, raw_dir, check_image_exists=True)
+    result = validate_dataset(ANN_DIR, RAW_DIR, check_image_exists=True)
 
     assert result["is_valid"] is True
     assert result["total_files"] >= 5
@@ -50,7 +54,7 @@ def test_validate_strength_units():
 
 def test_validation_detects_out_of_bounds_bbox(tmp_path: Path):
     """Verifies that bounding boxes with invalid coordinates are flagged with errors."""
-    sample_path = Path("data/annotations/img-dolo-650-blister.json")
+    sample_path = ANN_DIR / "img-dolo-650-blister.json"
     with open(sample_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -62,14 +66,14 @@ def test_validation_detects_out_of_bounds_bbox(tmp_path: Path):
         json.dump(data, f)
 
     seen = {}
-    issues = validate_annotation_file(bad_file, Path("data/raw"), seen, check_image_exists=False)
+    issues = validate_annotation_file(bad_file, RAW_DIR, seen, check_image_exists=False)
     err_types = [i.error_type for i in issues]
     assert "BBOX_OUT_OF_BOUNDS" in err_types
 
 
 def test_validation_detects_duplicate_image_hashes(tmp_path: Path):
     """Verifies that two annotations pointing to the same image hash are caught as duplicates."""
-    sample_path = Path("data/annotations/img-dolo-650-blister.json")
+    sample_path = ANN_DIR / "img-dolo-650-blister.json"
     with open(sample_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -82,8 +86,8 @@ def test_validation_detects_duplicate_image_hashes(tmp_path: Path):
         json.dump(data, f)
 
     seen = {}
-    issues_a = validate_annotation_file(file_a, Path("data/raw"), seen, check_image_exists=False)
-    issues_b = validate_annotation_file(file_b, Path("data/raw"), seen, check_image_exists=False)
+    issues_a = validate_annotation_file(file_a, RAW_DIR, seen, check_image_exists=False)
+    issues_b = validate_annotation_file(file_b, RAW_DIR, seen, check_image_exists=False)
 
     assert len(issues_a) == 0
     assert any(i.error_type == "DUPLICATE_IMAGE_HASH" for i in issues_b)
@@ -91,7 +95,7 @@ def test_validation_detects_duplicate_image_hashes(tmp_path: Path):
 
 def test_leakage_free_dataset_splitting(tmp_path: Path):
     """Verifies that dataset splitting ensures zero product family leakage between train, val, and test."""
-    ann_dir = Path("data/annotations")
+    ann_dir = ANN_DIR
     out_dir = tmp_path / "splits"
 
     summary = split_dataset(
@@ -123,8 +127,8 @@ def test_leakage_free_dataset_splitting(tmp_path: Path):
 
 def test_dataset_report_statistics_generation():
     """Verifies aggregating statistics and rendering markdown report."""
-    ann_dir = Path("data/annotations")
-    splits_dir = Path("data/splits")
+    ann_dir = ANN_DIR
+    splits_dir = SPLITS_DIR
 
     stats = generate_statistics(ann_dir, splits_dir)
     assert stats["total_images"] >= 5
@@ -140,7 +144,7 @@ def test_dataset_report_statistics_generation():
 
 def test_annotation_tool_workflow(tmp_path: Path):
     """Verifies CLI helper initializes a new annotation draft from image and adds entity."""
-    img_file = Path("data/raw/dolo_650_blister.jpg")
+    img_file = RAW_DIR / "dolo_650_blister.jpg"
     out_dir = tmp_path / "annotations"
 
     created = initialize_annotation(

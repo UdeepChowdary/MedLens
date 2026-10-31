@@ -138,6 +138,21 @@ export type ApiError = {
   details?: Record<string, unknown>;
 };
 
+/** Retrieves or initializes cryptographically random session token for record access control (ML-046). */
+export function getClientSessionId(): string {
+  if (typeof window === "undefined") return "default-session";
+  try {
+    let sess = localStorage.getItem("medlens_session_id");
+    if (!sess) {
+      sess = `sess_${crypto.randomUUID().replace(/-/g, "")}`;
+      localStorage.setItem("medlens_session_id", sess);
+    }
+    return sess;
+  } catch {
+    return "default-session";
+  }
+}
+
 // ─── HTTP Helper ──────────────────────────────────────────────────────────────
 
 async function request<T>(
@@ -145,10 +160,12 @@ async function request<T>(
   options?: RequestInit
 ): Promise<{ data: T | null; error: ApiError | null }> {
   try {
+    const sessionToken = getClientSessionId();
     const res = await fetch(`${API_BASE}${path}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
+        "X-Session-ID": sessionToken,
         ...(options?.headers ?? {}),
       },
     });
@@ -181,9 +198,13 @@ export async function uploadAnalysis(
   formData.append("file", file);
 
   try {
+    const sessionToken = getClientSessionId();
     const res = await fetch(`${API_BASE}/analyses`, {
       method: "POST",
       body: formData,
+      headers: {
+        "X-Session-ID": sessionToken,
+      },
       // Do NOT set Content-Type header for multipart; browser sets it with boundary
     });
 

@@ -12,6 +12,7 @@
     },
     "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
     "packaging_type": "blister_foil",
+    "image_side": "back",
     "product_family": "example-brand",
     "brand_name": "Example Brand",
     "manufacturer": "Example Pharma Ltd",
@@ -33,6 +34,7 @@
     "skew_angle": 0.0
   },
   "transcription": "Example Brand 500 mg. Each tablet contains: Paracetamol IP 500 mg.",
+  "composition_text": "Each tablet contains: Paracetamol IP 500 mg.",
   "entities": [
     {
       "label": "BRAND",
@@ -85,5 +87,7 @@
     }
   ],
   "canonical_product_id": null,
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
   "review_status": "verified_by_human"
 }

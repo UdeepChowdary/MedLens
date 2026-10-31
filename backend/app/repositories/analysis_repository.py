@@ -39,12 +39,16 @@ class AnalysisRepository:
         self.session.add_all(entities)
         await self.session.commit()
 
-    async def list_recent(self, limit: int = 50) -> List[Analysis]:
-        """Fetches recent analyses ordered by creation timestamp descending."""
-        stmt = (
-            select(Analysis)
-            .order_by(Analysis.created_at.desc())
-            .limit(limit)
-        )
+    async def list_recent(
+        self,
+        limit: int = 50,
+        session_id: Optional[str] = None,
+    ) -> List[Analysis]:
+        """Fetches recent analyses ordered by creation timestamp descending, scoped by session."""
+        stmt = select(Analysis).order_by(Analysis.created_at.desc()).limit(limit)
+
+        if session_id:
+            stmt = stmt.where(Analysis.session_id == session_id)
+
         result = await self.session.execute(stmt)
         return list(result.scalars().all())

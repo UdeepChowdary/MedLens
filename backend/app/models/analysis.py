@@ -13,6 +13,7 @@ class Analysis(Base):
     __tablename__ = "analyses"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    session_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, index=True)
     status: Mapped[str] = mapped_column(String(50), default="received")
     image_sha256: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     processing_time_ms: Mapped[int] = mapped_column(Integer, default=0)
