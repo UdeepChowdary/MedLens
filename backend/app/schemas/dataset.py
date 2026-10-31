@@ -97,6 +97,10 @@ class ImageMetadata(BaseModel):
     dimensions: ImageDimensions = Field(description="Width and height in pixels.")
     sha256: str = Field(min_length=64, max_length=64, description="SHA-256 cryptographic digest of image file.")
     packaging_type: PackagingType = Field(description="Physical packaging category.")
+    image_side: Optional[str] = Field(
+        default="back",
+        description="Packaging face or aspect photographed: 'back', 'front', 'side', 'carton_flap', 'unspecified'.",
+    )
     product_family: str = Field(description="Grouping key for leakage prevention, e.g. 'dolo-650', 'augmentin-625'.")
     brand_name: Optional[str] = Field(default=None, description="Commercial brand name if identified.")
     manufacturer: Optional[str] = Field(default=None, description="Manufacturing pharmaceutical company.")
@@ -109,6 +113,18 @@ class PackagingAnnotationDoc(BaseModel):
     image_metadata: ImageMetadata = Field(description="Image descriptors and file identity.")
     quality_flags: QualityFlags = Field(default_factory=QualityFlags, description="Visual degradation attributes.")
     transcription: str = Field(description="Complete verbatim transcript of all readable text in reading order.")
+    composition_text: Optional[str] = Field(
+        default=None,
+        description="Verbatim visible composition text exactly as printed on packaging.",
+    )
     entities: List[EntityAnnotation] = Field(default_factory=list, description="Extracted entity spans.")
+    has_uncertainty: bool = Field(
+        default=False,
+        description="Whether human annotator encountered ambiguous, degraded, or uncertain text.",
+    )
+    uncertainty_notes: Optional[str] = Field(
+        default=None,
+        description="Clinical annotator notes detailing uncertain or unreadable characters/spans.",
+    )
     canonical_product_id: Optional[str] = Field(default=None, description="Linked canonical product ID in database.")
     review_status: ReviewStatus = Field(default=ReviewStatus.DRAFT, description="Human verification review status.")

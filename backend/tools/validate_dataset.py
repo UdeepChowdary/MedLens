@@ -203,6 +203,75 @@ def validate_annotation_file(
             if not valid:
                 errors.append(ValidationErrorItem(rel_path, "INCONSISTENT_UNIT", reason, severity="ERROR"))
 
+        # Character span validation (if char_span present)
+        char_span = ent.get("char_span")
+        if char_span is not None:
+            if not isinstance(char_span, (list, tuple)) or len(char_span) != 2:
+                errors.append(
+                    ValidationErrorItem(
+                        rel_path,
+                        "INVALID_CHAR_SPAN_FORMAT",
+                        f"Entity {label} at index {idx} char_span must be a 2-element [start, end] list.",
+                    )
+                )
+            else:
+                c_start, c_end = char_span
+                if not isinstance(c_start, int) or not isinstance(c_end, int):
+                    errors.append(
+                        ValidationErrorItem(
+                            rel_path,
+                            "INVALID_CHAR_SPAN_FORMAT",
+                            f"Entity {label} at index {idx} char_span indices must be integers.",
+                        )
+                    )
+                elif c_start < 0 or c_end > len(transcription) or c_start >= c_end:
+                    errors.append(
+                        ValidationErrorItem(
+                            rel_path,
+                            "CHAR_SPAN_OUT_OF_BOUNDS",
+                            f"Entity {label} char_span [{c_start}, {c_end}] out of bounds for transcription length {len(transcription)}.",
+                        )
+                    )
+                else:
+                    sliced = transcription[c_start:c_end]
+                    if sliced != raw_text:
+                        errors.append(
+                            ValidationErrorItem(
+                                rel_path,
+                                "CHAR_SPAN_TEXT_MISMATCH",
+                                f"Entity {label} slice '{sliced}' does not match declared raw_text '{raw_text}'.",
+                            )
+                        )
+
+    # 5. Provenance & Real Packaging Ground Truth Policy Check
+    prov = meta.get("provenance", {})
+    if not isinstance(prov, dict):
+        errors.append(ValidationErrorItem(rel_path, "MISSING_FIELD", "Missing 'image_metadata.provenance'."))
+    else:
+        if not prov.get("source"):
+            errors.append(ValidationErrorItem(rel_path, "MISSING_FIELD", "Missing 'provenance.source'."))
+        if not prov.get("annotator_id"):
+            errors.append(ValidationErrorItem(rel_path, "MISSING_FIELD", "Missing 'provenance.annotator_id'."))
+
+        review_status = data.get("review_status")
+        notes = str(prov.get("notes") or "").lower()
+        source_str = str(prov.get("source") or "").lower()
+
+        is_synthetic = (
+            "synthetic" in notes
+            or "synthetic" in source_str
+            or "3d generic illustration" in notes
+            or "do not use as ground truth" in notes
+        )
+        if is_synthetic and review_status == "verified_by_human":
+            errors.append(
+                ValidationErrorItem(
+                    rel_path,
+                    "SYNTHETIC_CANNOT_BE_VERIFIED",
+                    "Synthetic illustrations and unreadable promotional images cannot be marked as 'verified_by_human' real packaging ground truth.",
+                )
+            )
+
     # Clinical completeness warning
     if not has_brand and not has_ingredient:
         errors.append(
@@ -249,10 +318,128 @@ def validate_dataset(
     }
 
 
+def validate_split_manifests(
+    splits_dir: Path,
+    annotations_dir: Path,
+    require_human_verified: bool = True,
+) -> Dict[str, Any]:
+    """Validates split manifests (train, val, test) ensuring zero leakage and evaluation split eligibility."""
+    if not splits_dir.exists():
+        raise FileNotFoundError(f"Splits directory not found: {splits_dir}")
+
+    issues: List[ValidationErrorItem] = []
+    split_families: Dict[str, Set[str]] = {}
+
+    for split_name in ["train", "val", "test"]:
+        manifest_file = splits_dir / f"{split_name}.json"
+        if not manifest_file.exists():
+            issues.append(
+                ValidationErrorItem(
+                    manifest_file.name,
+                    "MISSING_SPLIT_MANIFEST",
+                    f"Required split manifest '{split_name}.json' missing in {splits_dir}.",
+                )
+            )
+            continue
+
+        try:
+            with open(manifest_file, "r", encoding="utf-8") as f:
+                split_data = json.load(f)
+        except Exception as e:
+            issues.append(ValidationErrorItem(manifest_file.name, "JSON_SYNTAX_ERROR", str(e)))
+            continue
+
+        families = set(split_data.get("product_families", []))
+        split_families[split_name] = families
+        items = split_data.get("images", [])
+
+        for it in items:
+            ann_filename = it.get("annotation_file")
+            image_id = it.get("image_id", "unknown")
+            review_status = it.get("review_status", "draft")
+            is_synthetic = it.get("is_synthetic_fixture", False)
+
+            # Check that referenced annotation file actually exists
+            ann_path = annotations_dir / ann_filename
+            if not ann_path.exists():
+                issues.append(
+                    ValidationErrorItem(
+                        manifest_file.name,
+                        "MISSING_ANNOTATION_FILE",
+                        f"Split {split_name} references non-existent annotation '{ann_filename}'.",
+                    )
+                )
+                continue
+
+            # In evaluation splits (val, test), records MUST be verified by human and not synthetic
+            if split_name in ("val", "test"):
+                sev = "ERROR" if require_human_verified else "WARNING"
+                if review_status != "verified_by_human":
+                    issues.append(
+                        ValidationErrorItem(
+                            manifest_file.name,
+                            "UNREVIEWED_RECORD_IN_EVAL_SPLIT",
+                            f"Evaluation split '{split_name}' contains unverified item '{image_id}' with status '{review_status}'.",
+                            severity=sev,
+                        )
+                    )
+                if is_synthetic:
+                    issues.append(
+                        ValidationErrorItem(
+                            manifest_file.name,
+                            "SYNTHETIC_RECORD_IN_EVAL_SPLIT",
+                            f"Evaluation split '{split_name}' contains synthetic fixture '{image_id}'.",
+                            severity=sev,
+                        )
+                    )
+
+    # Verify zero product family leakage
+    train_f = split_families.get("train", set())
+    val_f = split_families.get("val", set())
+    test_f = split_families.get("test", set())
+
+    leak_train_val = train_f & val_f
+    leak_train_test = train_f & test_f
+    leak_val_test = val_f & test_f
+
+    if leak_train_val:
+        issues.append(
+            ValidationErrorItem(
+                "splits",
+                "PRODUCT_FAMILY_LEAKAGE",
+                f"Train and Val share product families: {sorted(list(leak_train_val))}",
+            )
+        )
+    if leak_train_test:
+        issues.append(
+            ValidationErrorItem(
+                "splits",
+                "PRODUCT_FAMILY_LEAKAGE",
+                f"Train and Test share product families: {sorted(list(leak_train_test))}",
+            )
+        )
+    if leak_val_test:
+        issues.append(
+            ValidationErrorItem(
+                "splits",
+                "PRODUCT_FAMILY_LEAKAGE",
+                f"Val and Test share product families: {sorted(list(leak_val_test))}",
+            )
+        )
+
+    error_count = sum(1 for i in issues if i.severity == "ERROR")
+    return {
+        "is_valid": error_count == 0,
+        "error_count": error_count,
+        "issues": [i.to_dict() for i in issues],
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Validate MedLens medicine packaging dataset.")
     parser.add_argument("--annotations-dir", default="data/annotations", help="Path to annotations folder")
     parser.add_argument("--raw-dir", default="data/raw", help="Path to raw images folder")
+    parser.add_argument("--splits-dir", default=None, help="Optional path to splits folder to validate manifests")
     parser.add_argument("--skip-image-check", action="store_true", help="Skip physical image file checks")
     args = parser.parse_args()
 
@@ -272,6 +459,16 @@ def main():
         print("\n--- Detailed Issues ---")
         for iss in result["issues"]:
             print(f"[{iss['severity']}] {iss['annotation_file']}: {iss['error_type']} - {iss['message']}")
+
+    if args.splits_dir:
+        splits_path = Path(args.splits_dir)
+        print(f"\nValidating splits in {splits_path}...")
+        split_result = validate_split_manifests(splits_path, ann_dir)
+        print(f"Splits valid: {split_result['is_valid']}, Errors: {split_result['error_count']}")
+        for iss in split_result["issues"]:
+            print(f"[{iss['severity']}] {iss['annotation_file']}: {iss['error_type']} - {iss['message']}")
+        if not split_result["is_valid"]:
+            result["is_valid"] = False
 
     if result["is_valid"]:
         print("\nSUCCESS: All dataset annotations passed validation!")
