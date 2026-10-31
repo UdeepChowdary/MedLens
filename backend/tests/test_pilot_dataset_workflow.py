@@ -348,3 +348,4 @@ def test_human_review_queue_detection(tmp_path: Path):
     assert "img-draft" in md
     assert "img-uncertain" in md
     assert "Expiry date font worn off" in md
+

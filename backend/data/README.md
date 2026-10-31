@@ -121,3 +121,4 @@ python backend/tools/split_dataset.py \
 > A 15–20 image pilot collection provides a rigorously annotated benchmark for verifying OCR character error rates, parser coverage, and pipeline reproducibility.  
 > It **does not** represent all commercial medicine packaging varieties, nor does it support robust deep learning model training across rare dosage formulations.  
 > Claims of platform performance must distinguish between **benchmark test set validation** on this pilot and **large-scale population-level clinical accuracy**.
+

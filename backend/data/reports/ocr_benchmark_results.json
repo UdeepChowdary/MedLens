@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-10-31T18:00:45.584552+00:00",
+  "target_split": "test",
+  "annotations_dir": "backend\\data\\annotations",
+  "raw_images_dir": "backend\\data\\raw",
+  "requested_engines": [
+    "paddleocr",
+    "tesseract"
+  ],
+  "preprocessing_enabled": true,
+  "total_eligible_images": 1,
+  "engine_availability": {
+    "paddleocr": {
+      "available": false,
+      "version": "unavailable",
+      "reason": "Engine 'paddleocr' binaries or Python packages missing"
+    },
+    "tesseract": {
+      "available": false,
+      "version": "unavailable",
+      "reason": "Engine 'tesseract' binaries or Python packages missing"
+    }
+  },
+  "per_engine_results": {},
+  "status": "ENGINES_UNAVAILABLE",
+  "notes": [
+    "Eligible packaging images are present (1), but none of the requested OCR engines (paddleocr, tesseract) are available in the local environment. Per MedLens policy, mock results are never silently substituted during benchmark evaluation."
+  ]
+}
