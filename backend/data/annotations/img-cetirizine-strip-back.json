@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-cetirizine-strip-back",
+    "file_name": "Cetirizine_strip_back.jpg",
+    "format": "jpeg",
+    "dimensions": {
+      "width": 264,
+      "height": 757
+    },
+    "sha256": "b9538b46be293bd1188f503ead147df5145e09401f99d728cc110dc865124bf5",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "cetirizine-10",
+    "brand_name": "Cetizine / Cetirizine Tablets IP",
+    "manufacturer": "Bioconic Remedies / Cuts Universal Life Science",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:30:55Z",
+      "notes": "Authentic physical blister strip (back foil). Narrow strip format showing Cetirizine 10mg composition and manufacturing license."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Cetirizine Tablets IP Cetizine. Composition: Each film coated tablet contains: Cetirizine Dihydrochloride IP 10 mg. Excipients q.s. Colour: Titanium Dioxide IP. Dosage: As directed by the Physician. Storage: Store in a cool, dry & dark place. Protect from direct light & moisture. Keep the medicine out of reach of children. Mfd. by: Bioconic Remedies. Mfg. Lic. No.: MNB/06/315 & MB/06/38/06. Manufactured in India for Cuts Universal Life Science.",
+  "composition_text": "Composition: Each film coated tablet contains: Cetirizine Dihydrochloride IP 10 mg.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Cetizine",
+      "normalized_value": "Cetirizine",
+      "bbox": [
+        245,
+        87,
+        302,
+        496
+      ],
+      "char_span": [
+        22,
+        30
+      ]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Composition: Each film coated tablet contains:",
+      "normalized_value": null,
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        32,
+        78
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [
+        190,
+        90,
+        249,
+        727
+      ],
+      "char_span": [
+        62,
+        68
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Cetirizine",
+      "normalized_value": "Cetirizine",
+      "bbox": [
+        132,
+        75,
+        195,
+        708
+      ],
+      "char_span": [
+        0,
+        10
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Dihydrochloride",
+      "normalized_value": "Dihydrochloride Salt",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        90,
+        105
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        190,
+        90,
+        249,
+        727
+      ],
+      "char_span": [
+        19,
+        21
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "10 mg",
+      "normalized_value": "10 mg",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        109,
+        114
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [
+        190,
+        90,
+        249,
+        727
+      ],
+      "char_span": [
+        62,
+        68
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "cetirizine-10",
+  "review_status": "verified_by_human"
+}

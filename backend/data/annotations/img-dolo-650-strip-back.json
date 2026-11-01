@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-dolo-650-strip-back",
+    "file_name": "dolo_650_strip_back.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 308,
+      "height": 396
+    },
+    "sha256": "0da2d514eec337b2061abfc0facbf59f33d3e2d6c3e788e4ad3567514f1e3f0d",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "dolo-650",
+    "brand_name": "Dolo-650",
+    "manufacturer": "Micro Labs Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:29:23Z",
+      "notes": "Authentic physical blister strip (back foil). Clean readable monochrome typography with repeated Dolo-650 brand mark, active ingredient Paracetamol 650mg, and manufacturer Micro Labs."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Dolo-650 Paracetamol Tablets IP. Each uncoated tablet contains: Paracetamol IP 650 mg. Dosage: As directed by the Physician. Store in a dry & dark place, at a temperature not exceeding 30C. Over dose may be injurious to Liver. Mfg. Lic. No.: M/600/2012. Made in India by MICRO LABS LIMITED. Mamring, Namthang Road, South Sikkim - 737 132. Regd. Trade Mark.",
+  "composition_text": "Each uncoated tablet contains: Paracetamol IP 650 mg.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Dolo-650",
+      "normalized_value": "Dolo-650",
+      "bbox": [
+        161,
+        250,
+        189,
+        379
+      ],
+      "char_span": [
+        0,
+        8
+      ]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Each uncoated tablet contains:",
+      "normalized_value": null,
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        33,
+        63
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [
+        272,
+        246,
+        353,
+        662
+      ],
+      "char_span": [
+        47,
+        53
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Paracetamol",
+      "normalized_value": "Paracetamol",
+      "bbox": [
+        194,
+        250,
+        267,
+        769
+      ],
+      "char_span": [
+        9,
+        20
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        272,
+        246,
+        353,
+        662
+      ],
+      "char_span": [
+        29,
+        31
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "650 mg",
+      "normalized_value": "650 mg",
+      "bbox": [
+        454,
+        250,
+        489,
+        525
+      ],
+      "char_span": [
+        79,
+        85
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [
+        272,
+        246,
+        353,
+        662
+      ],
+      "char_span": [
+        47,
+        53
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "dolo-650",
+  "review_status": "verified_by_human"
+}

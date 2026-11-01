@@ -231,7 +231,14 @@ class PaddleOCREngine(BaseOCREngine):
         if np_array is None:
             if pil_image is None:
                 pil_image = Image.open(io.BytesIO(image_bytes))
+            if pil_image.mode != "RGB":
+                pil_image = pil_image.convert("RGB")
             np_array = np.array(pil_image)
+        else:
+            if len(np_array.shape) == 2:
+                np_array = np.stack([np_array] * 3, axis=-1)
+            elif np_array.shape[2] == 4:
+                np_array = np_array[:, :, :3]
 
         try:
             ocr = self._get_ocr_instance()

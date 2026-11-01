@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-pan-40-strip-back",
+    "file_name": "pan_40_strip_back.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 535,
+      "height": 344
+    },
+    "sha256": "6dc168ed681fafc2c8d4530d8095425ae1116c53009aa9fe7729d366976a436d",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "pan-40",
+    "brand_name": "PAN 40",
+    "manufacturer": "Alkem Laboratories Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:30:39Z",
+      "notes": "Authentic physical blister strip (back foil). Gastro-resistant enteric coated Pantoprazole 40mg with manufacturer Alkem Laboratories."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Pantoprazole Gastro-resistant Tablets IP PAN 40. Composition: Each enteric coated tablet contains: Pantoprazole Sodium IP Eq. to Pantoprazole 40 mg. Colours: Ferric Oxide Yellow USP-NF & Titanium Dioxide IP. Dosage: As directed by the Physician. Store protected from moisture & temperature not exceeding 30C. ALKEM HEALTH SCIENCE. A Unit of Alkem Laboratories Limited. Samardung, South Sikkim - 737 137. Mfg. Lic. No.: M/757/2016. SCHEDULE H PRESCRIPTION DRUG - CAUTION.",
+  "composition_text": "Composition: Each enteric coated tablet contains: Pantoprazole Sodium IP Eq. to Pantoprazole 40 mg.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "PAN 40",
+      "normalized_value": "PAN 40",
+      "bbox": [
+        598,
+        145,
+        671,
+        343
+      ],
+      "char_span": [
+        41,
+        47
+      ]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Composition: Each enteric coated tablet contains:",
+      "normalized_value": null,
+      "bbox": [
+        69,
+        151,
+        98,
+        414
+      ],
+      "char_span": [
+        49,
+        98
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [
+        69,
+        151,
+        98,
+        414
+      ],
+      "char_span": [
+        82,
+        88
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Pantoprazole",
+      "normalized_value": "Pantoprazole",
+      "bbox": [
+        93,
+        147,
+        127,
+        306
+      ],
+      "char_span": [
+        0,
+        12
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Sodium",
+      "normalized_value": "Sodium Salt",
+      "bbox": [
+        93,
+        147,
+        127,
+        306
+      ],
+      "char_span": [
+        112,
+        118
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        93,
+        147,
+        127,
+        306
+      ],
+      "char_span": [
+        38,
+        40
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "40 mg",
+      "normalized_value": "40 mg",
+      "bbox": [
+        116,
+        360,
+        154,
+        411
+      ],
+      "char_span": [
+        142,
+        147
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [
+        69,
+        151,
+        98,
+        414
+      ],
+      "char_span": [
+        82,
+        88
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "pan-40",
+  "review_status": "verified_by_human"
+}

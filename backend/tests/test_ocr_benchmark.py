@@ -150,8 +150,11 @@ def test_eligibility_filter_rejects_unreviewed_draft():
 # 3. Engine Availability & Benchmark Scoring Tests
 # ============================================================================
 
-def test_unavailable_engine_explicitly_reported_without_mock_substitution(tmp_path: Path):
+def test_unavailable_engine_explicitly_reported_without_mock_substitution(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Verifies that missing OCR engines are reported as unavailable, never replaced with mock."""
+    from app.services.ocr.paddle_engine import PaddleOCREngine
+    monkeypatch.setattr(PaddleOCREngine, "is_available", lambda self: False)
+
     ann_dir = tmp_path / "annotations"
     raw_dir = tmp_path / "raw"
     ann_dir.mkdir(parents=True)

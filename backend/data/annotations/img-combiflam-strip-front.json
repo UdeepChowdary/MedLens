@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-combiflam-strip-front",
+    "file_name": "combiflam_strip_front.jpg",
+    "format": "webp",
+    "dimensions": {
+      "width": 539,
+      "height": 1080
+    },
+    "sha256": "e3fa22ef9c2f1809904ff04a31bf43a2754fb62447ece9d3df2da08b53c4ed1e",
+    "packaging_type": "blister_foil",
+    "image_side": "front",
+    "product_family": "combiflam",
+    "brand_name": "Combiflam",
+    "manufacturer": "Sanofi India Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:29:31Z",
+      "notes": "Authentic physical blister strip (front / cavity pocket face). White oblong tablets in clear PVC pockets with stamped batch imprint."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "0000 6856",
+  "composition_text": null,
+  "entities": [],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "combiflam",
+  "review_status": "verified_by_human"
+}
