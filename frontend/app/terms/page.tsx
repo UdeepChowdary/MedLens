@@ -14,9 +14,7 @@ export default function TermsPage() {
       {/* Navigation Header */}
       <header style={{ padding: "18px 32px", borderBottom: "1px solid var(--border)", background: "#ffffff" }}>
         <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Logo />
-          </Link>
+          <Logo />
           <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
             <Link href="/" style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-secondary)", textDecoration: "none" }}>
               Back to Overview

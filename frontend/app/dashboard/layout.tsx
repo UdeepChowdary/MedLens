@@ -74,9 +74,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         height: "100vh",
       }} className="desktop-only">
         <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--border)" }}>
-          <Link href="/dashboard" style={{ textDecoration: "none" }}>
-            <Logo />
-          </Link>
+          <Logo href="/dashboard" />
         </div>
         
         <nav style={{ flex: 1, padding: "24px 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -136,9 +134,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           top: 0,
           zIndex: 40
         }} className="mobile-only">
-          <Link href="/dashboard" style={{ textDecoration: "none" }}>
-            <Logo />
-          </Link>
+          <Logo href="/dashboard" />
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             style={{ background: "none", border: "none", cursor: "pointer", padding: "8px" }}

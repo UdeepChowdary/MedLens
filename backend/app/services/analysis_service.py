@@ -125,6 +125,7 @@ class AnalysisPipelineService:
 
         primary_norm: Optional[NormalizationResult] = None
         has_canonical_grounding = False
+        per_scan_external_cache: Dict[str, Any] = {}
 
         for ing in extraction.ingredients:
             raw_name = ing.get("raw_ingredient") or ing.get("raw_name") or ing.get("canonical_name") or ""
@@ -188,7 +189,9 @@ class AnalysisPipelineService:
 
             # Query external reference authorities (openFDA, PubChem, Indian Pharmacopoeia / CDSCO)
             try:
-                ext_lookups = await self.reference_coordinator.lookup_ingredient(canonical_name)
+                if canonical_name not in per_scan_external_cache:
+                    per_scan_external_cache[canonical_name] = await self.reference_coordinator.lookup_ingredient(canonical_name)
+                ext_lookups = per_scan_external_cache[canonical_name]
                 ext_sources = self.reference_coordinator.build_evidence_sources(ext_lookups)
                 clinical_profile = self.reference_coordinator.consolidate_clinical_profile(ext_lookups)
 

@@ -22,9 +22,7 @@ export default function LoginPage() {
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--surface)" }}>
       {/* Simple Header */}
       <header style={{ padding: "24px 32px", borderBottom: "1px solid var(--border)", backgroundColor: "white" }}>
-        <Link href="/" style={{ textDecoration: "none" }}>
-          <Logo />
-        </Link>
+        <Logo />
       </header>
 
       {/* Login Form Container */}
