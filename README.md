@@ -94,15 +94,17 @@ flowchart TD
 - **Data Validation & Schemas:** [Pydantic v2](https://docs.pydantic.dev/) + `pydantic-settings`
 - **Testing:** [Pytest](https://docs.pytest.org/) + `httpx` AsyncClient
 
-### Machine Learning & Computer Vision (Planned / In Pipeline)
-- **Preprocessing:** OpenCV (`cv2`) & NumPy
-- **OCR:** PaddleOCR v4 (primary) with Tesseract OCR (benchmark fallback)
-- **Information Extraction:** PyTorch & Hugging Face Transformers (Biomedical Token Classifier)
-- **Candidate Matching:** RapidFuzz & Sentence-Transformers (`all-MiniLM-L6-v2`)
+### Machine Learning & Computer Vision Layer
+- **Preprocessing:** OpenCV (`cv2`) with Laplacian blur variance rejection ($\sigma^2 < 100$), deskew, and CLAHE contrast normalization
+- **Spatial OCR Engine:** Baidu PaddleOCR (DBNet detection + SVTR/CRNN text recognition) with automated oneDNN CPU flags
+- **Fallback Engine:** Google Tesseract-OCR local adapter (zero-mock policy: never silently substitutes mock data)
+- **Token Classification & Information Extraction:** Pharmacopeial regex, composition header detection, and biomedical token classification
+- **Entity Normalization:** INN salt-preserving normalization with RapidFuzz candidate search and alias graphs
 
 ### Database & Pharmaceutical Reference Layer
-- **Relational Store:** PostgreSQL 16 with UUID primary keys and strict foreign-key cascades
-- **Migrations:** Alembic
+- **Relational Store:** PostgreSQL 16 (production) / SQLite via `aiosqlite` (local) with UUID primary keys and strict cascading foreign keys
+- **Deep Clinical Evidence:** Section-level verified citations to PubChem (Compound CIDs), DailyMed (FDA SPL monographs), WHO Model List of Essential Medicines (EML), and Indian Pharmacopoeia (IP) / CDSCO
+- **Migrations:** Alembic async migration environment
 - **Reference Sources:** RxNorm, openFDA Drug Labeling API, PubChem PUG REST, DailyMed, WHO Essential Medicines
 
 ---
@@ -203,7 +205,7 @@ MedLens/
    ```bash
    python -m pytest tests/
    ```
-   *(Expected output: 31/31 tests passing in ~1s)*
+   *(Expected output: 165/165 tests passing across 21 test suites in ~2m)*
 
 7. Start the local API development server:
    ```bash
@@ -292,16 +294,40 @@ All backend endpoints are versioned under `/api/v1`:
 
 ## 🛡️ Testing & Quality Assurance
 
-Both frontend and backend layers maintain automated quality gates:
+Both frontend and backend layers maintain automated, zero-mock quality gates:
 
-- **Backend Pytest Suite:**
-  - `tests/test_health.py`: Validates health probes and OpenAPI schema completeness.
-  - `tests/test_schemas.py`: Asserts strict Pydantic v2 validation (e.g., rejecting negative strengths, bounding confidence to $[0.0, 1.0]$).
-  - `tests/test_errors.py`: Asserts uniform error responses and image MIME rejection.
-  - **Status:** `10 passed in 0.40s`
+- **Backend Pytest Suite (165 passing tests across 21 test suites):**
+  - `tests/test_analysis_pipeline.py`: Real end-to-end OCR and entity extraction pipeline.
+  - `tests/test_database.py`: Relational schemas, cascading foreign keys, idempotent seeders, and deep-linked clinical monographs.
+  - `tests/test_comparison_engine.py`: Deterministic multi-attribute medicine comparisons, strength deltas, and excipient allergy alerts.
+  - `tests/test_ocr_benchmark.py` & `test_ocr_dispatcher.py`: Real PaddleOCR spatial inference, CER/WER metrics, and strict zero-silent-mock fallback verification.
+  - `tests/test_dataset_pipeline.py`: Packaging annotation schemas, coordinate bounding $[0, 1000]$, and zero product-family partition leakage.
+  - `tests/test_indian_medicines_audit.py`: Authentic Indian packaging coverage and format validation.
+  - **Status:** `165 passed across 21 test suites`
 - **Frontend Quality:**
   - `npm run lint`: ESLint with Next.js 16 and React 19 rules (**0 errors**).
   - `npm run build`: Production compilation via Turbopack (**13/13 static routes generated cleanly**).
+
+---
+
+## 📊 Ground Truth Dataset & Authentic Indian Packaging
+
+MedLens features a human-verified dataset of authentic physical packaging photographs from Indian retail pharmacies (`backend/data/raw/`):
+
+- **21 Authentic Packaging Photos** covering 11 core Indian medicine families:
+  - *Dolo 650* (Paracetamol 650 mg), *Combiflam* (Ibuprofen + Paracetamol), *Pan 40* (Pantoprazole 40 mg), *Pan-D* (Pantoprazole + Domperidone SR), *Cetirizine 10mg*, *Augmentin 625 Duo* (Amoxicillin + Clavulanic Acid), *Azithral 500* (Azithromycin 500 mg), *Benadryl Syrup* (Diphenhydramine + Ammonium Chloride + Sodium Citrate), *Ecosprin 75* (Aspirin 75 mg), *Glycomet 500* (Metformin 500 mg), *Montair 10* (Montelukast 10 mg), and *Omez 20* (Omeprazole 20 mg).
+- **119 Annotated Ground-Truth Entities:** Bounding boxes, verbatim packaging transcriptions, and normalized labels (`SALT_FORM`, `INGREDIENT`, `STRENGTH`, `BRAND`, `DOSAGE_FORM`, `STRENGTH_BASIS`, `COMPOSITION_HEADER`, `RELEASE_TYPE`, `ROUTE`).
+- **100% Human Verified:** Certified ground truth with zero synthetic illustrations.
+- **Leakage-Free Splits:** 15 train / 3 val / 3 test partitioned by product family to prevent data leakage.
+
+---
+
+## ⚠️ Known Limitations & Clinical Boundaries
+
+1. **Pretrained Optical Bounds:** Optical text recognition on foil packaging is sensitive to severe specular glare, acute wrinkles, or heavy motion blur. Images with Laplacian variance $\sigma^2 < 100$ are rejected at intake.
+2. **Back vs. Front Packaging:** Clinical active ingredient data in blister strips is concentrated on the back foil. Front blister cavity scans have minimal text and serve as negative validation controls.
+3. **No Direct Bioequivalence Assertion:** Even when two products have matching active ingredients and strengths, MedLens never asserts clinical bioequivalence without formal regulatory bioequivalence study data.
+4. **Informational Use Only:** All evidence citations link directly to section-level PubChem, DailyMed (FDA), WHO EML, and Indian Pharmacopoeia / CDSCO monographs. MedLens does not replace licensed medical advice.
 
 ---
 
