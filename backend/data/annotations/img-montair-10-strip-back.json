@@ -1,0 +1,207 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-montair-10-strip-back",
+    "file_name": "montair_10_strip_back.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 753,
+      "height": 451
+    },
+    "sha256": "0c7931293c4ead29f8fc00b9639344920d48b19e8c841ffb44b8e8013b432c79",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "montair-10",
+    "brand_name": "montair-LC",
+    "manufacturer": "Cipla Ltd",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:36:29Z",
+      "notes": "Authentic physical blister pack (back foil). Dual anti-allergy formulation (Montelukast + Levocetirizine) in bilayered tablet presentation by Cipla."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "montair-LC. Montelukast Sodium & Levocetirizine Hydrochloride Tablets IP. Rx. Each uncoated bilayered tablet contains: Montelukast Sodium IP equivalent to Montelukast 10 mg, Levocetirizine Hydrochloride IP 5 mg. Colours: Yellow Oxide of Iron & Red Oxide of Iron. Dosage: As directed by the Physician. Store protected from light & moisture, at a temperature not exceeding 30C. Mfd. by CIPLA LTD. (Unit II), Taza Block, Rorathang, Sikkim 737 133 INDIA. M.L. M/719/2016. SCHEDULE H PRESCRIPTION DRUG.",
+  "composition_text": "Each uncoated bilayered tablet contains: Montelukast Sodium IP equivalent to Montelukast 10 mg, Levocetirizine Hydrochloride IP 5 mg.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "montair-LC",
+      "normalized_value": "Montair LC",
+      "bbox": [
+        257,
+        30,
+        359,
+        367
+      ],
+      "char_span": [
+        0,
+        10
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [
+        133,
+        29,
+        246,
+        798
+      ],
+      "char_span": [
+        102,
+        108
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Montelukast",
+      "normalized_value": "Montelukast",
+      "bbox": [
+        26,
+        77,
+        124,
+        527
+      ],
+      "char_span": [
+        12,
+        23
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Sodium",
+      "normalized_value": "Sodium Salt",
+      "bbox": [
+        26,
+        77,
+        124,
+        527
+      ],
+      "char_span": [
+        24,
+        30
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        133,
+        29,
+        246,
+        798
+      ],
+      "char_span": [
+        70,
+        72
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "10 mg",
+      "normalized_value": "10 mg",
+      "bbox": [
+        445,
+        354,
+        492,
+        422
+      ],
+      "char_span": [
+        167,
+        172
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Levocetirizine",
+      "normalized_value": "Levocetirizine",
+      "bbox": [
+        133,
+        29,
+        246,
+        798
+      ],
+      "char_span": [
+        33,
+        47
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Hydrochloride",
+      "normalized_value": "Hydrochloride Salt",
+      "bbox": [
+        133,
+        29,
+        246,
+        798
+      ],
+      "char_span": [
+        48,
+        61
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        133,
+        29,
+        246,
+        798
+      ],
+      "char_span": [
+        70,
+        72
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "5 mg",
+      "normalized_value": "5 mg",
+      "bbox": [
+        478,
+        29,
+        536,
+        424
+      ],
+      "char_span": [
+        206,
+        210
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [
+        133,
+        29,
+        246,
+        798
+      ],
+      "char_span": [
+        102,
+        108
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "montair-10",
+  "review_status": "verified_by_human"
+}

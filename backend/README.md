@@ -38,7 +38,7 @@ python -m app.database.seed
 ### 3. Run Automated Tests
 ```bash
 python -m pytest tests/
-# Output: 31 passed in ~1s
+# Output: 165 passed across 21 test suites
 ```
 
 ### 4. Start Local Development Server
@@ -50,6 +50,71 @@ uvicorn app.main:app --reload --port 8000
 - Interactive Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
 - OpenAPI JSON: `http://localhost:8000/api/v1/openapi.json`
+
+---
+
+## 🔍 Pretrained OCR Engine Setup & Benchmark (ML-026, ML-027)
+
+MedLens uses a real deep-learning pretrained OCR pipeline with **Baidu PaddleOCR** (DBNet detection + SVTR/CRNN recognition) as primary engine, and **Google Tesseract-OCR** as an optional local fallback.
+
+> [!IMPORTANT]
+> **Zero Silent Mock Fallback Policy**: Real user packaging uploads and benchmark runs never silently substitute mock OCR data. If real OCR dependencies are not installed in the environment, the API returns `HTTP 503 Service Unavailable (ERR_OCR_ENGINE_UNAVAILABLE)` with actionable remediation hints. Mock OCR is strictly reserved for unit tests or explicitly marked demo fixtures (`X-OCR-Engine: mock` or `ocr_engine="mock"`).
+
+### 1. Installation & OS Prerequisites
+
+#### Python Packages
+```bash
+# Core CPU deep-learning OCR runtime
+pip install "paddlepaddle>=3.0.0" "paddleocr>=3.7.0"
+
+# Optional fallback engine wrapper
+pip install "pytesseract>=0.3.13"
+```
+
+#### OS-Specific Binary Prerequisites
+
+- **Windows**:
+  - PaddlePaddle CPU requires the standard Microsoft Visual C++ 2015-2022 Redistributable (x64).
+  - For Tesseract fallback, install UB-Mannheim Tesseract:
+    ```powershell
+    winget install UB-Mannheim.TesseractOCR
+    # Add C:\Program Files\Tesseract-OCR to your PATH environment variable
+    ```
+- **Linux (Debian / Ubuntu)**:
+  - System OpenMP runtime and Tesseract binaries:
+    ```bash
+    sudo apt-get update && sudo apt-get install -y libgomp1 tesseract-ocr
+    ```
+- **macOS**:
+  - Homebrew Tesseract:
+    ```bash
+    brew install tesseract
+    ```
+
+### 2. First-Run Pretrained Model Weight Download & CPU Execution Flags
+
+Model initialization is strictly **lazy**: importing FastAPI does not download model weights or contact external networks. On the **first live inference request**, PaddleOCR / PaddleX automatically downloads and verifies pretrained detection (`PP-OCRv6_medium_det` / `PP-OCRv4_det`) and recognition (`PP-OCRv6_medium_rec` / `PP-OCRv4_rec`) model weights into `~/.paddlex/` or `~/.paddleocr/` (~15–30 MB). Ensure outbound HTTPS access is available during first inference, or pre-populate the directory in air-gapped environments.
+
+**PaddlePaddle 3.3.1 CPU Compatibility:**
+When executing inference on CPU with PaddlePaddle 3.3.1, oneDNN (MKLDNN) with PIR (Program Intermediate Representation) can trigger an unimplemented static instruction error (`ConvertPirAttribute2RuntimeAttribute`). The `PaddleOCREngine` adapter automatically sets `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` and `FLAGS_use_mkldnn=0` to ensure stable CPU execution across Windows, Linux, and macOS. On Windows, if PyTorch is installed alongside PaddlePaddle, PyTorch DLLs are preloaded to prevent `shm.dll` loading collisions.
+
+### 3. Running the OCR Benchmark Tool
+
+MedLens provides an automated OCR benchmarking tool (`tools/benchmark_ocr.py`) to evaluate Character Error Rate (CER), Word Error Rate (WER), latency, and error distributions on human-verified packaging annotations:
+
+```bash
+# Run benchmark on test split with primary PaddleOCR engine
+python tools/benchmark_ocr.py --annotations data/annotations --raw data/raw --split test --engine paddleocr
+
+# Run benchmark evaluating both PaddleOCR and Tesseract fallback
+python tools/benchmark_ocr.py --annotations data/annotations --raw data/raw --split test --engine paddleocr tesseract
+
+# Run in mock demo mode for testing pipeline scaffolding
+python tools/benchmark_ocr.py --annotations data/annotations --raw data/raw --split test --allow-mock
+```
+
+> [!NOTE]
+> Pretrained OCR enables optical transcription of packaging text out-of-the-box without fine-tuning, but does not prove clinical or domain accuracy on Indian medicine packaging. Accurate evaluation requires human-verified physical packaging photographs and transcriptions.
 
 ---
 
@@ -105,16 +170,64 @@ backend/
 │   ├── versions/
 │   │   └── 001_initial_relational_schema.py
 │   └── env.py                   # Async Alembic execution environment
-├── tests/                       # Pytest test suite (31 tests)
+├── tests/                       # Automated test suite (165 tests across 21 test suites)
 │   ├── conftest.py              # TestClient & database session fixtures
-│   ├── test_health.py           # Health probe and openapi tests
-│   ├── test_schemas.py          # Schema validation tests
-│   ├── test_errors.py           # Domain exception tests
-│   ├── test_database.py         # Schema, cascade, seeder & repository unit tests
-│   ├── test_products_api.py     # Database-backed search and comparison API tests
-│   └── test_dataset_pipeline.py # Dataset schema, leakage-free split & validation tests
+│   ├── test_analysis_pipeline.py # Full image analysis integration pipeline
+│   ├── test_auth_access_control.py # Security & authorization boundary tests
+│   ├── test_comparison_engine.py # Deterministic multi-attribute medicine comparisons
+│   ├── test_confidence.py       # Multidimensional confidence scoring bounds
+│   ├── test_database.py         # Relational schema, cascade, seeder & repository unit tests
+│   ├── test_dataset_pipeline.py # Annotation schemas, split validation & zero-leakage tests
+│   ├── test_e2e_journey.py      # End-to-end user scan and verification journeys
+│   ├── test_errors.py           # Standardized API error responses & exceptions
+│   ├── test_extraction_baseline.py # Regex and pharmacopeial token extraction rules
+│   ├── test_health.py           # Health probe and OpenAPI completeness
+│   ├── test_indian_medicines_audit.py # Authentic Indian retail packaging conformance
+│   ├── test_normalization.py   # INN salt normalization & alias mapping
+│   ├── test_ocr_benchmark.py    # Zero-mock OCR evaluation (CER/WER metrics)
+│   ├── test_ocr_dispatcher.py   # PaddleOCR / Tesseract engine selection & dispatch
+│   ├── test_ocr_integration.py  # End-to-end OCR execution on sample images
+│   ├── test_pilot_dataset_workflow.py # Dataset intake and audit compliance
+│   ├── test_preprocessor.py     # OpenCV blur rejection & CLAHE contrast enhancement
+│   ├── test_products_api.py     # Product catalog search & retrieval API tests
+│   ├── test_reference_adapters.py # PubChem, openFDA, and external registry adapters
+│   ├── test_rule_extractor.py   # Rule-based pharmaceutical entity extractor
+│   └── test_schemas.py          # Pydantic v2 strict schema boundaries
 ├── alembic.ini                  # Alembic migration configuration
 ├── pyproject.toml               # Pytest configuration
 ├── requirements.txt             # Pinned dependencies
 └── .env.example                 # Environment configuration template
 ```
+
+---
+
+## 📊 Ground Truth Dataset & Benchmarks (ML-020, ML-021)
+
+MedLens includes an authentic ground-truth benchmark of real Indian retail pharmacy medicine packaging:
+
+- **Total Authentic Packaging Photos:** 21 high-resolution images (`backend/data/raw/`)
+- **Medicine Families:** 11 core Indian pharmaceutical families:
+  - *Dolo 650* (Micro Labs Ltd — Paracetamol 650 mg)
+  - *Combiflam* (Sanofi India Ltd — Ibuprofen 400 mg + Paracetamol 325 mg)
+  - *Pan 40* (Alkem Laboratories Ltd — Pantoprazole Sodium 40 mg)
+  - *Pan-D* (Alkem Laboratories Ltd — Pantoprazole 40 mg + Domperidone 30 mg SR)
+  - *Cetirizine 10mg* (Cipla / Bioconic Remedies — Cetirizine Dihydrochloride 10 mg)
+  - *Augmentin 625 Duo* (GlaxoSmithKline — Amoxicillin 500 mg + Clavulanic Acid 125 mg)
+  - *Azithral 500* (Alembic Pharmaceuticals — Azithromycin 500 mg)
+  - *Benadryl Cough Formula* (Johnson & Johnson / Kenvue — Diphenhydramine + Ammonium Chloride + Sodium Citrate)
+  - *Ecosprin 75* (USV Pvt Ltd — Aspirin 75 mg)
+  - *Glycomet 500* (USV Pvt Ltd — Metformin HCl 500 mg)
+  - *Montair 10* (Cipla Ltd — Montelukast Sodium 10 mg)
+  - *Omez 20* (Dr. Reddy's Laboratories — Omeprazole 20 mg)
+- **Annotated Entities:** 119 ground-truth bounding boxes (`SALT_FORM`, `INGREDIENT`, `STRENGTH`, `BRAND`, `DOSAGE_FORM`, `STRENGTH_BASIS`, `COMPOSITION_HEADER`, `RELEASE_TYPE`, `ROUTE`).
+- **Human Verification:** 100% human-verified ground truth with zero synthetic illustrations.
+- **Data Partitions:** 15 train / 3 val / 3 test with strictly 0% product-family leakage.
+
+---
+
+## ⚠️ Known Limitations & Clinical Boundary (ML-060)
+
+1. **Pretrained OCR Optical Bounds:** Optical recognition on metallic blister strips is susceptible to extreme specular glare, heavy creasing, or severe motion blur. Images with Laplacian blur variance $\sigma^2 < 100$ are rejected at intake.
+2. **Back vs. Front Packaging:** Clinical active ingredient data in blister strips is overwhelmingly printed on the back foil. Front blister cavity scans have minimal text and primarily serve as negative validation controls.
+3. **No Direct Bioequivalence Assertion:** Even when two products have matching active ingredients and strengths, MedLens never asserts clinical bioequivalence without formal regulatory bioequivalence study data.
+4. **Informational Use Only:** All evidence citations link directly to section-level PubChem, DailyMed (FDA), WHO EML, and Indian Pharmacopoeia / CDSCO monographs. MedLens does not replace licensed medical advice.

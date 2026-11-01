@@ -34,13 +34,16 @@ async def test_pipeline_service_full_execution(db_session: AsyncSession):
     image_bytes = create_mock_medicine_image_bytes()
     service = AnalysisPipelineService(db_session=db_session)
 
-    report = await service.process_image(raw_bytes=image_bytes)
+    report = await service.process_image(raw_bytes=image_bytes, requested_ocr_engine="mock")
 
     assert isinstance(report, AnalysisResponse)
     assert report.analysis_id is not None
     assert len(report.analysis_id) > 10
     assert report.confidence.ocr_quality > 0.0
     assert report.confidence.identity_confidence > 0.0
+    assert report.ocr_metadata is not None
+    assert report.ocr_metadata.engine_name == "mock"
+    assert report.ocr_metadata.is_mock is True
 
     # Verify active ingredients detected
     assert len(report.active_ingredients) > 0

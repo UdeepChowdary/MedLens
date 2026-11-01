@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-pan-40-strip-front",
+    "file_name": "pan_40_strip_front.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 557,
+      "height": 325
+    },
+    "sha256": "0ce49187f0f5ff2470b503bdf8ba24fb13013d1a1d98ceddaa359af5de5f040d",
+    "packaging_type": "blister_foil",
+    "image_side": "front",
+    "product_family": "pan-40",
+    "brand_name": "PAN-40",
+    "manufacturer": "Alkem Laboratories Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:30:12Z",
+      "notes": "Authentic physical blister strip (front blister foil). Repeating silver metallic foil with purple PAN-40 brand stamp."
+    }
+  },
+  "quality_flags": {
+    "glare": true,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "PAN-40 PAN-40 PAN-40 40",
+  "composition_text": null,
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "PAN-40",
+      "normalized_value": "PAN 40",
+      "bbox": [
+        347,
+        84,
+        390,
+        969
+      ],
+      "char_span": [
+        0,
+        6
+      ]
+    },
+    {
+      "label": "PRODUCT_NAME",
+      "raw_text": "40",
+      "normalized_value": "PAN-40",
+      "bbox": [
+        347,
+        84,
+        390,
+        969
+      ],
+      "char_span": [
+        21,
+        23
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "pan-40",
+  "review_status": "verified_by_human"
+}

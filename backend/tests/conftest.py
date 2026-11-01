@@ -24,8 +24,8 @@ def setup_database():
 
 @pytest.fixture(scope="session")
 def client() -> TestClient:
-    """Synchronous test client for endpoint assertions."""
-    return TestClient(fastapi_app)
+    """Synchronous test client for endpoint assertions with explicit mock engine for hermetic testing."""
+    return TestClient(fastapi_app, headers={"X-OCR-Engine": "mock"})
 
 
 @pytest.fixture

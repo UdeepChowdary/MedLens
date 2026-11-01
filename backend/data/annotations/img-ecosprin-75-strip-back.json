@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-ecosprin-75-strip-back",
+    "file_name": "ecosprin_75_strip_back.jpg",
+    "format": "webp",
+    "dimensions": {
+      "width": 792,
+      "height": 792
+    },
+    "sha256": "9b71511f5b7e71bff164c318f8c18250461e363d7ba7712cb5ee9677f5d04441",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "aspirin-75",
+    "brand_name": "Ecosprin AV 75/40",
+    "manufacturer": "USV Private Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:35:51Z",
+      "notes": "Authentic physical blister pack (back foil). Dual cardio-protective combination (Atorvastatin + Aspirin) in hard gelatin capsule formulation with gastro-resistant delayed release coating."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Ecosprin AV 75/40. Atorvastatin And Aspirin Capsules. 10 Capsules. Each hard gelatin capsule contains: Atorvastatin Calcium IP eq. to Atorvastatin 10 mg, Aspirin IP 75 mg (As Gastro-resistant Tablet IP). Excipients q.s. Colours: Sunset Yellow FCF & Titanium Dioxide IP. Dosage: As directed by the Physician. Store in a cool place, protected from light & moisture. USV Private Limited, Plot No. 6 & 7E, HPSIDC Indl. Area, Baddi, Solan, H.P. - 173 205. Mfg. Lic. No.: MNB/06/291. SCHEDULE H PRESCRIPTION DRUG - CAUTION.",
+  "composition_text": "Each hard gelatin capsule contains: Atorvastatin Calcium IP eq. to Atorvastatin 10 mg, Aspirin IP 75 mg (As Gastro-resistant Tablet IP).",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Ecosprin AV 75/40",
+      "normalized_value": "Ecosprin AV 75/40",
+      "bbox": [
+        404,
+        83,
+        438,
+        321
+      ],
+      "char_span": [
+        0,
+        17
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "capsule",
+      "normalized_value": "Capsule",
+      "bbox": [
+        248,
+        84,
+        266,
+        181
+      ],
+      "char_span": [
+        85,
+        92
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Atorvastatin",
+      "normalized_value": "Atorvastatin",
+      "bbox": [
+        340,
+        80,
+        396,
+        530
+      ],
+      "char_span": [
+        19,
+        31
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Calcium",
+      "normalized_value": "Calcium Salt",
+      "bbox": [
+        479,
+        87,
+        497,
+        246
+      ],
+      "char_span": [
+        116,
+        123
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        212,
+        84,
+        229,
+        188
+      ],
+      "char_span": [
+        124,
+        126
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "10 mg",
+      "normalized_value": "10 mg",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        147,
+        152
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Aspirin",
+      "normalized_value": "Aspirin",
+      "bbox": [
+        340,
+        80,
+        396,
+        530
+      ],
+      "char_span": [
+        36,
+        43
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        212,
+        84,
+        229,
+        188
+      ],
+      "char_span": [
+        124,
+        126
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "75 mg",
+      "normalized_value": "75 mg",
+      "bbox": [
+        516,
+        284,
+        539,
+        333
+      ],
+      "char_span": [
+        165,
+        170
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "capsule",
+      "normalized_value": "per capsule",
+      "bbox": [
+        248,
+        84,
+        266,
+        181
+      ],
+      "char_span": [
+        85,
+        92
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "ecosprin-75",
+  "review_status": "verified_by_human"
+}

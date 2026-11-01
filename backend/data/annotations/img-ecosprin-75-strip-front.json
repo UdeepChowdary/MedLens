@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-ecosprin-75-strip-front",
+    "file_name": "ecosprin_75_strip_front.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 398,
+      "height": 259
+    },
+    "sha256": "23ea719ed9f2e28025a97cf0ae62ab367dd0621d34b8fe852ff0770549fc9c5a",
+    "packaging_type": "blister_foil",
+    "image_side": "front",
+    "product_family": "aspirin-75",
+    "brand_name": "Ecosprin AV 75/40",
+    "manufacturer": "USV Private Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:35:23Z",
+      "notes": "Authentic physical capsule blister pack (front cavity face). Hard gelatin capsules in opaque PVC pockets with stamped batch marks."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "00000 00000",
+  "composition_text": null,
+  "entities": [],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "ecosprin-75",
+  "review_status": "verified_by_human"
+}

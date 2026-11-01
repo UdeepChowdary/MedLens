@@ -1,0 +1,222 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-benadryl-bottle-back",
+    "file_name": "benedryl_bottle_back.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 502,
+      "height": 1016
+    },
+    "sha256": "1a9e4cd0f66b38662965a19aee0a9ff9db7849341d55cd5d039784df3dda12ba",
+    "packaging_type": "bottle_label",
+    "image_side": "back",
+    "product_family": "benadryl-cough-syrup",
+    "brand_name": "Benadryl Cough Formula",
+    "manufacturer": "Johnson & Johnson / Kenvue",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:35:22Z",
+      "notes": "Authentic physical liquid syrup bottle label. Multicomponent antitussive/expectorant with concentration (per 5 ml), quantitative milligram strengths, and pediatric dosing."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Benadryl Cough Formula. DIPHENHYDRAMINE HYDROCHLORIDE, AMMONIUM CHLORIDE, SODIUM CITRATE & ETHANOL SYRUP. EACH 5 ml CONTAINS: Diphenhydramine Hydrochloride I.P. 14.08 mg, Ammonium Chloride I.P. 138 mg, Sodium Citrate I.P. 57.03 mg, Ethanol (95%) I.P. 0.2625ml. DOSAGE: Children (4-less than 6yrs) 2.5 ml, Children (6-less than 12yrs) 5.0 ml, Adults and children 12yrs and over 10 ml. In a pleasantly flavoured, mentholated syrup base. SCHEDULE G PRESCRIPTION DRUG - CAUTION.",
+  "composition_text": "EACH 5 ml CONTAINS: Diphenhydramine Hydrochloride I.P. 14.08 mg, Ammonium Chloride I.P. 138 mg, Sodium Citrate I.P. 57.03 mg.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Benadryl Cough Formula",
+      "normalized_value": "Benadryl Cough Formula",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        0,
+        22
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "SYRUP",
+      "normalized_value": "Syrup",
+      "bbox": [
+        412,
+        189,
+        442,
+        418
+      ],
+      "char_span": [
+        99,
+        104
+      ]
+    },
+    {
+      "label": "ROUTE",
+      "raw_text": "CONTAINS",
+      "normalized_value": "Oral",
+      "bbox": [
+        617,
+        195,
+        642,
+        422
+      ],
+      "char_span": [
+        116,
+        124
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Diphenhydramine",
+      "normalized_value": "Diphenhydramine",
+      "bbox": [
+        363,
+        191,
+        389,
+        663
+      ],
+      "char_span": [
+        126,
+        141
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Hydrochloride",
+      "normalized_value": "Hydrochloride Salt",
+      "bbox": [
+        363,
+        191,
+        389,
+        663
+      ],
+      "char_span": [
+        142,
+        155
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "I.P.",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        630,
+        193,
+        656,
+        563
+      ],
+      "char_span": [
+        156,
+        160
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "14.08 mg",
+      "normalized_value": "14.08 mg",
+      "bbox": [
+        637,
+        577,
+        654,
+        687
+      ],
+      "char_span": [
+        161,
+        169
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Ammonium Chloride",
+      "normalized_value": "Ammonium Chloride",
+      "bbox": [
+        386,
+        187,
+        419,
+        703
+      ],
+      "char_span": [
+        171,
+        188
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "138 mg",
+      "normalized_value": "138 mg",
+      "bbox": [
+        652,
+        597,
+        667,
+        685
+      ],
+      "char_span": [
+        194,
+        200
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Sodium Citrate",
+      "normalized_value": "Sodium Citrate",
+      "bbox": [
+        386,
+        187,
+        419,
+        703
+      ],
+      "char_span": [
+        202,
+        216
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "57.03 mg",
+      "normalized_value": "57.03 mg",
+      "bbox": [
+        664,
+        573,
+        681,
+        685
+      ],
+      "char_span": [
+        222,
+        230
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "5 ml",
+      "normalized_value": "per 5 ml",
+      "bbox": [
+        485,
+        454,
+        507,
+        693
+      ],
+      "char_span": [
+        111,
+        115
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "benadryl-syrup",
+  "review_status": "verified_by_human"
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-glycomet-500-strip-back",
+    "file_name": "glycomet_500_strip_back.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 393,
+      "height": 428
+    },
+    "sha256": "51f8867d7e96a1bf464734fc73e518e07b8bb4264ccea4c6cd8becc9d559688e",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "metformin-500",
+    "brand_name": "GLYCOMET-500 S.R.",
+    "manufacturer": "USV Private Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:36:10Z",
+      "notes": "Authentic physical blister strip (back foil). Common Indian anti-diabetic medication with sustained-release (SR) modifier and Metformin active ingredient."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "GLYCOMET-500 S.R. METFORMIN HYDROCHLORIDE SUSTAINED RELEASE TABLETS IP 500 MG. 20 Tablets. Each film coated sustained release tablet contains: Metformin Hydrochloride IP 500 mg. Colour: Titanium Dioxide IP. Excipients: q.s. Dosage: As directed by the Physician. Preserve in well-closed, light-resistant containers and store at controlled room temperature. Mfd. by: USV Private Limited, Plot No. 6 & 7E, HPSIDC Indl. Area, Baddi, Dist. Solan, Himachal Pradesh - 173 205. Mfg. Lic. No.: MNB/06/291.",
+  "composition_text": "Each film coated sustained release tablet contains: Metformin Hydrochloride IP 500 mg.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "GLYCOMET-500 S.R.",
+      "normalized_value": "Glycomet 500 SR",
+      "bbox": [
+        257,
+        58,
+        289,
+        338
+      ],
+      "char_span": [
+        0,
+        17
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "sustained release tablet",
+      "normalized_value": "Tablet",
+      "bbox": [
+        154,
+        53,
+        193,
+        646
+      ],
+      "char_span": [
+        108,
+        132
+      ]
+    },
+    {
+      "label": "RELEASE_TYPE",
+      "raw_text": "SUSTAINED RELEASE",
+      "normalized_value": "Sustained Release",
+      "bbox": [
+        154,
+        53,
+        193,
+        646
+      ],
+      "char_span": [
+        42,
+        59
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Metformin",
+      "normalized_value": "Metformin",
+      "bbox": [
+        109,
+        53,
+        151,
+        648
+      ],
+      "char_span": [
+        143,
+        152
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Hydrochloride",
+      "normalized_value": "Hydrochloride Salt",
+      "bbox": [
+        109,
+        53,
+        151,
+        648
+      ],
+      "char_span": [
+        153,
+        166
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        196,
+        53,
+        240,
+        256
+      ],
+      "char_span": [
+        68,
+        70
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "500 mg",
+      "normalized_value": "500 mg",
+      "bbox": [
+        196,
+        53,
+        240,
+        256
+      ],
+      "char_span": [
+        170,
+        176
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [
+        84,
+        544,
+        109,
+        646
+      ],
+      "char_span": [
+        126,
+        132
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "glucophage-500",
+  "review_status": "verified_by_human"
+}

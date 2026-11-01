@@ -25,6 +25,7 @@ from app.models.analysis import Analysis, ExtractedEntityModel, AnalysisSource
 from app.models.product import Product, Ingredient, ProductIngredient
 from app.models.clinical import ClinicalInformation, Source, DrugInteraction
 from app.schemas.analysis import AnalysisResponse, MultidimensionalConfidence
+from app.schemas.ocr import OCRMetadata
 from app.schemas.common import VerificationState, RoleType
 from app.schemas.product import (
     ProductReport,
@@ -75,6 +76,7 @@ class AnalysisPipelineService:
         analysis_id: Optional[str] = None,
         requested_ocr_engine: Optional[str] = None,
         session_id: Optional[str] = None,
+        allow_mock_ocr: bool = False,
     ) -> AnalysisResponse:
         """Executes full zero-hallucination analysis pipeline and persists report."""
         start_time = time.perf_counter()
@@ -90,8 +92,20 @@ class AnalysisPipelineService:
             pil_image=preprocessed.pil_image,
             np_array=preprocessed.np_array,
             requested_engine=requested_ocr_engine,
+            allow_mock=allow_mock_ocr,
         )
         raw_text = ocr_result.full_text
+
+        is_mock_ocr = (ocr_result.engine_name == "mock")
+        ocr_metadata = OCRMetadata(
+            engine_name=ocr_result.engine_name,
+            engine_version=ocr_result.engine_version,
+            is_mock=is_mock_ocr,
+            requested_engine=ocr_result.requested_engine,
+            fallback_used=ocr_result.fallback_used,
+            mean_confidence=ocr_result.mean_confidence,
+            execution_time_ms=ocr_result.execution_time_ms,
+        )
 
         # Step 3: Entity Extraction (ML-062)
         extraction: RuleExtractionResult = self.rule_extractor.extract(raw_text)
@@ -103,6 +117,11 @@ class AnalysisPipelineService:
         indications_set = set()
         warnings_set = set()
         uncertainties: List[str] = list(image_quality.warnings)
+
+        if is_mock_ocr:
+            uncertainties.append(
+                "NOTICE: Mock OCR engine was used for this scan. Extracted text and entities are simulated test fixtures, not real optical packaging recognition."
+            )
 
         primary_norm: Optional[NormalizationResult] = None
         has_canonical_grounding = False
@@ -222,6 +241,33 @@ class AnalysisPipelineService:
             manufacturer = matched_product.manufacturer
             dosage_form = matched_product.dosage_form or extraction.dosage_form or "Tablet"
             is_verified = True
+
+            # Retrieve product-specific clinical claims & deep evidence provenance (ML-013)
+            stmt_prod_claims = (
+                select(ClinicalInformation)
+                .where(
+                    ClinicalInformation.subject_type == "product",
+                    ClinicalInformation.subject_id == matched_product.id,
+                )
+                .options(selectinload(ClinicalInformation.source))
+            )
+            res_prod_claims = await self.session.execute(stmt_prod_claims)
+            for pcl in res_prod_claims.scalars().all():
+                if pcl.category == "contraindication":
+                    contraindications_set.add(pcl.claim_text)
+                elif pcl.category == "purpose":
+                    indications_set.add(pcl.claim_text)
+                elif pcl.category in ("precaution", "adverse_effect"):
+                    warnings_set.add(pcl.claim_text)
+                if pcl.source:
+                    evidence_sources.append(
+                        EvidenceSourceSchema(
+                            name=pcl.source.source_name,
+                            url=pcl.source.source_url,
+                            source_id=pcl.source.id,
+                            jurisdiction=pcl.source.jurisdiction,
+                        )
+                    )
         else:
             first_line = ocr_result.lines[0].text if ocr_result.lines else "Medicine Packaging Scan"
             product_id = None
@@ -238,8 +284,9 @@ class AnalysisPipelineService:
             is_verified=is_verified,
         )
 
+        purpose_summary = " | ".join(sorted(indications_set)) if indications_set else "Symptomatic relief and therapeutic treatment as directed by physician."
         safety_profile = SafetyProfile(
-            purpose_summary="Symptomatic relief and therapeutic treatment as directed by physician.",
+            purpose_summary=purpose_summary,
             precautions=sorted(list(warnings_set)) if warnings_set else ["Use only as directed by a healthcare professional."],
             contraindications=sorted(list(contraindications_set)) if contraindications_set else ["Hypersensitivity to active ingredients."],
             adverse_effects=["Consult physician if adverse symptoms persist."],
@@ -283,6 +330,7 @@ class AnalysisPipelineService:
             safety_profile=safety_profile,
             uncertainties=uncertainties,
             audit_hash=image_quality.sha256,
+            ocr_metadata=ocr_metadata,
             sources=unique_sources,
         )
 

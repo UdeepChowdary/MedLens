@@ -393,7 +393,10 @@ def run_ocr_benchmark(
 
                 # Optional OpenCV/Pillow Preprocessing
                 if preprocessor:
-                    preprocessed = preprocessor.preprocess(img_bytes)
+                    if hasattr(preprocessor, "process"):
+                        preprocessed = preprocessor.process(img_bytes)
+                    else:
+                        preprocessed = preprocessor.preprocess(img_bytes)
                     ocr_res = eng_adapter.extract_text(
                         image_bytes=preprocessed.processed_bytes,
                         pil_image=preprocessed.pil_image,

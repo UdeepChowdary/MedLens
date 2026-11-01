@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-combiflam-strip-back",
+    "file_name": "combiflam_strip_back.jpg",
+    "format": "webp",
+    "dimensions": {
+      "width": 539,
+      "height": 1080
+    },
+    "sha256": "a3e45653a7f77ecb7bd7ebf8cb8ee4b0ca8f36ccc18b083dcc72ea06cc0946c2",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "combiflam",
+    "brand_name": "Combiflam",
+    "manufacturer": "Sanofi India Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:30:06Z",
+      "notes": "Authentic physical blister strip (back foil). Dual active pharmaceutical ingredient formulation (Ibuprofen + Paracetamol) with Schedule H prescription warnings."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Combiflam. Anti-inflammatory Analgesic. Each uncoated tablet contains: Ibuprofen I.P. - 400mg. Paracetamol I.P. - 325mg. Excipients q.s. Store below 30C away from moisture. Dosage: Adult: 1 tablet 3 times a day or as directed by the Physician. SCHEDULE H DRUG: WARNING To be sold by retail on the prescription of a Registered Medical Practitioner only. Warning: Taking more than daily dose may cause serious liver damage or allergic reactions. Caution: Bronchospasm may be precipitated in patients suffering from asthma. Manufactured By: SANOFI INDIA LIMITED. Plot No. 3501, 3503-15, G.I.D.C. Estate, Ankleshwar-393 002. Mfg. Lic. No.: G/811.",
+  "composition_text": "Each uncoated tablet contains: Ibuprofen I.P. - 400mg. Paracetamol I.P. - 325mg. Excipients q.s.",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Combiflam",
+      "normalized_value": "Combiflam",
+      "bbox": [
+        160,
+        730,
+        271,
+        773
+      ],
+      "char_span": [
+        0,
+        9
+      ]
+    },
+    {
+      "label": "COMPOSITION_HEADER",
+      "raw_text": "Each uncoated tablet contains:",
+      "normalized_value": null,
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        40,
+        70
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "tablet",
+      "normalized_value": "Tablet",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        54,
+        60
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Ibuprofen",
+      "normalized_value": "Ibuprofen",
+      "bbox": [
+        430,
+        55,
+        449,
+        285
+      ],
+      "char_span": [
+        71,
+        80
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "I.P.",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        430,
+        55,
+        449,
+        285
+      ],
+      "char_span": [
+        81,
+        85
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "400mg",
+      "normalized_value": "400 mg",
+      "bbox": [
+        430,
+        55,
+        449,
+        285
+      ],
+      "char_span": [
+        88,
+        93
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Paracetamol",
+      "normalized_value": "Paracetamol",
+      "bbox": [
+        447,
+        53,
+        466,
+        302
+      ],
+      "char_span": [
+        95,
+        106
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "I.P.",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        430,
+        55,
+        449,
+        285
+      ],
+      "char_span": [
+        81,
+        85
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "325mg",
+      "normalized_value": "325 mg",
+      "bbox": [
+        447,
+        53,
+        466,
+        302
+      ],
+      "char_span": [
+        114,
+        119
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "tablet",
+      "normalized_value": "per tablet",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        54,
+        60
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "combiflam",
+  "review_status": "verified_by_human"
+}

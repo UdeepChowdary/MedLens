@@ -15,11 +15,11 @@
     "manufacturer": null,
     "provenance": {
       "source": "MedLens Reference Packaging Archive",
-      "license": "CC-BY-4.0",
+      "license": "unknown",
       "annotator_id": "clinical-curator-01",
-      "verified_by_human": true,
+      "verified_by_human": false,
       "date_annotated": "2026-10-13T10:48:00Z",
-      "notes": "Verified against physical image pixels. Only generic 'Paracetamol Tablets IP 500 mg' is visible on the package."
+      "notes": "Unverified synthetic-looking product render; no authentic physical packaging source or permission evidence is available. Exclude from OCR evaluation and training until replaced with a reviewed real-package photograph."
     }
   },
   "quality_flags": {
@@ -69,5 +69,5 @@
     }
   ],
   "canonical_product_id": null,
-  "review_status": "verified_by_human"
+  "review_status": "flagged_for_review"
 }
