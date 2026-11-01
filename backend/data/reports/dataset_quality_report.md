@@ -1,6 +1,6 @@
 # 📊 MedLens Medicine Label Dataset Quality Report
 
-> **Generated:** 2026-11-01T14:15:54.131133+00:00  
+> **Generated:** 2026-11-01T15:33:14.466631+00:00  
 > **Specification:** MedLens Capstone Implementation Blueprint (Section 06)
 
 ---
@@ -88,13 +88,20 @@ During the initial repository bootstrap phase (October 2026), 5 synthetic test i
 5. `paracetamol_500_box.jpg` (Unreviewed pilot illustration; flagged).
 
 ### 8.2 Formal Supersession & Segregation Policy
-As of November 1, 2026 (`[ML-018]` & `[ML-019]`), 9 authentic, high-resolution physical packaging photographs of genuine Indian retail medicines were procured and human-verified with ground-truth bounding boxes and verbatim transcriptions:
+As of November 1, 2026 (`[ML-018]`, `[ML-019]`, `[ML-020]`, `[ML-021]`), 21 authentic, high-resolution physical packaging photographs across 11 core medicine families were procured and 100% human-verified with ground-truth bounding boxes and verbatim transcriptions:
 - **Dolo 650:** `dolo_650_strip_back.jpg` & `front` (Micro Labs Ltd, Paracetamol 650 mg).
 - **Combiflam:** `combiflam_strip_back.jpg` & `front` (Sanofi India Ltd, Ibuprofen 400 mg + Paracetamol 325 mg).
 - **Pan 40:** `pan_40_strip_back.jpg` & `front` (Alkem Laboratories Ltd, Pantoprazole Sodium 40 mg).
+- **Pan-D:** `pan_d_strip_back.webp` (Alkem Laboratories Ltd, Pantoprazole 40 mg + Domperidone 30 mg SR).
 - **Cetirizine:** `Cetirizine_strip_back.jpg` & `front` (Cipla / Bioconic Remedies, Cetirizine Dihydrochloride 10 mg).
 - **Augmentin 625 Duo:** `augmentin_625_strip.jpg` (GlaxoSmithKline Pharmaceuticals Ltd, Amoxicillin 500 mg + Clavulanic Acid 125 mg).
+- **Azithral 500:** `azithral_500_strip_back.jpg` & `front` (Alembic Pharmaceuticals, Azithromycin 500 mg).
+- **Benadryl Syrup:** `benedryl_bottle_back.jpg` & `front` (Johnson & Johnson / Kenvue, Diphenhydramine + Ammonium Chloride + Sodium Citrate).
+- **Ecosprin 75:** `ecosprin_75_strip_back.jpg` & `front` (USV Pvt Ltd, Aspirin / Acetylsalicylic Acid 75 mg).
+- **Glycomet 500:** `glycomet_500_strip_back.jpg` & `front` (USV Pvt Ltd, Metformin HCl 500 mg).
+- **Montair 10:** `montair_10_strip_back.jpg` & `front` (Cipla Ltd, Montelukast Sodium 10 mg).
+- **Omez 20:** `omez_20_strip.jpg` (Dr. Reddy's Laboratories, Omeprazole 20 mg).
 
 ### 8.3 Enforcement & Zero-Mock Assurance
 - All synthetic fixtures and unreviewed illustrations are strictly excluded from OCR benchmarking and model training (`eligible_for_real_training: false`, `review_status: flagged_for_review`).
-- All 9 authentic packaging photographs are designated as the official MedLens ground truth (`eligible_for_real_training: true`, `review_status: verified_by_human`).
+- All 21 authentic packaging photographs are designated as the official MedLens ground truth (`eligible_for_real_training: true`, `review_status: verified_by_human`).
