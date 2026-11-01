@@ -10,6 +10,7 @@ Requirements verified:
 """
 
 import io
+import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 from PIL import Image, ImageDraw
@@ -315,4 +316,98 @@ async def test_pipeline_marks_mock_ocr_and_adds_uncertainty_notice(
     assert report.ocr_metadata.is_mock is True
     # Verify mock warning is surfaced in uncertainties
     assert any("Mock OCR engine was used" in u for u in report.uncertainties)
+
+
+# ============================================================================
+# 4. PaddleOCR Output Parsing Regression Tests (2.x and 3.x API Formats)
+# ============================================================================
+
+def test_paddleocr_parse_output_v3_format():
+    """Verifies that PaddleOCREngine._parse_ocr_output correctly parses PaddleOCR 3.x dict format."""
+    engine = PaddleOCREngine()
+
+    mock_v3_results = [
+        {
+            "rec_texts": ["Tablets IP", "500 mg"],
+            "rec_scores": [0.9998, 0.9508],
+            "rec_polys": [
+                np.array([[77, 13], [220, 13], [220, 63], [77, 63]]),
+                np.array([[86, 74], [198, 74], [198, 121], [86, 121]]),
+            ],
+            "rec_boxes": np.array([[77, 13, 220, 63], [86, 74, 198, 121]]),
+        }
+    ]
+
+    lines = engine._parse_ocr_output(mock_v3_results)
+    assert len(lines) == 2
+
+    # Line 0 check
+    line0 = lines[0]
+    assert line0.text == "Tablets IP"
+    assert round(line0.confidence, 4) == 0.9998
+    assert line0.box.x_min == 77.0
+    assert line0.box.x_max == 220.0
+    assert len(line0.tokens) == 2
+    assert line0.tokens[0].text == "Tablets"
+    assert line0.tokens[1].text == "IP"
+
+    # Line 1 check
+    line1 = lines[1]
+    assert line1.text == "500 mg"
+    assert round(line1.confidence, 4) == 0.9508
+    assert line1.box.x_min == 86.0
+    assert line1.box.x_max == 198.0
+    assert len(line1.tokens) == 2
+    assert line1.tokens[0].text == "500"
+    assert line1.tokens[1].text == "mg"
+
+
+def test_paddleocr_parse_output_v2_format():
+    """Verifies that PaddleOCREngine._parse_ocr_output correctly parses PaddleOCR 2.x list format."""
+    engine = PaddleOCREngine()
+
+    mock_v2_results = [
+        [
+            [[[10, 20], [100, 20], [100, 50], [10, 50]], ("Paracetamol", 0.985)],
+            [[[10, 60], [80, 60], [80, 90], [10, 90]], ("500mg", 0.962)],
+        ]
+    ]
+
+    lines = engine._parse_ocr_output(mock_v2_results)
+    assert len(lines) == 2
+
+    assert lines[0].text == "Paracetamol"
+    assert round(lines[0].confidence, 3) == 0.985
+    assert lines[0].box.x_min == 10.0
+    assert lines[0].box.x_max == 100.0
+
+    assert lines[1].text == "500mg"
+    assert round(lines[1].confidence, 3) == 0.962
+    assert lines[1].box.y_min == 60.0
+    assert lines[1].box.y_max == 90.0
+
+
+def test_dispatcher_raises_clear_error_when_no_real_engine_available():
+    """Verifies that OCRDispatcher raises OCREngineUnavailableError when no real engine is available."""
+    unavailable_paddle = HermeticPaddleEngine(available=False)
+    unavailable_tesseract = HermeticTesseractEngine(available=False)
+
+    dispatcher = OCRDispatcher(
+        engines={
+            "paddleocr": unavailable_paddle,
+            "tesseract": unavailable_tesseract,
+            "mock": MockOCREngine(),
+        },
+        preference_order=["paddleocr", "tesseract"],
+    )
+
+    with pytest.raises(OCREngineUnavailableError) as exc_info:
+        dispatcher.resolve_engine(requested_engine=None, allow_mock=False)
+
+    err = exc_info.value
+    assert err.error_code == "ERR_OCR_ENGINE_UNAVAILABLE"
+    assert "No real OCR engine is available" in err.message
+    assert err.details["attempted_preference"] == ["paddleocr", "tesseract"]
+    assert "hint" in err.details
+
 

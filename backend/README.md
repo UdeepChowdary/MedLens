@@ -91,9 +91,12 @@ pip install "pytesseract>=0.3.13"
     brew install tesseract
     ```
 
-### 2. First-Run Pretrained Model Weight Download
+### 2. First-Run Pretrained Model Weight Download & CPU Execution Flags
 
-Model initialization is strictly **lazy**: importing FastAPI does not download model weights or contact external networks. On the **first live inference request**, PaddleOCR automatically downloads and verifies pretrained detection (`ch_PP-OCRv4_det`) and recognition (`ch_PP-OCRv4_rec`) model weights into `~/.paddleocr/` (~15–30 MB). Ensure outbound HTTPS access is available during first inference, or pre-populate `~/.paddleocr/` in air-gapped environments.
+Model initialization is strictly **lazy**: importing FastAPI does not download model weights or contact external networks. On the **first live inference request**, PaddleOCR / PaddleX automatically downloads and verifies pretrained detection (`PP-OCRv6_medium_det` / `PP-OCRv4_det`) and recognition (`PP-OCRv6_medium_rec` / `PP-OCRv4_rec`) model weights into `~/.paddlex/` or `~/.paddleocr/` (~15–30 MB). Ensure outbound HTTPS access is available during first inference, or pre-populate the directory in air-gapped environments.
+
+**PaddlePaddle 3.3.1 CPU Compatibility:**
+When executing inference on CPU with PaddlePaddle 3.3.1, oneDNN (MKLDNN) with PIR (Program Intermediate Representation) can trigger an unimplemented static instruction error (`ConvertPirAttribute2RuntimeAttribute`). The `PaddleOCREngine` adapter automatically sets `PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0` and `FLAGS_use_mkldnn=0` to ensure stable CPU execution across Windows, Linux, and macOS. On Windows, if PyTorch is installed alongside PaddlePaddle, PyTorch DLLs are preloaded to prevent `shm.dll` loading collisions.
 
 ### 3. Running the OCR Benchmark Tool
 
