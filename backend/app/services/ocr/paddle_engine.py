@@ -52,7 +52,12 @@ class PaddleOCREngine(BaseOCREngine):
         if self._ocr_instance is None:
             try:
                 from paddleocr import PaddleOCR
-                self._ocr_instance = PaddleOCR(use_angle_cls=self._use_angle_cls, lang=self._lang)
+                self._ocr_instance = PaddleOCR(
+                    lang=self._lang,
+                    use_doc_orientation_classify=False,
+                    use_doc_unwarping=False,
+                    use_textline_orientation=self._use_angle_cls,
+                )
             except Exception as e:
                 raise RuntimeError(
                     f"Failed to initialize PaddleOCR engine (model weights download or runtime error): {e}"
@@ -79,28 +84,48 @@ class PaddleOCREngine(BaseOCREngine):
 
         try:
             ocr = self._get_ocr_instance()
-            raw_results = ocr.ocr(np_array, cls=self._use_angle_cls)
+            raw_results = ocr.predict(np_array)
         except Exception as e:
             raise RuntimeError(f"PaddleOCR inference execution failed: {e}") from e
 
         lines_out: List[OCRLine] = []
         all_confs: List[float] = []
 
-        if raw_results and raw_results[0]:
-            for line_item in raw_results[0]:
-                poly = line_item[0]  # [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
-                text_info = line_item[1]  # (text, conf)
-                text = str(text_info[0])
-                conf = float(text_info[1])
+        for page_result in raw_results or []:
+            result_data = page_result.json if hasattr(page_result, "json") else page_result
+            if callable(result_data):
+                result_data = result_data()
+            result_data = result_data.get("res", result_data)
+            texts = result_data.get("rec_texts", [])
+            scores = result_data.get("rec_scores", [])
+            polygons = result_data.get("rec_polys", [])
+            boxes = result_data.get("rec_boxes", [])
 
-                xs = [p[0] for p in poly]
-                ys = [p[1] for p in poly]
+            for index, raw_text in enumerate(texts):
+                text = str(raw_text)
+                conf = float(scores[index]) if index < len(scores) else 0.0
+                poly = polygons[index] if index < len(polygons) else None
+                if poly is not None:
+                    points = np.asarray(poly).tolist()
+                    xs = [point[0] for point in points]
+                    ys = [point[1] for point in points]
+                elif index < len(boxes):
+                    x_min, y_min, x_max, y_max = np.asarray(boxes[index]).tolist()
+                    points = None
+                    xs = [x_min, x_max]
+                    ys = [y_min, y_max]
+                else:
+                    points = None
+                    xs = ys = []
+
+                if not xs or not ys:
+                    continue
                 box = BoundingBox(
                     x_min=float(min(xs)),
                     y_min=float(min(ys)),
                     x_max=float(max(xs)),
                     y_max=float(max(ys)),
-                    polygon=poly,
+                    polygon=points,
                 )
 
                 # Segment line into tokens

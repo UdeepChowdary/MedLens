@@ -139,6 +139,38 @@ def test_engine_availability_accuracy():
     assert isinstance(tesseract_eng.is_available(), bool)
 
 
+def test_paddle_v3_prediction_result_is_adapted(monkeypatch):
+    """Maps PaddleOCR 3.x prediction output into MedLens OCR schemas."""
+    class PaddleV3Result:
+        json = {
+            "res": {
+                "rec_texts": ["Paracetamol 500 mg"],
+                "rec_scores": [0.93],
+                "rec_polys": [[[10, 20], [150, 20], [150, 45], [10, 45]]],
+                "rec_boxes": [[10, 20, 150, 45]],
+            }
+        }
+
+    class PaddleV3Stub:
+        def predict(self, image):
+            return [PaddleV3Result()]
+
+    engine = PaddleOCREngine()
+    monkeypatch.setattr(engine, "is_available", lambda: True)
+    monkeypatch.setattr(engine, "_get_ocr_instance", lambda: PaddleV3Stub())
+
+    image = Image.new("RGB", (200, 80), "white")
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG")
+    result = engine.extract_text(buffer.getvalue(), pil_image=image)
+
+    assert result.full_text == "Paracetamol 500 mg"
+    assert result.mean_confidence == 0.93
+    assert result.lines[0].box.x_min == 10
+    assert result.lines[0].box.y_max == 45
+    assert result.lines[0].box.polygon == [[10, 20], [150, 20], [150, 45], [10, 45]]
+
+
 # ============================================================================
 # 2. Rejection of Silent Mock Substitution (Prompt Requirement 4)
 # ============================================================================
