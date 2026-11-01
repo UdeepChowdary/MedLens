@@ -1,45 +1,182 @@
 {
   "split": "train",
   "seed": 42,
-  "total_images": 3,
+  "total_images": 15,
   "product_families": [
+    "metformin-500",
+    "benadryl-cough-syrup",
+    "azithromycin-500",
+    "montair-10",
+    "combiflam",
     "dolo-650",
-    "brufen-400-fixture",
-    "cetirizine-10-fixture"
+    "omeprazole-20",
+    "cetirizine-10"
   ],
   "images": [
     {
-      "annotation_file": "img-dolo-650-blister.json",
-      "image_id": "img-dolo-650-blister",
-      "file_name": "dolo_650_blister.jpg",
+      "annotation_file": "img-glycomet-500-strip-back.json",
+      "image_id": "img-glycomet-500-strip-back",
+      "file_name": "glycomet_500_strip_back.jpg",
+      "product_family": "metformin-500",
+      "packaging_type": "blister_foil",
+      "entity_count": 8,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-glycomet-500-strip-front.json",
+      "image_id": "img-glycomet-500-strip-front",
+      "file_name": "glycomet_500_strip_front.png",
+      "product_family": "metformin-500",
+      "packaging_type": "blister_foil",
+      "entity_count": 0,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-benadryl-bottle-back.json",
+      "image_id": "img-benadryl-bottle-back",
+      "file_name": "benedryl_bottle_back.jpg",
+      "product_family": "benadryl-cough-syrup",
+      "packaging_type": "bottle_label",
+      "entity_count": 12,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-benadryl-bottle-front.json",
+      "image_id": "img-benadryl-bottle-front",
+      "file_name": "benedryl_bottle_front.jpg",
+      "product_family": "benadryl-cough-syrup",
+      "packaging_type": "bottle_label",
+      "entity_count": 2,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-azithral-500-strip-back.json",
+      "image_id": "img-azithral-500-strip-back",
+      "file_name": "azithral_500_strip_back.jpg",
+      "product_family": "azithromycin-500",
+      "packaging_type": "blister_foil",
+      "entity_count": 8,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-azithral-500-strip-front.json",
+      "image_id": "img-azithral-500-strip-front",
+      "file_name": "azithral_500_strip_front.jpg",
+      "product_family": "azithromycin-500",
+      "packaging_type": "blister_foil",
+      "entity_count": 1,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-montair-10-strip-back.json",
+      "image_id": "img-montair-10-strip-back",
+      "file_name": "montair_10_strip_back.jpg",
+      "product_family": "montair-10",
+      "packaging_type": "blister_foil",
+      "entity_count": 11,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-montair-10-strip-front.json",
+      "image_id": "img-montair-10-strip-front",
+      "file_name": "montair_10_strip_front.jpg",
+      "product_family": "montair-10",
+      "packaging_type": "blister_foil",
+      "entity_count": 0,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-combiflam-strip-back.json",
+      "image_id": "img-combiflam-strip-back",
+      "file_name": "combiflam_strip_back.jpg",
+      "product_family": "combiflam",
+      "packaging_type": "blister_foil",
+      "entity_count": 10,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-combiflam-strip-front.json",
+      "image_id": "img-combiflam-strip-front",
+      "file_name": "combiflam_strip_front.jpg",
+      "product_family": "combiflam",
+      "packaging_type": "blister_foil",
+      "entity_count": 0,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-dolo-650-strip-back.json",
+      "image_id": "img-dolo-650-strip-back",
+      "file_name": "dolo_650_strip_back.jpg",
       "product_family": "dolo-650",
       "packaging_type": "blister_foil",
       "entity_count": 7,
-      "review_status": "flagged_for_review",
+      "review_status": "verified_by_human",
       "is_synthetic_fixture": false,
-      "eligible_for_real_training": false
+      "eligible_for_real_training": true
     },
     {
-      "annotation_file": "img-brufen-400-strip.json",
-      "image_id": "img-brufen-400-strip",
-      "file_name": "brufen_400_strip.png",
-      "product_family": "brufen-400-fixture",
+      "annotation_file": "img-dolo-650-strip-front.json",
+      "image_id": "img-dolo-650-strip-front",
+      "file_name": "dolo_650_strip_front.jpg",
+      "product_family": "dolo-650",
       "packaging_type": "blister_foil",
-      "entity_count": 7,
-      "review_status": "draft",
-      "is_synthetic_fixture": true,
-      "eligible_for_real_training": false
+      "entity_count": 0,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
     },
     {
-      "annotation_file": "img-cetirizine-10-strip.json",
-      "image_id": "img-cetirizine-10-strip",
-      "file_name": "cetirizine_10_strip.png",
-      "product_family": "cetirizine-10-fixture",
+      "annotation_file": "img-omiflux-20-strip-back.json",
+      "image_id": "img-omiflux-20-strip-back",
+      "file_name": "omez_20_strip.jpg",
+      "product_family": "omeprazole-20",
+      "packaging_type": "blister_foil",
+      "entity_count": 9,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-cetirizine-strip-back.json",
+      "image_id": "img-cetirizine-strip-back",
+      "file_name": "Cetirizine_strip_back.jpg",
+      "product_family": "cetirizine-10",
       "packaging_type": "blister_foil",
       "entity_count": 8,
-      "review_status": "draft",
-      "is_synthetic_fixture": true,
-      "eligible_for_real_training": false
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-cetirizine-strip-front.json",
+      "image_id": "img-cetirizine-strip-front",
+      "file_name": "Cetirizine_strip_front.jpg",
+      "product_family": "cetirizine-10",
+      "packaging_type": "blister_foil",
+      "entity_count": 1,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
     }
   ]
 }

@@ -1,46 +1,47 @@
 {
-  "generated_at": "2026-10-13T11:18:27.518765+00:00",
-  "total_images": 5,
-  "total_product_families": 5,
-  "total_annotated_entities": 37,
-  "avg_entities_per_image": 7.4,
-  "human_verified_percentage": 20.0,
+  "generated_at": "2026-11-01T14:15:54.131133+00:00",
+  "total_images": 21,
+  "total_product_families": 11,
+  "total_annotated_entities": 119,
+  "avg_entities_per_image": 5.67,
+  "human_verified_percentage": 100.0,
   "entity_distribution": {
-    "SALT_FORM": 7,
-    "INGREDIENT": 6,
-    "STRENGTH": 6,
-    "DOSAGE_FORM": 5,
-    "COMPOSITION_HEADER": 4,
-    "STRENGTH_BASIS": 4,
-    "BRAND": 3,
-    "PRODUCT_NAME": 2
+    "SALT_FORM": 28,
+    "INGREDIENT": 20,
+    "STRENGTH": 20,
+    "BRAND": 16,
+    "DOSAGE_FORM": 13,
+    "STRENGTH_BASIS": 12,
+    "COMPOSITION_HEADER": 6,
+    "RELEASE_TYPE": 2,
+    "ROUTE": 1,
+    "PRODUCT_NAME": 1
   },
   "packaging_distribution": {
-    "blister_foil": 3,
-    "paper_box": 2
+    "blister_foil": 19,
+    "bottle_label": 2
   },
   "quality_flags_distribution": {
-    "small_text": 2,
+    "small_text": 12,
     "glare": 1
   },
   "sources_distribution": {
-    "MedLens Reference Packaging Archive": 3,
-    "MedLens Synthetic Test Fixture (Pillow rendered)": 2
+    "Authentic Indian Retail Pharmacy Packaging (Student Collection)": 21
   },
   "license_distribution": {
-    "CC-BY-4.0": 5
+    "CC-BY-4.0": 21
   },
   "splits": {
     "train": {
-      "count": 3,
-      "families": 3
+      "count": 15,
+      "families": 8
     },
     "val": {
-      "count": 1,
-      "families": 1
+      "count": 3,
+      "families": 2
     },
     "test": {
-      "count": 1,
+      "count": 3,
       "families": 1
     }
   }

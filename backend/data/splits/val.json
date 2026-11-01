@@ -1,21 +1,44 @@
 {
   "split": "val",
   "seed": 42,
-  "total_images": 1,
+  "total_images": 3,
   "product_families": [
+    "aspirin-75",
     "augmentin-625"
   ],
   "images": [
     {
-      "annotation_file": "img-augmentin-625-box.json",
-      "image_id": "img-augmentin-625-box",
-      "file_name": "augmentin_625_box.jpg",
-      "product_family": "augmentin-625",
-      "packaging_type": "paper_box",
+      "annotation_file": "img-ecosprin-75-strip-back.json",
+      "image_id": "img-ecosprin-75-strip-back",
+      "file_name": "ecosprin_75_strip_back.jpg",
+      "product_family": "aspirin-75",
+      "packaging_type": "blister_foil",
       "entity_count": 10,
-      "review_status": "flagged_for_review",
+      "review_status": "verified_by_human",
       "is_synthetic_fixture": false,
-      "eligible_for_real_training": false
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-ecosprin-75-strip-front.json",
+      "image_id": "img-ecosprin-75-strip-front",
+      "file_name": "ecosprin_75_strip_front.jpg",
+      "product_family": "aspirin-75",
+      "packaging_type": "blister_foil",
+      "entity_count": 0,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-augmentin-625-strip.json",
+      "image_id": "img-augmentin-625-strip",
+      "file_name": "augmentin_625_strip.jpg",
+      "product_family": "augmentin-625",
+      "packaging_type": "blister_foil",
+      "entity_count": 11,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
     }
   ]
 }

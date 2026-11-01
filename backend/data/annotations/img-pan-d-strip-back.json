@@ -1,0 +1,207 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-pan-d-strip-back",
+    "file_name": "pan_d_strip_back.webp",
+    "format": "webp",
+    "dimensions": {
+      "width": 860,
+      "height": 860
+    },
+    "sha256": "68435fc121ff1d5d3aa7bf1d494646c012fc274d73a39a9b36bb11f385776ce9",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "pan-40",
+    "brand_name": "Pantocid DSR",
+    "manufacturer": "Sun Pharma Laboratories Ltd",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:37:17Z",
+      "notes": "Authentic physical blister pack (back foil). Prolonged-release dual anti-reflux capsule with Pantoprazole 40mg and Domperidone 30mg by Sun Pharma."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Pantocid DSR. Pantoprazole Gastro-Resistant and Domperidone Prolonged-Release Capsules IP. Each capsule contains: Pantoprazole Sodium IP equivalent to Pantoprazole 40 mg (as gastro-resistant pellets), Domperidone IP 30 mg (as prolonged-release pellets). Excipients q.s. Colours: Indigo Carmine, Ferric Oxide Red, Titanium Dioxide IP. Dosage: As directed by the Physician. Capsule should be swallowed whole and not to be chewed or crushed. Store at temperature not exceeding 25C protected from moisture. Manufactured in India by: Sun Pharma Laboratories Ltd, East-Sikkim-737 135. M.L.: M/645/2014. SCHEDULE H PRESCRIPTION DRUG - CAUTION.",
+  "composition_text": "Each capsule contains: Pantoprazole Sodium IP equivalent to Pantoprazole 40 mg (as gastro-resistant pellets), Domperidone IP 30 mg (as prolonged-release pellets).",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Pantocid DSR",
+      "normalized_value": "Pantocid DSR",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        0,
+        12
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "capsule",
+      "normalized_value": "Capsule",
+      "bbox": [
+        182,
+        94,
+        256,
+        650
+      ],
+      "char_span": [
+        96,
+        103
+      ]
+    },
+    {
+      "label": "RELEASE_TYPE",
+      "raw_text": "Prolonged-Release",
+      "normalized_value": "Prolonged Release",
+      "bbox": [
+        182,
+        94,
+        256,
+        650
+      ],
+      "char_span": [
+        60,
+        77
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Pantoprazole",
+      "normalized_value": "Pantoprazole",
+      "bbox": [
+        113,
+        93,
+        186,
+        946
+      ],
+      "char_span": [
+        14,
+        26
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "Sodium",
+      "normalized_value": "Sodium Salt",
+      "bbox": [
+        344,
+        65,
+        367,
+        244
+      ],
+      "char_span": [
+        127,
+        133
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        182,
+        94,
+        256,
+        650
+      ],
+      "char_span": [
+        87,
+        89
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "40 mg",
+      "normalized_value": "40 mg",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        164,
+        169
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Domperidone",
+      "normalized_value": "Domperidone",
+      "bbox": [
+        113,
+        93,
+        186,
+        946
+      ],
+      "char_span": [
+        48,
+        59
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        182,
+        94,
+        256,
+        650
+      ],
+      "char_span": [
+        87,
+        89
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "30 mg",
+      "normalized_value": "30 mg",
+      "bbox": [
+        100,
+        50,
+        200,
+        500
+      ],
+      "char_span": [
+        216,
+        221
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "capsule",
+      "normalized_value": "per capsule",
+      "bbox": [
+        182,
+        94,
+        256,
+        650
+      ],
+      "char_span": [
+        96,
+        103
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "pan-40",
+  "review_status": "verified_by_human"
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-omiflux-20-strip-back",
+    "file_name": "omez_20_strip.jpg",
+    "format": "webp",
+    "dimensions": {
+      "width": 860,
+      "height": 860
+    },
+    "sha256": "1c83f119c5b9bc0616221ccb3557c3e4f9fa6d67dd41d677180c5ec37f5b8ff6",
+    "packaging_type": "blister_foil",
+    "image_side": "back",
+    "product_family": "omeprazole-20",
+    "brand_name": "Omiflux",
+    "manufacturer": "Micro Labs Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:36:56Z",
+      "notes": "Authentic physical blister strip (back foil). Dual gastrointestinal capsule with enteric-coated pellets containing Omeprazole 20mg and Domperidone 10mg."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": true,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Omiflux. Omeprazole and Domperidone Capsules IP. Rx. Each capsule contains: Omeprazole IP 20 mg (as enteric-coated pellets), Domperidone IP 10 mg (as pellets). Colours: Titanium Dioxide IP and Lake of Tartrazine. Approved colours used in capsule shells. Dosage: As directed by the Physician. Directions for use: Do not chew or crush the capsules. To be swallowed whole. Store in a dry & dark place, at a temperature not exceeding 30C. Made in India by: MICRO LABS LIMITED, Mamring, South Sikkim-737 132. Mfg. Lic. No.: M/600/2012. SCHEDULE H PRESCRIPTION DRUG - CAUTION.",
+  "composition_text": "Each capsule contains: Omeprazole IP 20 mg (as enteric-coated pellets), Domperidone IP 10 mg (as pellets).",
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Omiflux",
+      "normalized_value": "Omiflux",
+      "bbox": [
+        372,
+        81,
+        418,
+        388
+      ],
+      "char_span": [
+        0,
+        7
+      ]
+    },
+    {
+      "label": "DOSAGE_FORM",
+      "raw_text": "capsule",
+      "normalized_value": "Capsule",
+      "bbox": [
+        281,
+        81,
+        305,
+        206
+      ],
+      "char_span": [
+        58,
+        65
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Omeprazole",
+      "normalized_value": "Omeprazole",
+      "bbox": [
+        305,
+        110,
+        375,
+        888
+      ],
+      "char_span": [
+        9,
+        19
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        220,
+        82,
+        244,
+        296
+      ],
+      "char_span": [
+        45,
+        47
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "20 mg",
+      "normalized_value": "20 mg",
+      "bbox": [
+        737,
+        89,
+        758,
+        250
+      ],
+      "char_span": [
+        90,
+        95
+      ]
+    },
+    {
+      "label": "INGREDIENT",
+      "raw_text": "Domperidone",
+      "normalized_value": "Domperidone",
+      "bbox": [
+        305,
+        110,
+        375,
+        888
+      ],
+      "char_span": [
+        24,
+        35
+      ]
+    },
+    {
+      "label": "SALT_FORM",
+      "raw_text": "IP",
+      "normalized_value": "Indian Pharmacopoeia",
+      "bbox": [
+        220,
+        82,
+        244,
+        296
+      ],
+      "char_span": [
+        45,
+        47
+      ]
+    },
+    {
+      "label": "STRENGTH",
+      "raw_text": "10 mg",
+      "normalized_value": "10 mg",
+      "bbox": [
+        479,
+        84,
+        503,
+        255
+      ],
+      "char_span": [
+        140,
+        145
+      ]
+    },
+    {
+      "label": "STRENGTH_BASIS",
+      "raw_text": "capsule",
+      "normalized_value": "per capsule",
+      "bbox": [
+        281,
+        81,
+        305,
+        206
+      ],
+      "char_span": [
+        58,
+        65
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "omez-20",
+  "review_status": "verified_by_human"
+}

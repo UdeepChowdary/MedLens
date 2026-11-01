@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-montair-10-strip-front",
+    "file_name": "montair_10_strip_front.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 440,
+      "height": 746
+    },
+    "sha256": "5c5540fecd815fce078b1af87cfad6075227c8fc060e07b9034bcf24c291eb52",
+    "packaging_type": "blister_foil",
+    "image_side": "front",
+    "product_family": "montair-10",
+    "brand_name": "montair-LC",
+    "manufacturer": "Cipla Ltd",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:45:00Z",
+      "notes": "Authentic physical blister strip (front blister cavities). Bilayered yellow/pink tablets visible in clear PVC cavities with embossed blister edge; sharp focus."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "[Unprinted transparent blister cavity foil with bilayered tablets]",
+  "composition_text": null,
+  "entities": [],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "montair-10",
+  "review_status": "verified_by_human"
+}
