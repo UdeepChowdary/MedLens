@@ -2,16 +2,23 @@
 
 import React, { useState, useEffect } from "react";
 import { IcoShield } from "@/components/Icons";
+import { useAuth } from "@/context/AuthContext";
 
 const DEFAULT_ALLERGIES = ["Penicillin", "Ibuprofen"];
 
 export default function ProfilePage() {
-  const [fullName, setFullName] = useState("Udeep Chowdary");
-  const [email, setEmail] = useState("udeep@example.com");
+  const { user } = useAuth();
+  const [fullName, setFullName] = useState(user?.displayName || "Researcher");
+  const [email, setEmail] = useState(user?.email || "user@medlens.health");
   const [allergies, setAllergies] = useState<string[]>(DEFAULT_ALLERGIES);
   const [newAllergyInput, setNewAllergyInput] = useState("");
   const [isAddingAllergy, setIsAddingAllergy] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  useEffect(() => {
+    if (user?.displayName) setFullName(user.displayName);
+    if (user?.email) setEmail(user.email);
+  }, [user]);
 
   useEffect(() => {
     try {

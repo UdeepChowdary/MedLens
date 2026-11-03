@@ -155,17 +155,31 @@ export function getClientSessionId(): string {
 
 // ─── HTTP Helper ──────────────────────────────────────────────────────────────
 
+function getAuthHeaders(): Record<string, string> {
+  const sessionToken = getClientSessionId();
+  const headers: Record<string, string> = {
+    "X-Session-ID": sessionToken,
+  };
+  if (typeof window !== "undefined") {
+    const authToken = localStorage.getItem("medlens_auth_token");
+    if (authToken) {
+      headers["Authorization"] = `Bearer ${authToken}`;
+    }
+  }
+  return headers;
+}
+
 async function request<T>(
   path: string,
   options?: RequestInit
 ): Promise<{ data: T | null; error: ApiError | null }> {
   try {
-    const sessionToken = getClientSessionId();
+    const authHeaders = getAuthHeaders();
     const res = await fetch(`${API_BASE}${path}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
-        "X-Session-ID": sessionToken,
+        ...authHeaders,
         ...(options?.headers ?? {}),
       },
     });
@@ -198,12 +212,12 @@ export async function uploadAnalysis(
   formData.append("file", file);
 
   try {
-    const sessionToken = getClientSessionId();
+    const authHeaders = getAuthHeaders();
     const res = await fetch(`${API_BASE}/analyses`, {
       method: "POST",
       body: formData,
       headers: {
-        "X-Session-ID": sessionToken,
+        ...authHeaders,
       },
       // Do NOT set Content-Type header for multipart; browser sets it with boundary
     });
