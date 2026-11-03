@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 import uuid
 from typing import Dict, List, Optional
@@ -223,20 +224,63 @@ class AnalysisPipelineService:
                 )
             )
 
+        # Consolidate and deduplicate active ingredients by canonical name
+        deduped_active: Dict[str, IngredientReport] = {}
+        for ing_rep in active_ingredients:
+            cname = ing_rep.canonical_name
+            if cname not in deduped_active:
+                deduped_active[cname] = ing_rep
+            else:
+                existing = deduped_active[cname]
+                # If current has a numeric strength and existing doesn't, upgrade to the specific strength
+                if (ing_rep.strength and ing_rep.strength.numeric_value is not None) and (
+                    not existing.strength or existing.strength.numeric_value is None
+                ):
+                    deduped_active[cname] = ing_rep
+        active_ingredients = list(deduped_active.values())
+
         # Fallback if no ingredients extracted
         if not active_ingredients:
             uncertainties.append("No active therapeutic ingredients could be parsed from packaging text.")
 
-        # Commercial Product Brand Name Lookup
+        # Commercial Product Brand Name Lookup with OCR artifact and spacing resilience
         stmt = select(Product)
         all_prods_res = await self.session.execute(stmt)
         all_products = all_prods_res.scalars().all()
 
         matched_product: Optional[Product] = None
+        raw_lower = raw_text.lower()
+        raw_alphanumeric = re.sub(r"[^a-z0-9]", "", raw_lower)
+
+        # 1. Exact or alphanumeric normalized match
         for p in all_products:
-            if p.brand_name.lower() in raw_text.lower():
+            p_brand = p.brand_name.lower()
+            p_alphanumeric = re.sub(r"[^a-z0-9]", "", p_brand)
+            if p_brand in raw_lower or (len(p_alphanumeric) >= 3 and p_alphanumeric in raw_alphanumeric):
                 matched_product = p
                 break
+
+        # 2. Heuristic OCR artifact correction (e.g. PAN140 -> Pan 40, DOLO650 -> Dolo 650, PAN '40 -> Pan 40)
+        if not matched_product:
+            for p in all_products:
+                parts = p.brand_name.lower().split()
+                if len(parts) == 2 and parts[1].isdigit():
+                    prefix, num = parts[0], parts[1]
+                    # Check variants where separator is digit 1, apostrophe, quote, hyphen, or glyph
+                    pattern = rf"\b{re.escape(prefix)}[1'®\-_ ]*{re.escape(num)}\b"
+                    if re.search(pattern, raw_lower, re.IGNORECASE):
+                        matched_product = p
+                        break
+
+        # 3. Manufacturer + Ingredient correlation match if visible on label
+        if not matched_product and active_ingredients:
+            for p in all_products:
+                if p.manufacturer and p.manufacturer.lower() in raw_lower:
+                    p_tokens = set(re.findall(r"[a-z0-9]+", p.brand_name.lower()))
+                    raw_tokens = set(re.findall(r"[a-z0-9]+", raw_lower))
+                    if p_tokens.intersection(raw_tokens):
+                        matched_product = p
+                        break
 
         if matched_product:
             product_id = matched_product.id
