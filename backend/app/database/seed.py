@@ -744,8 +744,8 @@ async def seed_database(session: AsyncSession) -> Dict[str, int]:
         {
             "product": {
                 "id": "pan-40",
-                "brand_name": "Pan-40",
-                "manufacturer": "Alkem",
+                "brand_name": "Pan 40",
+                "manufacturer": "Alkem Laboratories Ltd",
                 "dosage_form": "Tablet",
                 "route": "Oral",
                 "release_type": "Immediate Release",

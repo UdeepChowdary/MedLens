@@ -251,24 +251,30 @@ class AnalysisPipelineService:
         matched_product: Optional[Product] = None
         raw_lower = raw_text.lower()
         raw_alphanumeric = re.sub(r"[^a-z0-9]", "", raw_lower)
+        # Normalize common OCR glyph artifacts where '1' or punctuation splits a brand and dosage (e.g. "pan140" -> "pan 40")
+        raw_normalized_separators = re.sub(r"([a-z]+)1(\d{2,4})\b", r"\1 \2", raw_lower)
 
         # 1. Exact or alphanumeric normalized match
         for p in all_products:
             p_brand = p.brand_name.lower()
             p_alphanumeric = re.sub(r"[^a-z0-9]", "", p_brand)
-            if p_brand in raw_lower or (len(p_alphanumeric) >= 3 and p_alphanumeric in raw_alphanumeric):
+            if (
+                p_brand in raw_lower
+                or p_brand in raw_normalized_separators
+                or (len(p_alphanumeric) >= 3 and p_alphanumeric in raw_alphanumeric)
+            ):
                 matched_product = p
                 break
 
-        # 2. Heuristic OCR artifact correction (e.g. PAN140 -> Pan 40, DOLO650 -> Dolo 650, PAN '40 -> Pan 40)
+        # 2. Heuristic OCR artifact correction (handles "Pan 40", "Pan-40", "Dolo 650", etc.)
         if not matched_product:
             for p in all_products:
-                parts = p.brand_name.lower().split()
-                if len(parts) == 2 and parts[1].isdigit():
-                    prefix, num = parts[0], parts[1]
-                    # Check variants where separator is digit 1, apostrophe, quote, hyphen, or glyph
-                    pattern = rf"\b{re.escape(prefix)}[1'®\-_ ]*{re.escape(num)}\b"
-                    if re.search(pattern, raw_lower, re.IGNORECASE):
+                m = re.match(r"^([a-zA-Z]+)[\s\-_]*(\d+)$", p.brand_name.strip())
+                if m:
+                    prefix = m.group(1).lower()
+                    num = m.group(2)
+                    pattern = rf"\b{re.escape(prefix)}[1|l'®\-_ ]*{re.escape(num)}\b"
+                    if re.search(pattern, raw_lower, re.IGNORECASE) or re.search(pattern, raw_normalized_separators, re.IGNORECASE):
                         matched_product = p
                         break
 
@@ -318,7 +324,9 @@ class AnalysisPipelineService:
         else:
             first_line = ocr_result.lines[0].text if ocr_result.lines else "Medicine Packaging Scan"
             product_id = None
-            detected_name = first_line.split()[0] if first_line else (primary_norm.canonical_name if primary_norm else "Analyzed Medicine")
+            detected_raw = first_line.split()[0] if first_line else (primary_norm.canonical_name if primary_norm else "Analyzed Medicine")
+            # Correct OCR artifact like PAN140 -> Pan 40 even in fallback
+            detected_name = re.sub(r"^([a-zA-Z]+)1(\d{2,4})$", r"\1 \2", detected_raw)
             manufacturer = None
             dosage_form = extraction.dosage_form or "Tablet"
             is_verified = (primary_norm is not None and primary_norm.is_inn_match)
