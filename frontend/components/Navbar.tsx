@@ -1,10 +1,15 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Logo } from "./Logo";
 import { IcoArrow, IcoClose, IcoMenu } from "./Icons";
+import { useAuth } from "@/context/AuthContext";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -19,6 +24,8 @@ export const Navbar = () => {
     { label: "Brand Comparison", href: "#brand-comparison" },
     { label: "FAQs", href: "#faqs" },
   ];
+
+  const scannerHref = user ? "/dashboard/scan" : "/login?redirect=/dashboard/scan";
 
   return (
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
@@ -58,9 +65,50 @@ export const Navbar = () => {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <a href="/dashboard/scan" className="btn-primary hidden md:inline-flex" style={{ padding: "8px 18px", fontSize: 13.5, borderRadius: 6 }}>
+          {user ? (
+            <Link
+              href="/dashboard"
+              style={{
+                fontSize: 13.5,
+                fontWeight: 600,
+                color: "var(--text-primary)",
+                textDecoration: "none",
+                padding: "8px 14px",
+                borderRadius: 6,
+                border: "1px solid var(--border)",
+                backgroundColor: "white",
+              }}
+              className="hidden md:inline-flex hover:bg-slate-50 transition-colors"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              style={{
+                fontSize: 13.5,
+                fontWeight: 600,
+                color: "var(--text-primary)",
+                textDecoration: "none",
+                padding: "8px 14px",
+                borderRadius: 6,
+                border: "1px solid var(--border)",
+                backgroundColor: "white",
+              }}
+              className="hidden md:inline-flex hover:bg-slate-50 transition-colors"
+            >
+              Sign In
+            </Link>
+          )}
+
+          <Link
+            href={scannerHref}
+            className="btn-primary hidden md:inline-flex"
+            style={{ padding: "8px 18px", fontSize: 13.5, borderRadius: 6, textDecoration: "none" }}
+          >
             Launch Scanner <IcoArrow />
-          </a>
+          </Link>
+
           <button
             onClick={() => setMobileOpen((o) => !o)}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 6, borderRadius: 6 }}
@@ -94,9 +142,55 @@ export const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <a href="/dashboard/scan" className="btn-primary" onClick={() => setMobileOpen(false)} style={{ marginTop: 18, width: "100%", justifyContent: "center", borderRadius: 6 }}>
-            Launch Scanner <IcoArrow />
-          </a>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 18 }}>
+            {user ? (
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  padding: "10px",
+                  borderRadius: 6,
+                  border: "1px solid var(--border)",
+                  color: "var(--text-primary)",
+                  fontWeight: 600,
+                  fontSize: 14,
+                  textDecoration: "none",
+                }}
+              >
+                Go to Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  padding: "10px",
+                  borderRadius: 6,
+                  border: "1px solid var(--border)",
+                  color: "var(--text-primary)",
+                  fontWeight: 600,
+                  fontSize: 14,
+                  textDecoration: "none",
+                }}
+              >
+                Sign In
+              </Link>
+            )}
+
+            <Link
+              href={scannerHref}
+              className="btn-primary"
+              onClick={() => setMobileOpen(false)}
+              style={{ width: "100%", justifyContent: "center", borderRadius: 6, textDecoration: "none" }}
+            >
+              Launch Scanner <IcoArrow />
+            </Link>
+          </div>
         </div>
       )}
     </nav>

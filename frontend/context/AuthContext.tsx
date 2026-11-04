@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser({
             uid: firebaseUser.uid,
             email: firebaseUser.email,
-            displayName: firebaseUser.displayName || (firebaseUser.email ? firebaseUser.email.split("@")[0] : "Researcher"),
+            displayName: firebaseUser.displayName || (firebaseUser.email ? firebaseUser.email.split("@")[0] : "User"),
             photoURL: firebaseUser.photoURL,
             isAnonymous: firebaseUser.isAnonymous,
           });
@@ -93,8 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Dev mode local mock user
       const mockUser: MedLensUser = {
         uid: "usr_google_dev_demo",
-        email: "demo.researcher@medlens.health",
-        displayName: "Dr. Demo Researcher",
+        email: "user@medlens.health",
+        displayName: "User",
         photoURL: null,
       };
       setUser(mockUser);

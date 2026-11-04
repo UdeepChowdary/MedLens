@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { IcoScan } from "@/components/Icons";
@@ -52,8 +52,14 @@ const IcoCompare = ({ size = 24, color = "currentColor" }) => (
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+    }
+  }, [loading, user, router, pathname]);
 
   const handleLogout = async () => {
     await logout();
@@ -67,6 +73,52 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: "Compare by Disease", href: "/dashboard/compare", icon: IcoCompare },
     { name: "Profile", href: "/dashboard/profile", icon: IcoProfile },
   ];
+
+  if (loading || !user) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "var(--surface)",
+          gap: "16px",
+        }}
+      >
+        <Logo />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            color: "var(--text-secondary)",
+            fontSize: "14px",
+          }}
+        >
+          <div
+            style={{
+              width: "18px",
+              height: "18px",
+              border: "2px solid #cbd5e1",
+              borderTopColor: "var(--blue)",
+              borderRadius: "50%",
+              animation: "spin 0.8s linear infinite",
+            }}
+          />
+          <span>Verifying authentication...</span>
+        </div>
+        <style jsx>{`
+          @keyframes spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "var(--surface)" }}>
@@ -144,10 +196,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {user?.displayName || "Researcher"}
+                  {user?.displayName || (user?.email ? user.email.split("@")[0] : "User")}
                 </div>
                 <div style={{ fontSize: "11px", color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {user?.email || "Signed In"}
+                  {user?.email || "Active User"}
                 </div>
               </div>
             </div>

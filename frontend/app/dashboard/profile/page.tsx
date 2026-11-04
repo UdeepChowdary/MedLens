@@ -23,7 +23,7 @@ const SUGGESTED_CONDITIONS = [
 
 export default function ProfilePage() {
   const { user } = useAuth();
-  const [fullName, setFullName] = useState(user?.displayName || "Patient / Researcher");
+  const [fullName, setFullName] = useState(user?.displayName || "User");
   const [email, setEmail] = useState(user?.email || "user@medlens.health");
 
   // Health Profile State
