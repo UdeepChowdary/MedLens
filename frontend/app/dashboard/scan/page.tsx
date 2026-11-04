@@ -203,6 +203,17 @@ export default function ScanPage() {
     setPreviewUrl(null);
   };
 
+  const handleSelectDemoSample = async (samplePath: string, fileName: string) => {
+    try {
+      const response = await fetch(samplePath);
+      const blob = await response.blob();
+      const file = new File([blob], fileName, { type: "image/jpeg" });
+      handleFileSelected(file);
+    } catch (err) {
+      console.error("Failed to load demo sample", err);
+    }
+  };
+
   return (
     <div className="flex flex-col font-sans" style={{ minHeight: "100%", backgroundColor: "var(--surface)" }}>
       <div
@@ -266,6 +277,143 @@ export default function ScanPage() {
               <div className="flex flex-col gap-6">
                 {/* 1. Upload Box */}
                 <UploadZone onFileSelected={handleFileSelected} />
+
+                {/* 1.5 Quick 1-Click Demo Packaging Samples */}
+                <div
+                  style={{
+                    backgroundColor: "white",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "16px",
+                    padding: "18px 20px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: "12px",
+                      flexWrap: "wrap",
+                      gap: "8px",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span style={{ fontSize: "16px" }}>⚡</span>
+                      <span style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)" }}>
+                        Don&apos;t have packaging nearby? Test with real blister samples:
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        color: "#475569",
+                        backgroundColor: "#f1f5f9",
+                        padding: "2px 8px",
+                        borderRadius: "10px",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Instant 1-Click Intake
+                    </span>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px" }}>
+                    {[
+                      {
+                        name: "Dolo 650",
+                        salt: "Paracetamol 650 mg",
+                        category: "Fever & Pain",
+                        file: "/samples/dolo_650.jpg",
+                        color: "#2563eb",
+                      },
+                      {
+                        name: "Augmentin 625 Duo",
+                        salt: "Amoxicillin + Clavulanate",
+                        category: "Antibiotic Ratio",
+                        file: "/samples/augmentin_625.jpg",
+                        color: "#059669",
+                      },
+                      {
+                        name: "Pan 40",
+                        salt: "Pantoprazole 40 mg",
+                        category: "Acidity / GERD",
+                        file: "/samples/pan_40.jpg",
+                        color: "#d97706",
+                      },
+                    ].map((sample) => (
+                      <button
+                        key={sample.name}
+                        type="button"
+                        onClick={() =>
+                          handleSelectDemoSample(
+                            sample.file,
+                            `${sample.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}.jpg`
+                          )
+                        }
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          padding: "10px 12px",
+                          borderRadius: "10px",
+                          border: "1px solid #e2e8f0",
+                          backgroundColor: "#f8fafc",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          transition: "all 0.15s ease",
+                        }}
+                        className="hover:border-blue-500 hover:bg-blue-50/50"
+                      >
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "8px",
+                            overflow: "hidden",
+                            position: "relative",
+                            flexShrink: 0,
+                            backgroundColor: "#e2e8f0",
+                            border: "1px solid #cbd5e1",
+                          }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={sample.file}
+                            alt={sample.name}
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                          />
+                        </div>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: 700,
+                              color: "var(--text-primary)",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {sample.name}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "11px",
+                              color: "var(--text-secondary)",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {sample.salt}
+                          </div>
+                        </div>
+                        <span style={{ fontSize: "12px", color: sample.color, fontWeight: 700 }}>→</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
                 {/* 2. Analysis Mode & Gemini API Key BYOK Card */}
                 <div

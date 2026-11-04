@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -19,6 +20,7 @@ export const isFirebaseConfigured = Boolean(
 let app: FirebaseApp | undefined;
 let auth: Auth | undefined;
 let googleProvider: GoogleAuthProvider | undefined;
+let db: Firestore | undefined;
 
 if (typeof window !== "undefined" || isFirebaseConfigured) {
   try {
@@ -26,10 +28,11 @@ if (typeof window !== "undefined" || isFirebaseConfigured) {
       app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
       auth = getAuth(app);
       googleProvider = new GoogleAuthProvider();
+      db = getFirestore(app);
     }
   } catch (err) {
     console.warn("Firebase initialization skipped or failed:", err);
   }
 }
 
-export { app, auth, googleProvider };
+export { app, auth, googleProvider, db };

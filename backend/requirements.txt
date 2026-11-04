@@ -23,3 +23,6 @@ paddleocr>=3.7.0
 
 # Optional Fallback Engine: Google Tesseract-OCR (requires OS binary in PATH)
 pytesseract>=0.3.13
+
+# BYOK AI Personalization (Google Gemini API)
+google-genai>=0.1.1

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { IcoShield } from "@/components/Icons";
 import { useAuth } from "@/context/AuthContext";
 import { verifyGeminiKey, VerifyKeyResponse } from "@/lib/api";
+import { saveProfileToFirestore, loadProfileFromFirestore } from "@/lib/firebaseSync";
 
 const DEFAULT_ALLERGIES = ["Penicillin", "Ibuprofen"];
 const DEFAULT_CONDITIONS = ["GERD / Acid Reflux"];
@@ -46,6 +47,14 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user?.displayName) setFullName(user.displayName);
     if (user?.email) setEmail(user.email);
+    if (user?.uid) {
+      loadProfileFromFirestore(user.uid).then((cloudProfile) => {
+        if (cloudProfile) {
+          if (cloudProfile.allergies?.length) setAllergies(cloudProfile.allergies);
+          if (cloudProfile.conditions?.length) setConditions(cloudProfile.conditions);
+        }
+      });
+    }
   }, [user]);
 
   useEffect(() => {
@@ -122,7 +131,7 @@ export default function ProfilePage() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
       localStorage.setItem("medlens_user_allergies", JSON.stringify(allergies));
       localStorage.setItem("medlens_user_conditions", JSON.stringify(conditions));
@@ -133,6 +142,12 @@ export default function ProfilePage() {
       }
       localStorage.setItem("medlens_user_name", fullName);
       localStorage.setItem("medlens_user_email", email);
+
+      // Synchronize with Cloud Firestore if user is authenticated
+      if (user?.uid) {
+        await saveProfileToFirestore(user.uid, { allergies, conditions });
+      }
+
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4000);
     } catch {
@@ -166,7 +181,7 @@ export default function ProfilePage() {
           gap: "8px",
         }}>
           <IcoShield size={20} color="#10b981" />
-          <span>Profile, health conditions, and BYOK Gemini settings saved successfully! Future medicine scans will cross-reference these entries.</span>
+          <span>Profile and health conditions saved &amp; synced across devices! Future medicine scans will cross-reference these entries.</span>
         </div>
       )}
 
