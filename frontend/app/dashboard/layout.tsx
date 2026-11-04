@@ -64,7 +64,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: "Overview", href: "/dashboard", icon: IcoDashboard },
     { name: "Scan New", href: "/dashboard/scan", icon: IcoScan },
     { name: "History", href: "/dashboard/history", icon: IcoHistory },
-    { name: "Compare Brands", href: "/dashboard/compare", icon: IcoCompare },
+    { name: "Compare by Disease", href: "/dashboard/compare", icon: IcoCompare },
     { name: "Profile", href: "/dashboard/profile", icon: IcoProfile },
   ];
 
