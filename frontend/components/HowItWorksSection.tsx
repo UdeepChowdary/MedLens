@@ -7,7 +7,7 @@ export const HowItWorksSection = () => {
     { n: 1, label: "Scan / Upload", icon: <IcoScan size={20} color="#fff" />, items: ["Tablet strip", "Medicine box", "Syrup bottle", "Composition panel"] },
     { n: 2, label: "Extract", icon: <IcoFile size={20} color="#fff" />, items: ["Medicine trade name", "Strengths & dosages", "Prescription marks", "Manufacturer ID"] },
     { n: 3, label: "Identify & Verify", icon: <IcoShield size={20} color="#fff" />, items: ["Canonical INN mapping", "OpenFDA & PubChem", "Bioequivalence check", "Flag unverified claims"] },
-    { n: 4, label: "Salt Synthesis", icon: <IcoBrain size={20} color="#fff" />, items: ["Active vs inactive roles", "Therapeutic purpose", "Plain-language summary", "Contraindications"] },
+    { n: 4, label: "Personalized Safety", icon: <IcoBrain size={20} color="#fff" />, items: ["Active vs inactive roles", "Allergy & condition cross-check", "Optional Gemini BYOK AI", "Clinical contraindications"] },
     { n: 5, label: "Clinical Report", icon: <IcoFile size={20} color="#fff" />, items: ["Structured clarity", "Confidence telemetry", "Official citations", "Brand delta match"] },
   ];
 

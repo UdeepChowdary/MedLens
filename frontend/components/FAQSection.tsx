@@ -24,6 +24,11 @@ export const FAQSection = () => {
       a: "MedLens cross-references authoritative sources including OpenFDA, PubChem / National Library of Medicine (NLM), WHO Essential Medicines, and DailyMed. All claims cite their source registry for complete transparency.",
     },
     {
+      cat: "Personalized Safety & BYOK",
+      q: "Can MedLens personalize safety checks for my allergies or medical conditions?",
+      a: "Yes. In your Health Profile, you can save your documented allergies (e.g., Penicillin, Ibuprofen, Sulfa drugs) and pre-existing medical conditions (e.g., GERD, Hypertension, Diabetes). Scanned medications are automatically evaluated for contraindications and cross-reactivity. You can also optionally connect your own free Google Gemini API key for clinical AI insights while keeping your key and health profile private on your own device.",
+    },
+    {
       cat: "Bioequivalence",
       q: "Can MedLens compare two different medicine brands?",
       a: "Yes. The Brand Comparison Engine scans two medicines, normalizes both to their canonical active International Nonproprietary Names (INNs), and highlights active salt equivalence, dosage parity, and excipient differences side by side.",

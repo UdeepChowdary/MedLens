@@ -9,6 +9,7 @@ export const WhyMedLensSection = () => {
     { label: "Evidence", ai: "Unverified internal training memory", ml: "Real-time grounding in OpenFDA, PubChem & DailyMed" },
     { label: "Output", ai: "Unstructured conversational paragraphs", ml: "Clinically structured report + confidence telemetry" },
     { label: "Equivalence", ai: "Manual querying brand by brand", ml: "Automated Active Salt & Excipient Delta Matcher" },
+    { label: "Safety", ai: "No patient allergy context or cross-check", ml: "Cross-checks personal allergies & diseases (BYOK Gemini)" },
   ];
 
   return (

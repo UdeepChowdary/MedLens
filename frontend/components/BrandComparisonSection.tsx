@@ -1,5 +1,8 @@
+"use client";
+
 import React, { useState } from "react";
-import { IcoCheck, IcoShield } from "./Icons";
+import Link from "next/link";
+import { IcoCheck, IcoShield, IcoArrow } from "./Icons";
 
 export const BrandComparisonSection = () => {
   const [selectedPair, setSelectedPair] = useState(0);
@@ -39,16 +42,35 @@ export const BrandComparisonSection = () => {
   return (
     <section id="brand-comparison" style={{ padding: "80px 0", background: "var(--bg)", borderTop: "1px solid var(--border)" }}>
       <div className="container">
-        <div style={{ marginBottom: 36 }}>
-          <span className="section-label" style={{ marginBottom: 8, display: "block" }}>Brand Comparison</span>
-          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(26px, 3.5vw, 40px)", fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 10, color: "#0F172A" }}>
-            Compare Medicine Brands &amp; Generic Substitutes
-          </h2>
-          <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-secondary)", maxWidth: 640 }}>
-            Confused when a pharmacist substitutes an alternate brand? MedLens strips trade names, extracts canonical INN salts, and confirms bioequivalence instantly.
-          </p>
-        </div>
+        <div style={{ marginBottom: 36, display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 }}>
+          <div>
+            <span className="section-label" style={{ marginBottom: 8, display: "block" }}>Brand Comparison</span>
+            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(26px, 3.5vw, 40px)", fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 10, color: "#0F172A" }}>
+              Compare Medicine Brands &amp; Generic Substitutes
+            </h2>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-secondary)", maxWidth: 640 }}>
+              Confused when a pharmacist substitutes an alternate brand? MedLens strips trade names, extracts canonical INN salts, and confirms bioequivalence instantly.
+            </p>
+          </div>
 
+          <Link
+            href="/dashboard/compare"
+            className="btn-secondary"
+            style={{
+              padding: "10px 18px",
+              fontSize: 13.5,
+              borderRadius: 6,
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              whiteSpace: "nowrap",
+            }}
+          >
+            <span>Explore Compare by Disease</span>
+            <IcoArrow />
+          </Link>
+        </div>
 
         {/* Pair Selector Tabs */}
         <div style={{ display: "flex", gap: 10, marginBottom: 24, overflowX: "auto", paddingBottom: 6 }}>
@@ -77,62 +99,93 @@ export const BrandComparisonSection = () => {
 
         {/* Tab content */}
         <div key={selectedPair} className="tab-content-enter">
-
-        {/* Savings & Clinical Delta Strip */}
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
-          <div style={{ padding: "5px 12px", borderRadius: 6, background: "#DCFCE7", border: "1px solid #86EFAC", color: "#166534", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <IcoCheck size={12} color="#166534" /> {curr.savingsPill}
+          {/* Savings & Clinical Delta Strip */}
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
+            <div style={{ padding: "5px 12px", borderRadius: 6, background: "#DCFCE7", border: "1px solid #86EFAC", color: "#166534", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <IcoCheck size={12} color="#166534" /> {curr.savingsPill}
+            </div>
+            <div style={{ padding: "5px 12px", borderRadius: 6, background: "var(--surface-blue)", border: "1px solid var(--blue-border)", color: "#1E40AF", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <IcoShield size={12} color="#1E40AF" /> {curr.allergyCheck}
+            </div>
           </div>
-          <div style={{ padding: "5px 12px", borderRadius: 6, background: "var(--surface-blue)", border: "1px solid var(--blue-border)", color: "#1E40AF", fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <IcoShield size={12} color="#1E40AF" /> {curr.allergyCheck}
+
+          {/* Comparison Cards Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20, marginBottom: 20 }}>
+            {/* Brand A */}
+            <div className="card" style={{ padding: 24 }}>
+              <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--blue)", fontWeight: 700, textTransform: "uppercase" }}>Brand A (Prescribed)</span>
+              <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 800, color: "#0F172A", margin: "4px 0" }}>{curr.brandA.name}</h3>
+              <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Mfg: {curr.brandA.maker}</p>
+              <div style={{ padding: "10px 12px", borderRadius: 8, background: "var(--surface-alt)", marginBottom: 12 }}>
+                <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Active Salt &amp; Strength</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#0F172A", fontFamily: "var(--font-mono)" }}>{curr.brandA.salt} {curr.brandA.strength}</div>
+              </div>
+              <div style={{ fontSize: 12.5, color: "var(--text-secondary)", marginBottom: 8 }}>Binders: {curr.brandA.binders}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#0F172A" }}>Market Price: {curr.brandA.price}</div>
+            </div>
+
+            {/* Brand B */}
+            <div className="card" style={{ padding: 24 }}>
+              <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--green)", fontWeight: 700, textTransform: "uppercase" }}>Brand B (Generic Substitute)</span>
+              <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 800, color: "#0F172A", margin: "4px 0" }}>{curr.brandB.name}</h3>
+              <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Mfg: {curr.brandB.maker}</p>
+              <div style={{ padding: "10px 12px", borderRadius: 8, background: "var(--surface-alt)", marginBottom: 12 }}>
+                <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Active Salt &amp; Strength</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#0F172A", fontFamily: "var(--font-mono)" }}>{curr.brandB.salt} {curr.brandB.strength}</div>
+              </div>
+              <div style={{ fontSize: 12.5, color: "var(--text-secondary)", marginBottom: 8 }}>Binders: {curr.brandB.binders}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#0F172A" }}>Market Price: {curr.brandB.price}</div>
+            </div>
+          </div>
+
+          {/* Verdict Banner */}
+          <div style={{ padding: "18px 22px", borderRadius: 12, background: "var(--surface-blue)", border: "1px solid var(--blue-border)", display: "flex", alignItems: "flex-start", gap: 14 }}>
+            <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#10B981", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
+              <IcoCheck size={14} color="#fff" />
+            </div>
+            <div>
+              <div style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "#1E3A8A", marginBottom: 3 }}>
+                MedLens Verdict: {curr.savingsPill.split("•")[0].trim()}
+              </div>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 13.5, color: "#334155", lineHeight: 1.5 }}>
+                {curr.verdict}
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Comparison Cards Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20, marginBottom: 20 }}>
-          {/* Brand A */}
-          <div className="card" style={{ padding: 24 }}>
-            <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--blue)", fontWeight: 700, textTransform: "uppercase" }}>Brand A (Prescribed)</span>
-            <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 800, color: "#0F172A", margin: "4px 0" }}>{curr.brandA.name}</h3>
-            <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Mfg: {curr.brandA.maker}</p>
-            <div style={{ padding: "10px 12px", borderRadius: 8, background: "var(--surface-alt)", marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Active Salt & Strength</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: "#0F172A", fontFamily: "var(--font-mono)" }}>{curr.brandA.salt} {curr.brandA.strength}</div>
-            </div>
-            <div style={{ fontSize: 12.5, color: "var(--text-secondary)", marginBottom: 8 }}>Binders: {curr.brandA.binders}</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#0F172A" }}>Market Price: {curr.brandA.price}</div>
-          </div>
-
-          {/* Brand B */}
-          <div className="card" style={{ padding: 24 }}>
-            <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--green)", fontWeight: 700, textTransform: "uppercase" }}>Brand B (Generic Substitute)</span>
-            <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 800, color: "#0F172A", margin: "4px 0" }}>{curr.brandB.name}</h3>
-            <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Mfg: {curr.brandB.maker}</p>
-            <div style={{ padding: "10px 12px", borderRadius: 8, background: "var(--surface-alt)", marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Active Salt & Strength</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: "#0F172A", fontFamily: "var(--font-mono)" }}>{curr.brandB.salt} {curr.brandB.strength}</div>
-            </div>
-            <div style={{ fontSize: 12.5, color: "var(--text-secondary)", marginBottom: 8 }}>Binders: {curr.brandB.binders}</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#0F172A" }}>Market Price: {curr.brandB.price}</div>
-          </div>
-        </div>
-
-        {/* Verdict Banner */}
-        <div style={{ padding: "18px 22px", borderRadius: 12, background: "var(--surface-blue)", border: "1px solid var(--blue-border)", display: "flex", alignItems: "flex-start", gap: 14 }}>
-          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#10B981", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
-            <IcoCheck size={14} color="#fff" />
-          </div>
+        {/* Live Compare by Disease Tool Callout */}
+        <div
+          style={{
+            marginTop: 28,
+            padding: "20px 24px",
+            background: "#ffffff",
+            borderRadius: 12,
+            border: "1px solid var(--border)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 16,
+            boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
+          }}
+        >
           <div>
-            <div style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "#1E3A8A", marginBottom: 3 }}>
-              MedLens Verdict: {curr.savingsPill.split("•")[0].trim()}
+            <div style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 700, color: "var(--text-primary)", marginBottom: 4 }}>
+              Looking for alternatives for a specific ailment or symptom?
             </div>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 13.5, color: "#334155", lineHeight: 1.5 }}>
-              {curr.verdict}
-            </p>
+            <div style={{ fontSize: 13.5, color: "var(--text-secondary)" }}>
+              Filter by condition (Fever, Acidity, Cough, Infections, Hypertension, Pain &amp; more) to find bioequivalent formulations and price breakdowns.
+            </div>
           </div>
+          <Link
+            href="/dashboard/compare"
+            className="btn-primary"
+            style={{ padding: "10px 20px", fontSize: 13.5, borderRadius: 6, textDecoration: "none", whiteSpace: "nowrap" }}
+          >
+            Launch Disease Comparator <IcoArrow />
+          </Link>
         </div>
-
-        </div>{/* /tab-content-enter */}
 
         {/* Authoritative Databases Grounding Strip */}
         <div style={{ marginTop: 36, paddingTop: 24, borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
