@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 
 export const metadata = {
   title: "Privacy Policy | MedLens Clinical Data Governance",
-  description: "MedLens data handling standards, zero-PII architecture, and ephemeral processing policies for medicine packaging inspection.",
+  description: "MedLens data handling standards, zero-PII architecture, ephemeral processing, and BYOK Gemini API key privacy policies.",
 };
 
 export default function PrivacyPage() {
@@ -33,17 +33,18 @@ export default function PrivacyPage() {
             
             <div style={{ marginBottom: "32px", borderBottom: "1px solid var(--border)", paddingBottom: "24px" }}>
               <div style={{ display: "inline-block", fontSize: "11px", fontWeight: 700, fontFamily: "var(--font-mono)", color: "var(--blue)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>
-                Data Architecture & Compliance
+                Data Architecture &amp; Clinical Privacy Governance
               </div>
               <h1 style={{ fontSize: "32px", fontWeight: 800, color: "#0F172A", letterSpacing: "-0.02em", marginBottom: "12px" }}>
                 Privacy Policy
               </h1>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", margin: 0 }}>
-                Effective Date: October 12, 2026 | Document ID: ML-SEC-POL-04
+                Effective Date: November 2026 | Document ID: ML-SEC-POL-05
               </p>
             </div>
 
-            <section style={{ marginBottom: "32px" }}>
+            {/* Section 1: Ephemeral Processing */}
+            <section id="ephemeral-processing" style={{ marginBottom: "32px", scrollMarginTop: "90px" }}>
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
                 1. Fundamental Operating Principle: Ephemeral Processing
               </h2>
@@ -51,73 +52,106 @@ export default function PrivacyPage() {
                 MedLens operates as an informational pharmaceutical composition verification engine. We adhere to a strict ephemeral processing architecture: physical medicine packaging photos submitted for optical character recognition and salt normalization are held strictly in temporary volatile memory (RAM).
               </p>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
-                Uploaded images are immediately discarded upon completion of the feature extraction pipeline. We do not store, catalog, train on, or persist raw image pixels to persistent disk, object storage buckets, or external third-party repositories.
+                Uploaded images are immediately purged upon completion of the feature extraction pipeline. We do not store, catalog, train public models on, or persist raw image pixels to persistent disk storage, object buckets, or external third-party repositories.
               </p>
             </section>
 
-            <section style={{ marginBottom: "32px" }}>
+            {/* Section 2: Zero-PII */}
+            <section id="zero-pii" style={{ marginBottom: "32px", scrollMarginTop: "90px" }}>
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
-                2. Zero-PII Policy and Packaging Boundary
+                2. Zero-PII Packaging Boundary &amp; Automated Redaction
               </h2>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75, marginBottom: "12px" }}>
-                MedLens is engineered exclusively to parse printed medicine blister strips, boxes, bottles, and formulation inserts. Our processing software does not collect Protected Health Information (PHI) or Personally Identifiable Information (PII).
+                MedLens is engineered exclusively to parse printed medicine blister packs, boxes, bottles, and composition inserts. Our packaging intake pipeline does not extract or retain Protected Health Information (PHI) or personal patient identifiers.
               </p>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
-                In the event that an uploaded image inadvertently contains human faces, patient names, prescription receipts, or hospital admission cards, automated detection routines apply black bounding redaction masks across those regions prior to tokenization, ensuring non-medicinal attributes are never indexed.
+                In the event that an uploaded image inadvertently contains human faces, prescription receipts, patient names, or hospital stickers, automated spatial filters apply black bounding redaction masks across those regions prior to tokenization, ensuring non-medicinal elements are completely discarded.
               </p>
             </section>
 
-            <section style={{ marginBottom: "32px" }}>
+            {/* Section 3: BYOK Gemini & Health Profile Privacy */}
+            <section id="byok-privacy" style={{ marginBottom: "32px", scrollMarginTop: "90px" }}>
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
-                3. Immutable Audit Telemetry
+                3. Bring Your Own Key (BYOK) &amp; Health Profile Governance
               </h2>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75, marginBottom: "12px" }}>
-                To support deterministic safety verification, system auditing, and model accuracy benchmarks, our infrastructure generates a non-reversible cryptographic SHA-256 digest of verified packaging tokens.
+                To unlock personalized clinical cross-reactivity and contraindication assessments, MedLens offers an optional Bring Your Own Key (BYOK) architecture with Google Gemini:
+              </p>
+              <ul style={{ paddingLeft: "24px", color: "var(--text-secondary)", fontSize: "14px", lineHeight: 1.75, marginBottom: "12px" }}>
+                <li>
+                  <strong>Client-Side Storage:</strong> Your Gemini API key and documented health conditions/allergies are stored exclusively within your local browser storage (<code>localStorage</code>) on your personal device.
+                </li>
+                <li>
+                  <strong>No Server Key Persistence:</strong> MedLens servers never save, database-persist, or log your Gemini API key. It is transmitted in-memory over encrypted TLS solely to fulfill the requested consultation.
+                </li>
+                <li>
+                  <strong>Direct Provider Integration:</strong> When you execute an AI-enhanced personalized consultation, your key communicates with Google&apos;s official Gemini API endpoints. Google does not use paid or standard API key calls to train base models.
+                </li>
+                <li>
+                  <strong>Full User Control:</strong> You can edit, modify, or permanently delete your stored API key, documented allergies, and pre-existing conditions at any time with one click from the Scan page or Profile page.
+                </li>
+              </ul>
+            </section>
+
+            {/* Section 4: Authentication & User Accounts */}
+            <section id="auth-privacy" style={{ marginBottom: "32px", scrollMarginTop: "90px" }}>
+              <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
+                4. User Account Governance &amp; Firebase Authentication
+              </h2>
+              <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75, marginBottom: "12px" }}>
+                MedLens provides secure account authentication through Firebase Authentication, supporting Google OAuth and verified email/password sign-in.
+              </p>
+              <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
+                Account credentials are encrypted using industry-standard identity protocols. We collect only your basic user profile identifier (email address and display name) necessary to authenticate access to your personal scan history and saved reports. We never sell, rent, or trade user profile data to data brokers, insurers, or pharmaceutical advertisers.
+              </p>
+            </section>
+
+            {/* Section 5: Immutable Audit Telemetry */}
+            <section id="audit-telemetry" style={{ marginBottom: "32px", scrollMarginTop: "90px" }}>
+              <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
+                5. Immutable Audit Telemetry &amp; SHA-256 Hashes
+              </h2>
+              <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75, marginBottom: "12px" }}>
+                To support clinical safety verification, auditability, and OCR fidelity benchmarks, our verification pipeline generates a non-reversible cryptographic SHA-256 digest of extracted pharmaceutical text tokens.
               </p>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
                 The persistent audit log contains solely:
               </p>
               <ul style={{ paddingLeft: "24px", marginTop: "8px", color: "var(--text-secondary)", fontSize: "14px", lineHeight: 1.75 }}>
-                <li>Cryptographic hash of extracted pharmaceutical text</li>
-                <li>Normalized International Nonproprietary Name (INN) matching scores</li>
-                <li>Execution latency metrics and confidence index calculations</li>
-                <li>Timestamp of verification event</li>
+                <li>Cryptographic SHA-256 hash of extracted pharmaceutical text</li>
+                <li>Normalized International Nonproprietary Name (INN) matches and PubChem CIDs</li>
+                <li>Processing latency metrics and OCR confidence index calculations</li>
+                <li>Verification timestamp and regulatory pharmacopeial citation references</li>
               </ul>
             </section>
 
-            <section style={{ marginBottom: "32px" }}>
+            {/* Section 6: Authoritative Database Grounding */}
+            <section id="pharmacological-registries" style={{ marginBottom: "32px", scrollMarginTop: "90px" }}>
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
-                4. Third-Party Pharmacological Reference Grounding
+                6. Third-Party Pharmacological Reference Grounding
               </h2>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
-                Extracted active ingredients are cross-referenced directly against public, authoritative biomedical registries, including OpenFDA, the National Library of Medicine (NLM/PubChem), DailyMed, and the World Health Organization (WHO) Essential Medicines List. We do not transmit user telemetry, IP tracking markers, or personal identifiers to these clinical data providers during reference verification queries.
+                Extracted active ingredients are grounded directly in authoritative public biomedical registries, including OpenFDA, the National Library of Medicine (NLM/PubChem), DailyMed (NIH), the WHO Essential Medicines List, and Indian Pharmacopoeia standards. MedLens transmits zero personal identifiers, browsing histories, or client tracking headers to these data providers during monograph queries.
               </p>
             </section>
 
-            <section style={{ marginBottom: "32px" }}>
+            {/* Section 7: Transmission Security */}
+            <section id="transmission-security" style={{ marginBottom: "32px", scrollMarginTop: "90px" }}>
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
-                5. Client Session Data and Local Storage
+                7. Transmission Security Standards (TLS 1.3)
               </h2>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
-                When you perform a scan in your browser, image previews may be stored in your browser session storage exclusively to display your immediate verification results. This data is isolated to your local device sandbox and is cleared automatically upon browser session termination. We do not deploy third-party advertising tracking cookies or biometric fingerprinters.
+                All network interactions across MedLens web applications and API servers are strictly protected with Transport Layer Security (TLS 1.3) using high-grade cipher suites. End-to-end encryption ensures that scans, ingredient tokens, and report payloads remain completely confidential in transit.
               </p>
             </section>
 
-            <section style={{ marginBottom: "32px" }}>
+            {/* Section 8: Inquiries */}
+            <section id="governance">
               <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
-                6. Transmission Security Standards
+                8. Governance Inquiries &amp; Technical Audit Requests
               </h2>
               <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
-                All network communication with MedLens endpoints utilizes Transport Layer Security (TLS 1.3) with modern cipher suites. In-transit packet encryption ensures that image payloads and extracted report data cannot be intercepted or modified by intermediary nodes.
-              </p>
-            </section>
-
-            <section>
-              <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#0F172A", marginBottom: "12px" }}>
-                7. Governance Inquiries and Contact
-              </h2>
-              <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.75 }}>
-                For technical auditing requests, data integrity questions, or administrative security notices regarding MedLens data protocols, direct formal inquiries to our technical governance office at <span style={{ fontFamily: "var(--font-mono)", color: "var(--blue)" }}>governance@medlens.internal</span>.
+                For data governance inquiries, security disclosures, or compliance auditing regarding MedLens privacy protocols, direct inquiries to our technical team at <span style={{ fontFamily: "var(--font-mono)", color: "var(--blue)" }}>privacy@medlens.health</span>.
               </p>
             </section>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Logo } from "./Logo";
 import { IcoGithub, IcoLinkedIn, IcoTwitterX, IcoYouTube } from "./Icons";
 
@@ -12,7 +13,7 @@ export const Footer = () => (
         <div style={{ maxWidth: 360 }}>
           <Logo height={38} />
           <p style={{ fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.7, marginTop: 16 }}>
-            MedLens is a pharmaceutical composition verification engine that helps patients understand ingredients, verify active salts against canonical databases, and compare brand bioequivalence.
+            MedLens is an informational pharmaceutical composition verification engine that helps patients understand ingredients, cross-check personal health conditions, and verify active salts against canonical databases.
           </p>
           <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 6, background: "var(--blue-dim)", border: "1px solid var(--blue-border)" }}>
             <span style={{ fontFamily: "var(--font-heading)", fontSize: 12, fontWeight: 700, color: "var(--blue)" }}>
@@ -27,16 +28,22 @@ export const Footer = () => (
             Platform
           </div>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-            {["Home", "How it Works", "Why MedLens", "Brand Comparison", "FAQs"].map((l) => (
-              <li key={l}>
-                <a
-                  href={`#${l.toLowerCase().replace(/\s+/g, "-")}`}
+            {[
+              { label: "Home", href: "/" },
+              { label: "How it Works", href: "/#how-it-works" },
+              { label: "Why MedLens", href: "/#why-medlens" },
+              { label: "Compare by Disease", href: "/dashboard/compare" },
+              { label: "Brand Bioequivalence", href: "/#brand-comparison" },
+              { label: "FAQs", href: "/#faqs" },
+            ].map((l) => (
+              <li key={l.label}>
+                <Link
+                  href={l.href}
                   style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-secondary)")}
+                  className="hover:text-[var(--blue)]"
                 >
-                  {l}
-                </a>
+                  {l.label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -60,8 +67,7 @@ export const Footer = () => (
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-secondary)")}
+                  className="hover:text-[var(--blue)]"
                 >
                   {l.label}
                 </a>
@@ -72,25 +78,25 @@ export const Footer = () => (
 
         <div>
           <div style={{ fontFamily: "var(--font-heading)", fontSize: 12, fontWeight: 700, color: "var(--text-primary)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 14 }}>
-            Clinical & Privacy
+            Clinical &amp; Privacy
           </div>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
             {[
-              { label: "Zero-PII Storage Policy", href: "/privacy" },
-              { label: "Ephemeral Volatile RAM", href: "/privacy" },
-              { label: "Non-Prescription Boundary", href: "/terms" },
-              { label: "Deterministic Verification", href: "/#how-it-works" },
+              { label: "Zero-PII Storage Policy", href: "/privacy#zero-pii" },
+              { label: "Ephemeral Volatile RAM", href: "/privacy#ephemeral-processing" },
+              { label: "BYOK Gemini & Health Privacy", href: "/privacy#byok-privacy" },
+              { label: "Non-Prescription Boundary", href: "/terms#clinical-notice" },
+              { label: "Personalized Safety Terms", href: "/terms#personalized-safety" },
               { label: "Terms and Conditions", href: "/terms" },
             ].map((item) => (
               <li key={item.label}>
-                <a
+                <Link
                   href={item.href}
                   style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-secondary)")}
+                  className="hover:text-[var(--blue)]"
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -110,30 +116,27 @@ export const Footer = () => (
         </p>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ display: "flex", gap: 16 }}>
-            <a
+            <Link
               href="/privacy"
               style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textDecoration: "none", transition: "color 0.15s" }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-muted)")}
+              className="hover:text-[var(--blue)]"
             >
               Privacy Policy
-            </a>
-            <a
+            </Link>
+            <Link
               href="/terms"
               style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textDecoration: "none", transition: "color 0.15s" }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-muted)")}
+              className="hover:text-[var(--blue)]"
             >
-              Terms & Conditions
-            </a>
-            <a
-              href="/terms"
+              Terms &amp; Conditions
+            </Link>
+            <Link
+              href="/terms#clinical-notice"
               style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-muted)", textDecoration: "none", transition: "color 0.15s" }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--blue)")}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-muted)")}
+              className="hover:text-[var(--blue)]"
             >
               Clinical Disclaimer
-            </a>
+            </Link>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: 8 }}>
             <a
