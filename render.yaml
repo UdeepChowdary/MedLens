@@ -1,0 +1,16 @@
+services:
+  # 1. MedLens FastAPI Deterministic Verification Engine & Personalization API
+  - type: web
+    name: medlens-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free
+    region: oregon
+    healthCheckPath: /docs
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: CORS_ORIGINS
+        sync: false
+        value: "http://localhost:3000,https://*.vercel.app,https://*.onrender.com"

@@ -65,14 +65,26 @@ docker compose down -v
 
 The backend includes a pre-configured multi-stage `backend/Dockerfile` with PaddleOCR, Tesseract, and OpenCV pre-installed.
 
-### Option A: Render (Docker Service)
-1. In [Render Dashboard](https://dashboard.render.com), create a **New Web Service**.
-2. Select your repository and choose **Docker** runtime.
-3. Set **Docker Root Directory** to `backend`.
-4. Configure environment variables:
-   * `PORT`: `8000`
-   * `CORS_ORIGINS`: `https://your-frontend.vercel.app`
-5. Deploy.
+### Option A: Render (Web Service via Docker)
+1. In [Render Dashboard](https://dashboard.render.com), click **"New +"** &rarr; **"Web Service"**.
+2. Connect your GitHub repository `MedLens`.
+3. Fill in the service configuration:
+   * **Name:** `medlens-backend`
+   * **Region:** Select the closest region (e.g., *Oregon, US* or *Frankfurt, EU*)
+   * **Branch:** `full-stack-integration` (or `main`)
+   * **Root Directory:** `backend`
+   * **Runtime:** `Docker`
+   * **Instance Type:** `Free`
+4. Add the following **Environment Variables**:
+   * `ENVIRONMENT` &rarr; `production`
+   * `CORS_ORIGINS` &rarr; `*` (or your frontend Vercel/Render URL)
+5. Click **"Create Web Service"**.
+6. Once deployed, Render will provide a public URL such as `https://medlens-backend.onrender.com`.
+   * Verify API docs: `https://medlens-backend.onrender.com/docs`
+   * Verify health check: `https://medlens-backend.onrender.com/api/v1/health`
+
+### Alternative: 1-Click Render Blueprint
+If you prefer 1-click infrastructure deployment, navigate to **Blueprints** in Render and select `render.yaml` from your repository root. Render will automatically configure the Docker Web Service and health probes.
 
 ### Option B: Railway
 1. In [Railway](https://railway.app), create a new project from your GitHub repo.
