@@ -1,0 +1,272 @@
+{
+  "timestamp": "2026-11-01T13:07:01.690051+00:00",
+  "target_split": "all_verified",
+  "annotations_dir": "backend\\data\\annotations",
+  "raw_images_dir": "backend\\data\\raw",
+  "requested_engines": [
+    "paddleocr"
+  ],
+  "preprocessing_enabled": true,
+  "total_eligible_images": 9,
+  "engine_availability": {
+    "paddleocr": {
+      "available": true,
+      "version": "3.7.0",
+      "reason": "Ready"
+    }
+  },
+  "per_engine_results": {
+    "paddleocr": {
+      "status": "COMPLETED",
+      "version": "3.7.0",
+      "aggregate_metrics": {
+        "images_evaluated": 9,
+        "exact_matches_raw": 1,
+        "exact_matches_normalized": 1,
+        "mean_raw_cer": 1.5812,
+        "mean_raw_wer": 1.5901,
+        "mean_normalized_cer": 1.5454,
+        "mean_normalized_wer": 1.5901,
+        "mean_latency_ms": 16555
+      },
+      "records": [
+        {
+          "image_id": "img-augmentin-625-strip",
+          "file_name": "augmentin_625_strip.jpg",
+          "product_family": "augmentin-625",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 1.7385,
+            "raw_wer": 1.9878,
+            "normalized_cer": 1.6821,
+            "normalized_wer": 1.9878,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 585,
+            "hypothesis_char_count": 1419,
+            "reference_word_count": 82,
+            "hypothesis_word_count": 197
+          },
+          "raw_ocr_text": "AUGMENTIN625\nDUTO\nEARSOF\nh\nTRUS\n625\nCo-amoxiclay\nINHN\n10 Tablers\nMfg. Lic. No\n76\nEach film-coated tab\nains:\nStoected from moisture\nManufacture\nHadreich Limited\nAmoxycillin mhydi\ntem:\nnot exceeding 25\u00b0\n12th Mile, Ole\nRoad\nequivalent to Amoxyc\n500 mg\nFreach of children.\nVirgonagar\niru,560049\nAUGMENTIN625\nPotassium Clavulanate Dilussd IP\nMarketed byBriunSmithKline\nequivalent to Clavulania\n125 mg\nEHPRESORI\nPharmaceu\nimited\nColour: Titanium Diosd\nAUTION\nRegd.Office\nmie Besant Road\nTo be used as directed by physician.\nNo\nold by atall without\nWorli, Mumba\n30\nTablet to be consumed ifimhole,\nReristered\nWHEE\nBrand Owne\nRegn. No.\nnot to be broken\nBO-03-0000\nACG4414B-22\nFonsToll free Customer:CarelCall 1800222203\nTrade manksowned on licensed by\nResc\nFJ4610V03MD\nSmitnKline Beecham Pic,London\nGSK.O2021GSKorJicensor\nAUGMENTIN625\ntf\nGSK\nAMOXYCILLIN AND POTASSIUM CLAVULANATE TABLETS IP\n100\nROEE\nAUGMENTIN625\nDUC\nYEARSCF\n\u8fd0\nRUST\noaa\n10 be\nWNINQIA\nMfg .Li. No\n76\nEach film-coated tablet ccnfains:\nStore promcted from moisture\nManufactured uy edreich Limited\nAmoxycillin Trihydrate IP\ntemperature not exceeding 25\u00b0\n12th Mile, Olc Madras Road.\nequivalent to Amoxycalin\n500 mg\nKeep out of reach of children.\nVirgonagar, Bengaluru, 560 049\nPotassium Clavulanate:Diluted IP\nAUGME\nMarketed by:GlaxoSmithKline\nequivalent to Clavulanic Acid\n125 mg\nSCHEDULEHPRESCRIPTION\nPharmaceuticals Limited\nColder: Titanium Dioxide IP\nDRUGEBAUTION",
+          "ground_truth_text": "AUGMENTIN 625 Duo. Amoxycillin and Potassium Clavulanate Tablets IP. 10 Tablets. Each film-coated tablet contains: Amoxycillin Trihydrate IP equivalent to Amoxycillin 500 mg, Potassium Clavulanate Diluted IP equivalent to Clavulanic Acid 125 mg. Colour: Titanium Dioxide IP. Dosage: To be used as directed by physician. Tablet to be consumed whole, not to be broken. Store protected from moisture at a temperature not exceeding 25C. Manufactured by Medreich Limited, Bengaluru. Marketed by GlaxoSmithKline Pharmaceuticals Limited, Worli, Mumbai. SCHEDULE H PRESCRIPTION DRUG - CAUTION.",
+          "latency_ms": 47752,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-cetirizine-strip-back",
+          "file_name": "Cetirizine_strip_back.jpg",
+          "product_family": "cetirizine-10",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 0.9688,
+            "raw_wer": 1.1029,
+            "normalized_cer": 0.9286,
+            "normalized_wer": 1.1029,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 448,
+            "hypothesis_char_count": 796,
+            "reference_word_count": 68,
+            "hypothesis_word_count": 113
+          },
+          "raw_ocr_text": "uy Universal\nLife Sclence\nGw74 Chandanwa\u00e1 Mb 4 0\nEml: utivenalisdecce@yabaoc.coum\nCetirizine\nTablets IP\nCetizine\nComposition:\nExch fim coated tablet containe:\nCotirzine Dinydrochlonde P 1\nExcipiants\nColour: Titanlum Diox-de IP\nDosace : As dinected by th Physicidica\nStorage:\nStore in a cool, dry & dark piace piac\nProtect from direct light & nioisbisbisbisi\nKeep the medicine out\nof reach of children.\nMt. by : Bioconic Remedies\n(An SO 9001:2015 Cemed Companyan\n(A.G.M.P.& G.L.P. Certviled Companyan\nPlot No. 66-B7, Industial Area, Gondpa.\nFaonta Sahib. Dist. Simour (H.P.)-1)-1H.r\nMfg. Lic. No.: MNB/06/315 & MB/06/38/D6\nManuacturad in inda tor\nCuts Universal\ntruem\nLife Sclence\n86/74. Chandanwad, Mumbc2-400 002.10 1002\nE-mail: wavewezidescierce@yanco.comtoo\nCetirizine\nruer\nTablets IP\nCetizine",
+          "ground_truth_text": "Cetirizine Tablets IP Cetizine. Composition: Each film coated tablet contains: Cetirizine Dihydrochloride IP 10 mg. Excipients q.s. Colour: Titanium Dioxide IP. Dosage: As directed by the Physician. Storage: Store in a cool, dry & dark place. Protect from direct light & moisture. Keep the medicine out of reach of children. Mfd. by: Bioconic Remedies. Mfg. Lic. No.: MNB/06/315 & MB/06/38/06. Manufactured in India for Cuts Universal Life Science.",
+          "latency_ms": 15125,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-cetirizine-strip-front",
+          "file_name": "Cetirizine_strip_front.jpg",
+          "product_family": "cetirizine-10",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 0.0,
+            "raw_wer": 0.0,
+            "normalized_cer": 0.0,
+            "normalized_wer": 0.0,
+            "exact_match_raw": true,
+            "exact_match_normalized": true,
+            "reference_char_count": 5,
+            "hypothesis_char_count": 5,
+            "reference_word_count": 1,
+            "hypothesis_word_count": 1
+          },
+          "raw_ocr_text": "Cipla",
+          "ground_truth_text": "Cipla",
+          "latency_ms": 1144,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-combiflam-strip-back",
+          "file_name": "combiflam_strip_back.jpg",
+          "product_family": "combiflam",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 1.2804,
+            "raw_wer": 1.4792,
+            "normalized_cer": 1.2523,
+            "normalized_wer": 1.4792,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 642,
+            "hypothesis_char_count": 1389,
+            "reference_word_count": 96,
+            "hypothesis_word_count": 198
+          },
+          "raw_ocr_text": "sununneigifieun in ef\u00dfniunn tealu snnues\na\ne.g\nc\niflam\nqUui ent\nPGF\nU   ci\nSh  n\nboo\nqru  r\nn I   A\nCombiflam\u00ae\nPlot No. 3501, 3503-15, 6310 B-14.G.I.D.C. Estate\nAokfeshwar-393-002.\nMfg.LicNo.:G/811\n-Registered Tademark\nSANOFI\nSIL-01043018-6t [543806]\nCombiflam\u00ae\nCombiflam\u00ae\nCombiflam\u00ae\nCombiflam\nRx\nrond\nCombiflam\nAnti-inflammatory Analgesic\nCombiflam\u00ae Combiflam\nEach uncoated toblet contains:\nIbuprofen I.P.-400mg.\nParacetamol I.P.-325mg\nExcipients.... q.s.\n\u4e2d\nCombiflam@\nCombiflam\nCombiflam\u00ae\nStore below 30Caway from moisture.\nDosage: Adult: 1tabemes a day oadreted by the scian\nSCHEDULE H BRUG: WARNING To be sold by refail on\nthe prescription of a Registered Medical Pracifioner only\nCombiflam@\nCombiflam\u00ae\nCombiflam\u00ae\nCombiflan Combiflam\nWarning: Taking more than daily dose may caose\nserious liver damage or allergic reactions\n(e.g. swelling of the face, mouth and throat,\ndifficulty in breathing, itching or rash)\niflam\nCaution: Bronchospasm may be precipitated in patients\nG\nsuffering from or with a previous history of bronchial\nasthma. Ibuprofen sheuld not be given to patients in\nwhom aspirin and ofher non-steroidel anti inflammatory\ndrugs induce the symptoms of asthma, rhinitis o urticaria.\nManufactured By: SANOFI INDIA LIMITED\nCombiflam\nPlot No. 3501, 3503-15, 6310 B-14.G.1.D.C. Estate,\nAnkleshwar-393.002.\nMfg. Lic. No.: G/811\nnr\nCSANOFI\n3\n1L -10 380\nomifam\noam\nCombiflam\u00ae\nCom",
+          "ground_truth_text": "Combiflam. Anti-inflammatory Analgesic. Each uncoated tablet contains: Ibuprofen I.P. - 400mg. Paracetamol I.P. - 325mg. Excipients q.s. Store below 30C away from moisture. Dosage: Adult: 1 tablet 3 times a day or as directed by the Physician. SCHEDULE H DRUG: WARNING To be sold by retail on the prescription of a Registered Medical Practitioner only. Warning: Taking more than daily dose may cause serious liver damage or allergic reactions. Caution: Bronchospasm may be precipitated in patients suffering from asthma. Manufactured By: SANOFI INDIA LIMITED. Plot No. 3501, 3503-15, G.I.D.C. Estate, Ankleshwar-393 002. Mfg. Lic. No.: G/811.",
+          "latency_ms": 33435,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-combiflam-strip-front",
+          "file_name": "combiflam_strip_front.jpg",
+          "product_family": "combiflam",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 2.3333,
+            "raw_wer": 2.0,
+            "normalized_cer": 2.2222,
+            "normalized_wer": 2.0,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 9,
+            "hypothesis_char_count": 29,
+            "reference_word_count": 2,
+            "hypothesis_word_count": 6
+          },
+          "raw_ocr_text": "0000\n6856\n0000\n0000\n0000\n0000",
+          "ground_truth_text": "0000 6856",
+          "latency_ms": 6979,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-dolo-650-strip-back",
+          "file_name": "dolo_650_strip_back.jpg",
+          "product_family": "dolo-650",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 0.8034,
+            "raw_wer": 0.9333,
+            "normalized_cer": 0.7556,
+            "normalized_wer": 0.9333,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 356,
+            "hypothesis_char_count": 543,
+            "reference_word_count": 60,
+            "hypothesis_word_count": 84
+          },
+          "raw_ocr_text": "Dok\n\u2467 Rogd T\n00100-550\nDolo-650\nsret-que\nDolo-650\nParacetamol\nDolo-650\nTablets IP\n063-1015\nDolo-650\nstoldieyo\n53-2\nEach uncoated toblet contains:\nPorocetamol IP 650 mg.\nDosage : As directed by the Physician.\nat a temperature not exceeding 30C.\nStore in a dry & dark place,\nOver dose may be injurious to Liver.\nDolo-650\nMfg. Lic. No. : M/600/2012\nMode in India by\nMICROLABS LIMITED\nMamrinc, Nerthang Road,\n\u00ae Regd. Trode Mork\nSouth Sakim-737 132\nML24F-0043IA\nDolo-650\nstoit-Eyo\nDolo-650\n059-0100\nParacetamol\nDolo-650\nTablets IP\nDolo-650\nSrat-Eyo",
+          "ground_truth_text": "Dolo-650 Paracetamol Tablets IP. Each uncoated tablet contains: Paracetamol IP 650 mg. Dosage: As directed by the Physician. Store in a dry & dark place, at a temperature not exceeding 30C. Over dose may be injurious to Liver. Mfg. Lic. No.: M/600/2012. Made in India by MICRO LABS LIMITED. Mamring, Namthang Road, South Sikkim - 737 132. Regd. Trade Mark.",
+          "latency_ms": 13214,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-dolo-650-strip-front",
+          "file_name": "dolo_650_strip_front.jpg",
+          "product_family": "dolo-650",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 1.0,
+            "raw_wer": 1.0,
+            "normalized_cer": 1.0,
+            "normalized_wer": 1.0,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 43,
+            "hypothesis_char_count": 0,
+            "reference_word_count": 5,
+            "hypothesis_word_count": 0
+          },
+          "raw_ocr_text": "",
+          "ground_truth_text": "[Unprinted transparent blister cavity foil]",
+          "latency_ms": 917,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-pan-40-strip-back",
+          "file_name": "pan_40_strip_back.jpg",
+          "product_family": "pan-40",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 1.8021,
+            "raw_wer": 2.058,
+            "normalized_cer": 1.7638,
+            "normalized_wer": 2.058,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 470,
+            "hypothesis_char_count": 1164,
+            "reference_word_count": 69,
+            "hypothesis_word_count": 182
+          },
+          "raw_ocr_text": "\u5e97\nPantoprazole Sodium IP\nComposition: Each enteric coated tablet contains:\nMfg. Lic. No.: M/757/2016\nEq. to Pantoprazole\n40 mg\nMade in india by\nwwar cnne the\n\u00b74\nColours: Ferric Oxide\nYellow USP-NF & Titanium Dioxide IP\nDosage: As directed by the Physician.\nand Talc USP-NF used in\nALKEM HEALTH SCIENCE\nALKEM\nSCHEDULEH PRESCRIPTION\nDRUG -CAUTION\nA Unit of Alkem Laboratories Limited, Unit-2\nNot to be sold by netail\nSamardung. Karek Block\nP.O.: Namthang. South S\nH.O.: Alkem House,\nSikkim - 737 137.\nKakkiman.\nStore protected from moisture\nSenapati Bapat Marg.\n& temperature not exceeding 30\u00b0C.\nLower Parel, Mumbai-400 013.\n- Registered Trade Mark\nPantoprazole Gastro-resistant Tables IP\nPAN 40\n40\nPantoprazole Sodium IP\nComposition: Each enteric coated tablet contains\nMfg. Lic. No.: M/757/2016\nEq. to Pantoprazole\n40 mg\nMade in india by\nPAN:\nColours: Ferric Oxide\nand Talc USP-NF used in\nYellow USP-NF & Titanium Dioxide IP\nDosage: As directed by the Physician.\nALKEM HEALTH SCIENCE\nALKEM\nSCHEDULE H PRESCRIPTION\nSamardung. Karek Block\nA Unit of Alkem Laboratories Limited, Unit-2\nDRUG-CAUTION\nSikim -737 137.\nP.O.: Namthang, South Sikkim.\n- Registered Trade Mark",
+          "ground_truth_text": "Pantoprazole Gastro-resistant Tablets IP PAN 40. Composition: Each enteric coated tablet contains: Pantoprazole Sodium IP Eq. to Pantoprazole 40 mg. Colours: Ferric Oxide Yellow USP-NF & Titanium Dioxide IP. Dosage: As directed by the Physician. Store protected from moisture & temperature not exceeding 30C. ALKEM HEALTH SCIENCE. A Unit of Alkem Laboratories Limited. Samardung, South Sikkim - 737 137. Mfg. Lic. No.: M/757/2016. SCHEDULE H PRESCRIPTION DRUG - CAUTION.",
+          "latency_ms": 24100,
+          "preprocessing_applied": true,
+          "error_message": null
+        },
+        {
+          "image_id": "img-pan-40-strip-front",
+          "file_name": "pan_40_strip_front.jpg",
+          "product_family": "pan-40",
+          "packaging_type": "blister_foil",
+          "engine_name": "paddleocr",
+          "engine_version": "3.7.0",
+          "engine_status": "SUCCESS",
+          "metrics": {
+            "raw_cer": 4.3043,
+            "raw_wer": 3.75,
+            "normalized_cer": 4.3043,
+            "normalized_wer": 3.75,
+            "exact_match_raw": false,
+            "exact_match_normalized": false,
+            "reference_char_count": 23,
+            "hypothesis_char_count": 122,
+            "reference_word_count": 4,
+            "hypothesis_word_count": 19
+          },
+          "raw_ocr_text": "PAN-40 PAN-40 PAN-40 PAN-40 PAN-40 PAN PAN-4U PAIR4APA!\n40\nAC\nPF 28\nPAN-40\nPAN-40\nPAN-40PAN-40 PAN-40 PANN\nPAN-40-9A-R PAt",
+          "ground_truth_text": "PAN-40 PAN-40 PAN-40 40",
+          "latency_ms": 6337,
+          "preprocessing_applied": true,
+          "error_message": null
+        }
+      ]
+    }
+  },
+  "status": "COMPLETED",
+  "notes": []
+}

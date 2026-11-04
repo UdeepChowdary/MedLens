@@ -1,6 +1,7 @@
 """Unit tests for OCR Dispatcher service and engines (ML-026, ML-027)."""
 
 import pytest
+from app.core.errors import OCREngineUnavailableError, OCRExecutionError
 from app.services.ocr import (
     OCRDispatcher,
     MockOCREngine,
@@ -14,19 +15,55 @@ from app.schemas.ocr import OCRResult, OCRLine, OCRToken, BoundingBox
 class FailingTestEngine(BaseOCREngine):
     """Engine that simulates runtime failure to verify dispatcher fallback."""
 
+    def __init__(self, name: str = "failing_engine", available: bool = True):
+        self._name = name
+        self._available = available
+
     @property
     def name(self) -> str:
-        return "failing_engine"
+        return self._name
 
     @property
     def version(self) -> str:
         return "0.0.1-faulty"
 
     def is_available(self) -> bool:
-        return True
+        return self._available
 
     def extract_text(self, image_bytes: bytes, pil_image=None, np_array=None) -> OCRResult:
         raise RuntimeError("Simulated OCR execution crash!")
+
+
+class WorkingMockRealEngine(BaseOCREngine):
+    """Hermetic working real engine double for testing without downloading weights."""
+
+    def __init__(self, name: str = "paddleocr", version: str = "3.7.0", available: bool = True):
+        self._name = name
+        self._version = version
+        self._available = available
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def version(self) -> str:
+        return self._version
+
+    def is_available(self) -> bool:
+        return self._available
+
+    def extract_text(self, image_bytes: bytes, pil_image=None, np_array=None) -> OCRResult:
+        token = OCRToken(text="Paracetamol", confidence=0.98, box=BoundingBox(x_min=0, y_min=0, x_max=10, y_max=10))
+        line = OCRLine(text="Paracetamol 500mg", confidence=0.98, tokens=[token], box=token.box)
+        return OCRResult(
+            engine_name=self._name,
+            engine_version=self._version,
+            full_text="Paracetamol 500mg",
+            lines=[line],
+            mean_confidence=0.98,
+            execution_time_ms=120,
+        )
 
 
 @pytest.fixture
@@ -87,41 +124,91 @@ class TestOCRDispatcher:
         assert isinstance(available, list)
         assert "mock" in available
 
-    def test_dispatcher_active_engine_selection(self):
-        dispatcher = OCRDispatcher()
-        active = dispatcher.get_active_engine()
+    def test_dispatcher_rejects_mock_when_no_real_engine_available(self):
+        # Dispatcher with only unavailable real engines and mock
+        dispatcher = OCRDispatcher(
+            engines={
+                "paddleocr": WorkingMockRealEngine("paddleocr", available=False),
+                "tesseract": WorkingMockRealEngine("tesseract", available=False),
+                "mock": MockOCREngine(),
+            },
+            preference_order=["paddleocr", "tesseract"],
+        )
+        with pytest.raises(OCREngineUnavailableError) as exc_info:
+            dispatcher.get_active_engine()
+        assert "No real OCR engine is available" in str(exc_info.value.message)
 
-        assert active is not None
-        assert active.is_available() is True
-
-    def test_dispatcher_explicit_engine_request(self, sample_image_bytes: bytes):
-        dispatcher = OCRDispatcher()
+    def test_dispatcher_allows_explicit_mock_request(self, sample_image_bytes: bytes):
+        dispatcher = OCRDispatcher(
+            engines={
+                "paddleocr": WorkingMockRealEngine("paddleocr", available=False),
+                "tesseract": WorkingMockRealEngine("tesseract", available=False),
+                "mock": MockOCREngine(),
+            },
+            preference_order=["paddleocr", "tesseract"],
+        )
         result = dispatcher.extract(sample_image_bytes, requested_engine="mock")
-
         assert result.engine_name == "mock"
-        assert len(result.lines) > 0
+        assert result.fallback_used is False
+        assert result.requested_engine == "mock"
 
-    def test_dispatcher_fallback_on_unavailable_engine(self, sample_image_bytes: bytes):
-        dispatcher = OCRDispatcher()
-        # Request non-existent engine; should cleanly fall back to first available
-        result = dispatcher.extract(sample_image_bytes, requested_engine="non_existent_engine_xyz")
+    def test_dispatcher_allows_mock_when_explicitly_permitted(self, sample_image_bytes: bytes):
+        dispatcher = OCRDispatcher(
+            engines={
+                "paddleocr": WorkingMockRealEngine("paddleocr", available=False),
+                "tesseract": WorkingMockRealEngine("tesseract", available=False),
+                "mock": MockOCREngine(),
+            },
+            preference_order=["paddleocr", "tesseract"],
+        )
+        result = dispatcher.extract(sample_image_bytes, allow_mock=True)
+        assert result.engine_name == "mock"
+        assert result.fallback_used is True
 
-        assert result is not None
-        assert result.engine_name in dispatcher.get_available_engines()
-
-    def test_dispatcher_recovers_from_engine_runtime_crash(self, sample_image_bytes: bytes):
-        mock_eng = MockOCREngine()
-        failing_eng = FailingTestEngine()
+    def test_dispatcher_selects_paddleocr_as_default_real_engine(self, sample_image_bytes: bytes):
+        paddle_eng = WorkingMockRealEngine("paddleocr", version="3.7.0", available=True)
+        tesseract_eng = WorkingMockRealEngine("tesseract", version="5.3.0", available=True)
 
         dispatcher = OCRDispatcher(
-            engines={"faulty": failing_eng, "mock": mock_eng},
-            preference_order=["faulty", "mock"],
+            engines={"paddleocr": paddle_eng, "tesseract": tesseract_eng, "mock": MockOCREngine()},
+            preference_order=["paddleocr", "tesseract"],
         )
-
-        # Faulty engine is tried first and throws RuntimeError; dispatcher should catch and fall back to mock
         result = dispatcher.extract(sample_image_bytes)
+        assert result.engine_name == "paddleocr"
+        assert result.engine_version == "3.7.0"
+        assert result.fallback_used is False
 
-        assert result is not None
-        assert result.engine_name == "mock"
-        assert len(result.lines) > 0
+    def test_dispatcher_falls_back_to_tesseract_when_paddle_unavailable(self, sample_image_bytes: bytes):
+        paddle_eng = WorkingMockRealEngine("paddleocr", available=False)
+        tesseract_eng = WorkingMockRealEngine("tesseract", version="5.3.0", available=True)
 
+        dispatcher = OCRDispatcher(
+            engines={"paddleocr": paddle_eng, "tesseract": tesseract_eng, "mock": MockOCREngine()},
+            preference_order=["paddleocr", "tesseract"],
+        )
+        result = dispatcher.extract(sample_image_bytes)
+        assert result.engine_name == "tesseract"
+        assert result.fallback_used is True
+
+    def test_dispatcher_recovers_from_primary_engine_crash(self, sample_image_bytes: bytes):
+        failing_paddle = FailingTestEngine("paddleocr", available=True)
+        working_tesseract = WorkingMockRealEngine("tesseract", available=True)
+
+        dispatcher = OCRDispatcher(
+            engines={"paddleocr": failing_paddle, "tesseract": working_tesseract, "mock": MockOCREngine()},
+            preference_order=["paddleocr", "tesseract"],
+        )
+        result = dispatcher.extract(sample_image_bytes)
+        assert result.engine_name == "tesseract"
+        assert result.fallback_used is True
+
+    def test_dispatcher_raises_execution_error_when_all_real_engines_crash(self, sample_image_bytes: bytes):
+        failing_paddle = FailingTestEngine("paddleocr", available=True)
+        failing_tesseract = FailingTestEngine("tesseract", available=True)
+
+        dispatcher = OCRDispatcher(
+            engines={"paddleocr": failing_paddle, "tesseract": failing_tesseract, "mock": MockOCREngine()},
+            preference_order=["paddleocr", "tesseract"],
+        )
+        with pytest.raises(OCRExecutionError):
+            dispatcher.extract(sample_image_bytes, allow_mock=False)

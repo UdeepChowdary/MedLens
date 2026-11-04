@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from .common import VerificationState
+from .ocr import OCRMetadata
 from .product import ProductReport, IngredientReport, SafetyProfile, EvidenceSourceSchema
 
 
@@ -37,6 +38,10 @@ class AnalysisResponse(BaseModel):
     safety_profile: SafetyProfile = Field(description="Verified safety and contraindication indicators.")
     uncertainties: List[str] = Field(default_factory=list, description="Explicitly noted gaps, conflicts, or unread tokens.")
     audit_hash: str = Field(description="SHA-256 fingerprint of the image and pipeline execution.")
+    ocr_metadata: Optional[OCRMetadata] = Field(
+        default=None,
+        description="Detailed provenance of the OCR engine execution and fallback status."
+    )
     sources: List[EvidenceSourceSchema] = Field(default_factory=list, description="All evidence sources consulted.")
     limitations: List[str] = Field(
         default_factory=lambda: [

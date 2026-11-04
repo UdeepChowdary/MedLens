@@ -3,16 +3,17 @@
 import hashlib
 import uuid
 from typing import List, Optional
-from fastapi import APIRouter, Depends, File, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, Header, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.errors import ImageValidationError, AnalysisNotFoundError
+from app.core.errors import ImageValidationError, AnalysisNotFoundError, MedLensException
 from app.core.auth import get_current_session, verify_analysis_ownership
 from app.database.session import get_db
 from app.models.analysis import Analysis
 from app.repositories.analysis_repository import AnalysisRepository
 from app.schemas.analysis import AnalysisCreateResponse, AnalysisResponse, AnalysisSummary, MultidimensionalConfidence
+from app.schemas.ocr import OCRMetadata
 from app.schemas.common import VerificationState, RoleType
 from app.schemas.product import (
     ProductReport,
@@ -32,6 +33,8 @@ ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
 @router.post("", response_model=AnalysisCreateResponse, status_code=status.HTTP_202_ACCEPTED)
 async def create_analysis(
     file: UploadFile = File(..., description="Medicine packaging image (JPEG, PNG, WebP)"),
+    ocr_engine: Optional[str] = Form(None, description="Explicitly requested OCR engine (paddleocr, tesseract, mock)"),
+    x_ocr_engine: Optional[str] = Header(None, alias="X-OCR-Engine", description="Optional header specifying OCR engine"),
     session_id: str = Depends(get_current_session),
     db: AsyncSession = Depends(get_db),
 ) -> AnalysisCreateResponse:
@@ -58,6 +61,7 @@ async def create_analysis(
         )
 
     analysis_id = str(uuid.uuid4())
+    target_engine = ocr_engine or x_ocr_engine
 
     # Execute full analysis pipeline and persist to database (ML-030 to ML-032, ML-046)
     try:
@@ -66,7 +70,10 @@ async def create_analysis(
             raw_bytes=contents,
             analysis_id=analysis_id,
             session_id=session_id,
+            requested_ocr_engine=target_engine,
         )
+    except MedLensException:
+        raise
     except Exception:
         # Fallback record for synthetic truncated test fixtures (e.g. test_errors.py)
         repo = AnalysisRepository(db)
@@ -233,6 +240,14 @@ async def get_analysis(
             ),
             uncertainties=[],
             audit_hash="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            ocr_metadata=OCRMetadata(
+                engine_name="mock",
+                engine_version="demo-fixture",
+                is_mock=True,
+                fallback_used=False,
+                mean_confidence=0.96,
+                execution_time_ms=1850,
+            ),
             sources=[pubchem_source, openfda_source],
         )
 

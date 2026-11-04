@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-dolo-650-strip-front",
+    "file_name": "dolo_650_strip_front.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 266,
+      "height": 398
+    },
+    "sha256": "be3aa15e49e783cc65b328d7c5a2e4ad3d16b67a96eef516135a05c34fcf4d57",
+    "packaging_type": "blister_foil",
+    "image_side": "front",
+    "product_family": "dolo-650",
+    "brand_name": "Dolo-650",
+    "manufacturer": "Micro Labs Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:29:09Z",
+      "notes": "Authentic physical blister strip (front / cavity pocket face). Transparent PVC cavities containing white uncoated tablets with embossed score line; no printed ink typography on front face."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "[Unprinted transparent blister cavity foil]",
+  "composition_text": null,
+  "entities": [],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "dolo-650",
+  "review_status": "verified_by_human"
+}

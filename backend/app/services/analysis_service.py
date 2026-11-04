@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 import uuid
 from typing import Dict, List, Optional
@@ -25,6 +26,7 @@ from app.models.analysis import Analysis, ExtractedEntityModel, AnalysisSource
 from app.models.product import Product, Ingredient, ProductIngredient
 from app.models.clinical import ClinicalInformation, Source, DrugInteraction
 from app.schemas.analysis import AnalysisResponse, MultidimensionalConfidence
+from app.schemas.ocr import OCRMetadata
 from app.schemas.common import VerificationState, RoleType
 from app.schemas.product import (
     ProductReport,
@@ -75,6 +77,7 @@ class AnalysisPipelineService:
         analysis_id: Optional[str] = None,
         requested_ocr_engine: Optional[str] = None,
         session_id: Optional[str] = None,
+        allow_mock_ocr: bool = False,
     ) -> AnalysisResponse:
         """Executes full zero-hallucination analysis pipeline and persists report."""
         start_time = time.perf_counter()
@@ -90,8 +93,20 @@ class AnalysisPipelineService:
             pil_image=preprocessed.pil_image,
             np_array=preprocessed.np_array,
             requested_engine=requested_ocr_engine,
+            allow_mock=allow_mock_ocr,
         )
         raw_text = ocr_result.full_text
+
+        is_mock_ocr = (ocr_result.engine_name == "mock")
+        ocr_metadata = OCRMetadata(
+            engine_name=ocr_result.engine_name,
+            engine_version=ocr_result.engine_version,
+            is_mock=is_mock_ocr,
+            requested_engine=ocr_result.requested_engine,
+            fallback_used=ocr_result.fallback_used,
+            mean_confidence=ocr_result.mean_confidence,
+            execution_time_ms=ocr_result.execution_time_ms,
+        )
 
         # Step 3: Entity Extraction (ML-062)
         extraction: RuleExtractionResult = self.rule_extractor.extract(raw_text)
@@ -104,8 +119,14 @@ class AnalysisPipelineService:
         warnings_set = set()
         uncertainties: List[str] = list(image_quality.warnings)
 
+        if is_mock_ocr:
+            uncertainties.append(
+                "NOTICE: Mock OCR engine was used for this scan. Extracted text and entities are simulated test fixtures, not real optical packaging recognition."
+            )
+
         primary_norm: Optional[NormalizationResult] = None
         has_canonical_grounding = False
+        per_scan_external_cache: Dict[str, Any] = {}
 
         for ing in extraction.ingredients:
             raw_name = ing.get("raw_ingredient") or ing.get("raw_name") or ing.get("canonical_name") or ""
@@ -169,7 +190,9 @@ class AnalysisPipelineService:
 
             # Query external reference authorities (openFDA, PubChem, Indian Pharmacopoeia / CDSCO)
             try:
-                ext_lookups = await self.reference_coordinator.lookup_ingredient(canonical_name)
+                if canonical_name not in per_scan_external_cache:
+                    per_scan_external_cache[canonical_name] = await self.reference_coordinator.lookup_ingredient(canonical_name)
+                ext_lookups = per_scan_external_cache[canonical_name]
                 ext_sources = self.reference_coordinator.build_evidence_sources(ext_lookups)
                 clinical_profile = self.reference_coordinator.consolidate_clinical_profile(ext_lookups)
 
@@ -201,20 +224,69 @@ class AnalysisPipelineService:
                 )
             )
 
+        # Consolidate and deduplicate active ingredients by canonical name
+        deduped_active: Dict[str, IngredientReport] = {}
+        for ing_rep in active_ingredients:
+            cname = ing_rep.canonical_name
+            if cname not in deduped_active:
+                deduped_active[cname] = ing_rep
+            else:
+                existing = deduped_active[cname]
+                # If current has a numeric strength and existing doesn't, upgrade to the specific strength
+                if (ing_rep.strength and ing_rep.strength.numeric_value is not None) and (
+                    not existing.strength or existing.strength.numeric_value is None
+                ):
+                    deduped_active[cname] = ing_rep
+        active_ingredients = list(deduped_active.values())
+
         # Fallback if no ingredients extracted
         if not active_ingredients:
             uncertainties.append("No active therapeutic ingredients could be parsed from packaging text.")
 
-        # Commercial Product Brand Name Lookup
+        # Commercial Product Brand Name Lookup with OCR artifact and spacing resilience
         stmt = select(Product)
         all_prods_res = await self.session.execute(stmt)
         all_products = all_prods_res.scalars().all()
 
         matched_product: Optional[Product] = None
+        raw_lower = raw_text.lower()
+        raw_alphanumeric = re.sub(r"[^a-z0-9]", "", raw_lower)
+        # Normalize common OCR glyph artifacts where '1' or punctuation splits a brand and dosage (e.g. "pan140" -> "pan 40")
+        raw_normalized_separators = re.sub(r"([a-z]+)1(\d{2,4})\b", r"\1 \2", raw_lower)
+
+        # 1. Exact or alphanumeric normalized match
         for p in all_products:
-            if p.brand_name.lower() in raw_text.lower():
+            p_brand = p.brand_name.lower()
+            p_alphanumeric = re.sub(r"[^a-z0-9]", "", p_brand)
+            if (
+                p_brand in raw_lower
+                or p_brand in raw_normalized_separators
+                or (len(p_alphanumeric) >= 3 and p_alphanumeric in raw_alphanumeric)
+            ):
                 matched_product = p
                 break
+
+        # 2. Heuristic OCR artifact correction (handles "Pan 40", "Pan-40", "Dolo 650", etc.)
+        if not matched_product:
+            for p in all_products:
+                m = re.match(r"^([a-zA-Z]+)[\s\-_]*(\d+)$", p.brand_name.strip())
+                if m:
+                    prefix = m.group(1).lower()
+                    num = m.group(2)
+                    pattern = rf"\b{re.escape(prefix)}[1|l'®\-_ ]*{re.escape(num)}\b"
+                    if re.search(pattern, raw_lower, re.IGNORECASE) or re.search(pattern, raw_normalized_separators, re.IGNORECASE):
+                        matched_product = p
+                        break
+
+        # 3. Manufacturer + Ingredient correlation match if visible on label
+        if not matched_product and active_ingredients:
+            for p in all_products:
+                if p.manufacturer and p.manufacturer.lower() in raw_lower:
+                    p_tokens = set(re.findall(r"[a-z0-9]+", p.brand_name.lower()))
+                    raw_tokens = set(re.findall(r"[a-z0-9]+", raw_lower))
+                    if p_tokens.intersection(raw_tokens):
+                        matched_product = p
+                        break
 
         if matched_product:
             product_id = matched_product.id
@@ -222,10 +294,39 @@ class AnalysisPipelineService:
             manufacturer = matched_product.manufacturer
             dosage_form = matched_product.dosage_form or extraction.dosage_form or "Tablet"
             is_verified = True
+
+            # Retrieve product-specific clinical claims & deep evidence provenance (ML-013)
+            stmt_prod_claims = (
+                select(ClinicalInformation)
+                .where(
+                    ClinicalInformation.subject_type == "product",
+                    ClinicalInformation.subject_id == matched_product.id,
+                )
+                .options(selectinload(ClinicalInformation.source))
+            )
+            res_prod_claims = await self.session.execute(stmt_prod_claims)
+            for pcl in res_prod_claims.scalars().all():
+                if pcl.category == "contraindication":
+                    contraindications_set.add(pcl.claim_text)
+                elif pcl.category == "purpose":
+                    indications_set.add(pcl.claim_text)
+                elif pcl.category in ("precaution", "adverse_effect"):
+                    warnings_set.add(pcl.claim_text)
+                if pcl.source:
+                    evidence_sources.append(
+                        EvidenceSourceSchema(
+                            name=pcl.source.source_name,
+                            url=pcl.source.source_url,
+                            source_id=pcl.source.id,
+                            jurisdiction=pcl.source.jurisdiction,
+                        )
+                    )
         else:
             first_line = ocr_result.lines[0].text if ocr_result.lines else "Medicine Packaging Scan"
             product_id = None
-            detected_name = first_line.split()[0] if first_line else (primary_norm.canonical_name if primary_norm else "Analyzed Medicine")
+            detected_raw = first_line.split()[0] if first_line else (primary_norm.canonical_name if primary_norm else "Analyzed Medicine")
+            # Correct OCR artifact like PAN140 -> Pan 40 even in fallback
+            detected_name = re.sub(r"^([a-zA-Z]+)1(\d{2,4})$", r"\1 \2", detected_raw)
             manufacturer = None
             dosage_form = extraction.dosage_form or "Tablet"
             is_verified = (primary_norm is not None and primary_norm.is_inn_match)
@@ -238,8 +339,9 @@ class AnalysisPipelineService:
             is_verified=is_verified,
         )
 
+        purpose_summary = " | ".join(sorted(indications_set)) if indications_set else "Symptomatic relief and therapeutic treatment as directed by physician."
         safety_profile = SafetyProfile(
-            purpose_summary="Symptomatic relief and therapeutic treatment as directed by physician.",
+            purpose_summary=purpose_summary,
             precautions=sorted(list(warnings_set)) if warnings_set else ["Use only as directed by a healthcare professional."],
             contraindications=sorted(list(contraindications_set)) if contraindications_set else ["Hypersensitivity to active ingredients."],
             adverse_effects=["Consult physician if adverse symptoms persist."],
@@ -283,6 +385,7 @@ class AnalysisPipelineService:
             safety_profile=safety_profile,
             uncertainties=uncertainties,
             audit_hash=image_quality.sha256,
+            ocr_metadata=ocr_metadata,
             sources=unique_sources,
         )
 

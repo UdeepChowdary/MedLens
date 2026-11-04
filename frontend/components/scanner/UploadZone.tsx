@@ -94,7 +94,10 @@ export default function UploadZone({ onFileSelected }: UploadZoneProps) {
       
       <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", justifyContent: "center" }}>
         <button 
-          onClick={handleClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleClick();
+          }}
           className="btn-primary"
         >
           Select Image

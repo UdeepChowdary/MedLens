@@ -18,7 +18,19 @@ class OpenFDAAdapter(BaseReferenceAdapter):
 
     BASE_URL = "https://api.fda.gov/drug/label.json"
 
-    def __init__(self, client: Optional[httpx.AsyncClient] = None, timeout: float = 5.0):
+    # Common INN/BAN to USAN equivalence mapping for openFDA lookups
+    USAN_MAP = {
+        "paracetamol": "acetaminophen",
+        "salbutamol": "albuterol",
+        "frusemide": "furosemide",
+        "lignocaine": "lidocaine",
+        "amoxycillin": "amoxicillin",
+        "amoxicillin and clavulanate potassium": "amoxicillin and clavulanate potassium",
+        "clavulanic acid": "clavulanate potassium",
+        "co-amoxiclav": "amoxicillin and clavulanate potassium",
+    }
+
+    def __init__(self, client: Optional[httpx.AsyncClient] = None, timeout: float = 2.5):
         self._client = client
         self._timeout = timeout
 
@@ -36,10 +48,12 @@ class OpenFDAAdapter(BaseReferenceAdapter):
         if not clean_name:
             return None
 
+        search_name = self.USAN_MAP.get(clean_name.lower(), clean_name)
+
         queries = [
-            f'openfda.substance_name:"{clean_name}"',
-            f'openfda.generic_name:"{clean_name}"',
-            f'openfda.brand_name:"{clean_name}"',
+            f'openfda.substance_name:"{search_name}"',
+            f'openfda.generic_name:"{search_name}"',
+            f'openfda.brand_name:"{search_name}"',
         ]
 
         for query in queries:

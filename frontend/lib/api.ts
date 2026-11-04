@@ -155,17 +155,31 @@ export function getClientSessionId(): string {
 
 // ─── HTTP Helper ──────────────────────────────────────────────────────────────
 
+function getAuthHeaders(): Record<string, string> {
+  const sessionToken = getClientSessionId();
+  const headers: Record<string, string> = {
+    "X-Session-ID": sessionToken,
+  };
+  if (typeof window !== "undefined") {
+    const authToken = localStorage.getItem("medlens_auth_token");
+    if (authToken) {
+      headers["Authorization"] = `Bearer ${authToken}`;
+    }
+  }
+  return headers;
+}
+
 async function request<T>(
   path: string,
   options?: RequestInit
 ): Promise<{ data: T | null; error: ApiError | null }> {
   try {
-    const sessionToken = getClientSessionId();
+    const authHeaders = getAuthHeaders();
     const res = await fetch(`${API_BASE}${path}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
-        "X-Session-ID": sessionToken,
+        ...authHeaders,
         ...(options?.headers ?? {}),
       },
     });
@@ -198,12 +212,12 @@ export async function uploadAnalysis(
   formData.append("file", file);
 
   try {
-    const sessionToken = getClientSessionId();
+    const authHeaders = getAuthHeaders();
     const res = await fetch(`${API_BASE}/analyses`, {
       method: "POST",
       body: formData,
       headers: {
-        "X-Session-ID": sessionToken,
+        ...authHeaders,
       },
       // Do NOT set Content-Type header for multipart; browser sets it with boundary
     });
@@ -307,4 +321,70 @@ export async function checkInteractions(
 export async function checkHealth(): Promise<boolean> {
   const { data } = await request<{ status: string }>(`/health`);
   return data?.status === "ok";
+}
+
+// ─── Personalization & BYOK Gemini API ─────────────────────────────────────────
+
+export interface AllergyMatch {
+  allergen: string;
+  severity: "none" | "low" | "moderate" | "high";
+  reaction_type: string;
+  explanation: string;
+}
+
+export interface ConditionMatch {
+  condition: string;
+  compatibility: "beneficial" | "compatible" | "caution" | "contraindicated";
+  clinical_note: string;
+}
+
+export interface PersonalizeRequest {
+  analysis_id?: string;
+  product_name?: string;
+  active_ingredients?: string[];
+  dosages?: string[];
+  manufacturer?: string;
+  user_allergies?: string[];
+  user_conditions?: string[];
+  gemini_api_key?: string;
+}
+
+export interface PersonalizeResponse {
+  analysis_id?: string;
+  is_ai_enhanced: boolean;
+  model_name?: string;
+  overall_safety_rating: "safe" | "caution" | "high_risk" | "contraindicated";
+  executive_summary: string;
+  allergy_matches: AllergyMatch[];
+  condition_matches: ConditionMatch[];
+  personalized_precautions: string[];
+  tailored_dosage_advice?: string;
+  questions_for_doctor: string[];
+  disclaimer: string;
+}
+
+export interface VerifyKeyResponse {
+  valid: boolean;
+  message: string;
+  model_tested?: string;
+}
+
+/** Evaluate medicine safety tailored to user's allergies and pre-existing conditions (optional BYOK Gemini). */
+export async function personalizeAnalysis(
+  req: PersonalizeRequest
+): Promise<{ data: PersonalizeResponse | null; error: ApiError | null }> {
+  return request<PersonalizeResponse>(`/personalize`, {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
+/** Test-validate a user-supplied Gemini API key. */
+export async function verifyGeminiKey(
+  apiKey: string
+): Promise<{ data: VerifyKeyResponse | null; error: ApiError | null }> {
+  return request<VerifyKeyResponse>(`/personalize/verify-key`, {
+    method: "POST",
+    body: JSON.stringify({ gemini_api_key: apiKey }),
+  });
 }

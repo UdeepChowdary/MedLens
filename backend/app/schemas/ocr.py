@@ -39,4 +39,18 @@ class OCRResult(BaseModel):
     lines: List[OCRLine] = Field(default_factory=list, description="Individual recognized text lines.")
     mean_confidence: float = Field(ge=0.0, le=1.0, description="Aggregated overall OCR confidence.")
     execution_time_ms: int = Field(ge=0, description="Latency in milliseconds.")
+    requested_engine: Optional[str] = Field(default=None, description="Engine explicitly requested by caller if specified.")
+    fallback_used: bool = Field(default=False, description="Whether an automatic fallback engine was used.")
+
+
+class OCRMetadata(BaseModel):
+    """Metadata detailing OCR engine provenance, version, and execution fallback status."""
+    engine_name: str = Field(description="Name of the OCR engine that actually processed the image.")
+    engine_version: str = Field(description="Version string of the OCR engine library.")
+    is_mock: bool = Field(description="True if mock engine was used (strictly for tests/demos). Never represented as real OCR.")
+    requested_engine: Optional[str] = Field(default=None, description="Engine explicitly requested by caller if specified.")
+    fallback_used: bool = Field(default=False, description="True if an automatic fallback occurred.")
+    mean_confidence: float = Field(ge=0.0, le=1.0, description="Confidence reported by the executing engine.")
+    execution_time_ms: int = Field(ge=0, description="Execution latency of the OCR step in milliseconds.")
+
 

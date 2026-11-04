@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     ]
     MAX_UPLOAD_SIZE_MB: int = 15
     DATABASE_URL: str = "sqlite+aiosqlite:///./medlens.db"
+    FIREBASE_PROJECT_ID: str = "medlens-8e318"
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod

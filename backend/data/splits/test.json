@@ -1,18 +1,40 @@
 {
   "split": "test",
   "seed": 42,
-  "total_images": 1,
+  "total_images": 3,
   "product_families": [
-    "paracetamol-generic-500"
+    "pan-40"
   ],
   "images": [
     {
-      "annotation_file": "img-paracetamol-500-box.json",
-      "image_id": "img-paracetamol-500-box",
-      "file_name": "paracetamol_500_box.jpg",
-      "product_family": "paracetamol-generic-500",
-      "packaging_type": "paper_box",
-      "entity_count": 5,
+      "annotation_file": "img-pan-40-strip-back.json",
+      "image_id": "img-pan-40-strip-back",
+      "file_name": "pan_40_strip_back.jpg",
+      "product_family": "pan-40",
+      "packaging_type": "blister_foil",
+      "entity_count": 8,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-pan-40-strip-front.json",
+      "image_id": "img-pan-40-strip-front",
+      "file_name": "pan_40_strip_front.jpg",
+      "product_family": "pan-40",
+      "packaging_type": "blister_foil",
+      "entity_count": 2,
+      "review_status": "verified_by_human",
+      "is_synthetic_fixture": false,
+      "eligible_for_real_training": true
+    },
+    {
+      "annotation_file": "img-pan-d-strip-back.json",
+      "image_id": "img-pan-d-strip-back",
+      "file_name": "pan_d_strip_back.webp",
+      "product_family": "pan-40",
+      "packaging_type": "blister_foil",
+      "entity_count": 11,
       "review_status": "verified_by_human",
       "is_synthetic_fixture": false,
       "eligible_for_real_training": true

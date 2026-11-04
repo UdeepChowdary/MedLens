@@ -7,6 +7,7 @@ import ProductOverview from "@/components/report/ProductOverview";
 import IngredientCard from "@/components/report/IngredientCard";
 import ExcipientCollapse from "@/components/report/ExcipientCollapse";
 import SafetyModule from "@/components/report/SafetyModule";
+import PersonalizedConsultation from "@/components/report/PersonalizedConsultation";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { IcoArrow } from "@/components/Icons";
 import { getAnalysis, AnalysisResponse } from "@/lib/api";
@@ -230,6 +231,17 @@ export default function ResultsPage() {
                     confidence={report.confidence.identity_confidence}
                   />
                 </div>
+              </ScrollReveal>
+
+              {/* Personalized Health Consultation (Allergies, Pre-Existing Conditions, BYOK Gemini AI) */}
+              <ScrollReveal variant="fade-up" delay={125}>
+                <PersonalizedConsultation
+                  analysisId={id}
+                  productName={report.product.detected_name}
+                  activeIngredients={report.active_ingredients.map((a) => a.canonical_name)}
+                  dosages={report.active_ingredients.map((a) => a.strength.raw_text)}
+                  manufacturer={report.product.manufacturer}
+                />
               </ScrollReveal>
 
               {/* Uncertainties Warning */}

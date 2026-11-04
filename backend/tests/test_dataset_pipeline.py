@@ -54,7 +54,7 @@ def test_validate_strength_units():
 
 def test_validation_detects_out_of_bounds_bbox(tmp_path: Path):
     """Verifies that bounding boxes with invalid coordinates are flagged with errors."""
-    sample_path = ANN_DIR / "img-dolo-650-blister.json"
+    sample_path = ANN_DIR / "img-dolo-650-strip-back.json"
     with open(sample_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -73,7 +73,7 @@ def test_validation_detects_out_of_bounds_bbox(tmp_path: Path):
 
 def test_validation_detects_duplicate_image_hashes(tmp_path: Path):
     """Verifies that two annotations pointing to the same image hash are caught as duplicates."""
-    sample_path = ANN_DIR / "img-dolo-650-blister.json"
+    sample_path = ANN_DIR / "img-dolo-650-strip-back.json"
     with open(sample_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -144,7 +144,7 @@ def test_dataset_report_statistics_generation():
 
 def test_annotation_tool_workflow(tmp_path: Path):
     """Verifies CLI helper initializes a new annotation draft from image and adds entity."""
-    img_file = RAW_DIR / "dolo_650_blister.jpg"
+    img_file = RAW_DIR / "dolo_650_strip_back.jpg"
     out_dir = tmp_path / "annotations"
 
     created = initialize_annotation(
@@ -170,4 +170,4 @@ def test_annotation_tool_workflow(tmp_path: Path):
     assert len(saved["entities"]) == 1
     assert saved["entities"][0]["label"] == "BRAND"
     assert saved["entities"][0]["raw_text"] == "Test Brand"
-    assert saved["image_metadata"]["dimensions"]["width"] == 260
+    assert saved["image_metadata"]["dimensions"]["width"] == 308

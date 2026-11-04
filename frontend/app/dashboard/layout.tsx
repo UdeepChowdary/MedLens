@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { IcoScan } from "@/components/Icons";
 import { Logo } from "@/components/Logo";
+import { useAuth } from "@/context/AuthContext";
 
 // Minimal icons for the sidebar
 const IcoDashboard = ({ size = 24, color = "currentColor" }) => (
@@ -50,13 +51,20 @@ const IcoCompare = ({ size = 24, color = "currentColor" }) => (
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/login");
+  };
 
   const navItems = [
     { name: "Overview", href: "/dashboard", icon: IcoDashboard },
     { name: "Scan New", href: "/dashboard/scan", icon: IcoScan },
     { name: "History", href: "/dashboard/history", icon: IcoHistory },
-    { name: "Compare Brands", href: "/dashboard/compare", icon: IcoCompare },
+    { name: "Compare by Disease", href: "/dashboard/compare", icon: IcoCompare },
     { name: "Profile", href: "/dashboard/profile", icon: IcoProfile },
   ];
 
@@ -74,9 +82,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         height: "100vh",
       }} className="desktop-only">
         <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--border)" }}>
-          <Link href="/dashboard" style={{ textDecoration: "none" }}>
-            <Logo />
-          </Link>
+          <Logo href="/dashboard" />
         </div>
         
         <nav style={{ flex: 1, padding: "24px 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -103,22 +109,72 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           })}
         </nav>
 
-        <div style={{ padding: "24px 16px", borderTop: "1px solid var(--border)" }}>
-          <Link href="/" style={{ textDecoration: "none" }}>
+        <div style={{ padding: "20px 16px", borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "12px" }}>
+          {/* User Profile Mini Card */}
+          <Link href="/dashboard/profile" style={{ textDecoration: "none" }}>
             <div style={{
               display: "flex",
               alignItems: "center",
+              gap: "10px",
+              padding: "8px 10px",
+              borderRadius: "8px",
+              backgroundColor: "var(--surface)",
+              cursor: "pointer",
+            }} className="hover:bg-slate-100 transition-colors">
+              <div style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "50%",
+                backgroundColor: "var(--blue)",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 600,
+                fontSize: "14px",
+                overflow: "hidden",
+                flexShrink: 0,
+              }}>
+                {user?.photoURL ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={user.photoURL} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  (user?.displayName?.[0] || user?.email?.[0] || "U").toUpperCase()
+                )}
+              </div>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {user?.displayName || "Researcher"}
+                </div>
+                <div style={{ fontSize: "11px", color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {user?.email || "Signed In"}
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          <button
+            onClick={handleLogout}
+            style={{
+              display: "flex",
+              alignItems: "center",
               gap: "12px",
-              padding: "12px 16px",
+              padding: "10px 12px",
               borderRadius: "8px",
               color: "var(--text-secondary)",
               fontWeight: 500,
-              cursor: "pointer"
-            }} className="hover:bg-slate-50">
-              <IcoLogout size={20} />
-              <span>Log out</span>
-            </div>
-          </Link>
+              cursor: "pointer",
+              border: "none",
+              backgroundColor: "transparent",
+              width: "100%",
+              fontSize: "14px",
+              textAlign: "left",
+            }}
+            className="hover:bg-slate-50 transition-colors"
+          >
+            <IcoLogout size={18} />
+            <span>Log out</span>
+          </button>
         </div>
       </aside>
 
@@ -136,9 +192,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           top: 0,
           zIndex: 40
         }} className="mobile-only">
-          <Link href="/dashboard" style={{ textDecoration: "none" }}>
-            <Logo />
-          </Link>
+          <Logo href="/dashboard" />
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             style={{ background: "none", border: "none", cursor: "pointer", padding: "8px" }}
@@ -189,8 +243,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   </Link>
                 );
               })}
-              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: "none" }}>
-                <div style={{
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleLogout();
+                }}
+                style={{
                   display: "flex",
                   alignItems: "center",
                   gap: "12px",
@@ -198,11 +256,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   borderRadius: "8px",
                   color: "var(--text-secondary)",
                   fontWeight: 500,
-                }}>
-                  <IcoLogout size={20} />
-                  <span>Log out</span>
-                </div>
-              </Link>
+                  border: "none",
+                  backgroundColor: "transparent",
+                  width: "100%",
+                  textAlign: "left",
+                  fontSize: "15px",
+                }}
+              >
+                <IcoLogout size={20} />
+                <span>Log out</span>
+              </button>
             </nav>
           </div>
         )}

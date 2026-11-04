@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-glycomet-500-strip-front",
+    "file_name": "glycomet_500_strip_front.png",
+    "format": "png",
+    "dimensions": {
+      "width": 395,
+      "height": 424
+    },
+    "sha256": "8d749509985f6f60300dc575e3704a3ec78c70c6d67ab7ab7e531fe20aeda52f",
+    "packaging_type": "blister_foil",
+    "image_side": "front",
+    "product_family": "metformin-500",
+    "brand_name": "GLYCOMET-500 S.R.",
+    "manufacturer": "USV Private Limited",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T19:35:52Z",
+      "notes": "Authentic physical blister strip (front cavity face). White uncoated oval tablets visible in clear PVC cavities; unprinted foil."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "[Unprinted transparent blister cavity foil - no printed text]",
+  "composition_text": null,
+  "entities": [],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "glucophage-500",
+  "review_status": "verified_by_human"
+}

@@ -17,7 +17,7 @@ if db_url.startswith("postgresql://"):
 # Configure engine arguments based on dialect
 engine_kwargs = {"echo": False}
 if db_url.startswith("sqlite"):
-    engine_kwargs["connect_args"] = {"check_same_thread": False}
+    engine_kwargs["connect_args"] = {"check_same_thread": False, "timeout": 30.0}
 elif db_url.startswith("postgresql"):
     engine_kwargs["pool_size"] = 10
     engine_kwargs["max_overflow"] = 20

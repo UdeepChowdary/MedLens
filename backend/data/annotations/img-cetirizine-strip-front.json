@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "image_metadata": {
+    "image_id": "img-cetirizine-strip-front",
+    "file_name": "Cetirizine_strip_front.jpg",
+    "format": "png",
+    "dimensions": {
+      "width": 146,
+      "height": 568
+    },
+    "sha256": "d72504a1e9c909f89d879ecc4b0cb42d1c5aee8d913f4641a87b8e2faa37924c",
+    "packaging_type": "blister_foil",
+    "image_side": "front",
+    "product_family": "cetirizine-10",
+    "brand_name": "Cetirizine",
+    "manufacturer": "Cipla",
+    "provenance": {
+      "source": "Authentic Indian Retail Pharmacy Packaging (Student Collection)",
+      "license": "CC-BY-4.0",
+      "annotator_id": "clinical-curator-01",
+      "verified_by_human": true,
+      "date_annotated": "2026-11-01T18:30:40Z",
+      "notes": "Authentic physical blister strip (front blister cavities). Narrow vertical strip with Cipla brand imprint."
+    }
+  },
+  "quality_flags": {
+    "glare": false,
+    "blur": false,
+    "low_contrast": false,
+    "small_text": false,
+    "occlusion": false,
+    "skew_angle": 0.0
+  },
+  "transcription": "Cipla",
+  "composition_text": null,
+  "entities": [
+    {
+      "label": "BRAND",
+      "raw_text": "Cipla",
+      "normalized_value": "Cipla",
+      "bbox": [
+        21,
+        178,
+        96,
+        917
+      ],
+      "char_span": [
+        0,
+        5
+      ]
+    }
+  ],
+  "has_uncertainty": false,
+  "uncertainty_notes": null,
+  "canonical_product_id": "cetirizine-10",
+  "review_status": "verified_by_human"
+}

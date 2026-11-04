@@ -36,7 +36,9 @@ class TesseractOCREngine(BaseOCREngine):
 
     def is_available(self) -> bool:
         if self._version == "unavailable":
-            return False
+            self._version = self._detect_version()
+            if self._version == "unavailable":
+                return False
         try:
             import pytesseract
             pytesseract.get_tesseract_version()
@@ -61,7 +63,10 @@ class TesseractOCREngine(BaseOCREngine):
             pil_image = Image.open(io.BytesIO(image_bytes))
 
         config = f"--oem {self._oem} --psm {self._psm}"
-        data = pytesseract.image_to_data(pil_image, config=config, output_type=pytesseract.Output.DICT)
+        try:
+            data = pytesseract.image_to_data(pil_image, config=config, output_type=pytesseract.Output.DICT)
+        except Exception as e:
+            raise RuntimeError(f"Tesseract OCR inference execution failed: {e}") from e
 
         lines_map: Dict[tuple, List[OCRToken]] = {}
         line_texts: Dict[tuple, List[str]] = {}
