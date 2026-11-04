@@ -559,7 +559,7 @@ export default function ProfilePage() {
             <div style={{ position: "relative", flex: 1 }}>
               <input
                 type={showApiKey ? "text" : "password"}
-                placeholder="AIzaSy..."
+                placeholder="Enter your Gemini API key..."
                 value={geminiApiKey}
                 onChange={(e) => {
                   setGeminiApiKey(e.target.value);

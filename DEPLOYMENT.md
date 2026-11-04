@@ -51,7 +51,7 @@ docker compose down -v
 4. Set **Root Directory** to `frontend`.
 5. Add the following **Environment Variables** in the Vercel project settings:
    * `NEXT_PUBLIC_API_URL` &rarr; `https://your-backend-domain.com/api/v1`
-   * `NEXT_PUBLIC_FIREBASE_API_KEY` &rarr; `AIzaSyAaeaaEjIH7iBf6QN64cWWRTdf321QNvPU`
+   * `NEXT_PUBLIC_FIREBASE_API_KEY` &rarr; `your_firebase_api_key_here`
    * `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` &rarr; `medlens-8e318.firebaseapp.com`
    * `NEXT_PUBLIC_FIREBASE_PROJECT_ID` &rarr; `medlens-8e318`
    * `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` &rarr; `medlens-8e318.firebasestorage.app`

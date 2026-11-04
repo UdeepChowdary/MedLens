@@ -629,7 +629,7 @@ export default function ScanPage() {
                       <div style={{ position: "relative", flex: 1 }}>
                         <input
                           type={showApiKeyText ? "text" : "password"}
-                          placeholder="AIzaSy... (leave blank for standard monograph mode)"
+                          placeholder="Enter Gemini API key (leave blank for standard monograph mode)"
                           value={geminiApiKey}
                           onChange={(e) => {
                             setGeminiApiKey(e.target.value);
@@ -857,7 +857,7 @@ export default function ScanPage() {
                             Click the blue button labeled <strong>&ldquo;Create API Key&rdquo;</strong> (or &ldquo;Get API key&rdquo;). No credit card or paid billing required for free personal tier.
                           </li>
                           <li style={{ marginBottom: "6px" }}>
-                            Copy the generated key string (begins with <code>AIzaSy...</code>), paste it into the field above, and click <strong>&ldquo;Save Key&rdquo;</strong>.
+                            Copy the generated key string, paste it into the field above, and click <strong>&ldquo;Save Key&rdquo;</strong>.
                           </li>
                         </ol>
 

@@ -459,7 +459,7 @@ export default function PersonalizedConsultation({
                 <form onSubmit={handleApplyInlineKey} style={{ marginTop: "14px", display: "flex", gap: "8px", alignItems: "center" }}>
                   <input
                     type="password"
-                    placeholder="AIzaSy... (Gemini API Key)"
+                    placeholder="Enter Gemini API Key"
                     value={inlineKey}
                     onChange={(e) => setInlineKey(e.target.value)}
                     style={{

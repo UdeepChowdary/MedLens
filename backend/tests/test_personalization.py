@@ -67,6 +67,6 @@ def test_verify_gemini_key_empty():
 def test_verify_gemini_key_invalid():
     """Invalid dummy key returns clean user-facing failure message."""
     service = PersonalizationService()
-    res = service.verify_gemini_key("AIzaSyFakeKeyThatDoesNotExist12345")
+    res = service.verify_gemini_key("invalid_dummy_gemini_key_12345")
     assert res.valid is False
     assert "Invalid Gemini API key" in res.message or "Could not verify" in res.message
