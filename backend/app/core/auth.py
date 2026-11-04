@@ -10,6 +10,7 @@ from typing import Optional
 from fastapi import Header, HTTPException, status
 
 from app.models.analysis import Analysis
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,11 @@ try:
     import firebase_admin
     from firebase_admin import auth as firebase_auth
     HAS_FIREBASE = True
+    if not firebase_admin._apps and hasattr(settings, "FIREBASE_PROJECT_ID") and settings.FIREBASE_PROJECT_ID:
+        try:
+            firebase_admin.initialize_app(options={"projectId": settings.FIREBASE_PROJECT_ID})
+        except Exception as e:
+            logger.debug(f"Firebase Admin auto-init notice: {e}")
 except ImportError:
     HAS_FIREBASE = False
 
