@@ -320,14 +320,3 @@ erDiagram
 | **openFDA External API Downtime** | openFDA rate limit or network outage | Falls back to internal **Indian Pharmacopoeia SQLite Monograph Knowledge Base** pre-seeded locally. |
 | **Gemini AI API Network Failure** | Upstream Google API outage | Returns deterministic structured verification report directly from extracted monographs without generative explanation. |
 | **Camera WebRTC Hardware Inaccessible** | Browser permission denied | Client interface immediately switches to drag-and-drop file upload picker with sample packaging gallery. |
-
----
-
-## 10. Viva Examination & Architectural Defense Guide
-
-| Viva Architectural Question | System Design Answer & Justification |
-| :--- | :--- |
-| *Why choose a Modular Monolith over Microservices?* | A packaging scan requires real-time coordination across preprocessing, OCR, entity extraction, and database retrieval. Microservices would introduce substantial network serialization overhead (latency penalty > $800\text{ ms}$) and distributed transaction complexity. The modular monolith runs in a single process memory space while maintaining clean module boundaries. |
-| *How does the system ensure zero hallucinations?* | Grounding through the RAG pattern: active salts are deterministically extracted and verified against pre-seeded monographs. The prompt provided to Google Gemini contains the extracted facts as immutable constraints; Gemini is forbidden from adding external salts. |
-| *Why dual OCR (PaddleOCR + Tesseract)?* | Medicine blister packs contain warped, reflective typography. PaddleOCR excels at curved, stylized text lines; Tesseract acts as a robust, lightweight fallback ensuring zero complete extraction failures. |
-| *How is horizontal scalability achieved?* | The FastAPI backend is completely stateless. Session state and user profiles are stored in the database, allowing any number of backend container replicas to sit behind a load balancer. |

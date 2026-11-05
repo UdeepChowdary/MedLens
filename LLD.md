@@ -398,14 +398,3 @@ def test_laplacian_blur_detection_blurred():
     variance = preprocessor.compute_blur_variance(blurred_img)
     assert variance < 10.0, f"Expected blurred variance < 10, got {variance}"
 ```
-
----
-
-## 9. Viva Examination & Code Engineering Defense
-
-| Viva Technical Question | Low-Level Code Justification |
-| :--- | :--- |
-| *How do you prevent SQL injection in complex salt queries?* | Complete reliance on SQLAlchemy ORM parameterized queries (`select(Monograph).where(Monograph.canonical_inn == inn)`). No string interpolation or raw SQL execution. |
-| *Why is Laplacian variance preferred over FFT for blur?* | Fast Fourier Transform (FFT) requires $O(N \log N)$ 2D transformations across all frequencies. The spatial discrete Laplacian requires a single $3 \times 3$ convolution pass in $O(N)$ time, executing in under $4\text{ ms}$ on standard CPUs. |
-| *How are database connections pooled under high load?* | `create_async_engine` configured with `pool_size=20, max_overflow=10, pool_recycle=1800, pool_pre_ping=True` to eliminate stale connection drops. |
-| *How are excipients differentiated from active salts?* | A negative lookup against a curated 450-entry pharmacopeial excipient lexicon combined with positive regex pattern matching for active dosage declarations (`contains: <Salt> IP <Strength>`). |

@@ -110,10 +110,10 @@ MedLens operates strictly as an **educational, informational, and verification p
 
 ## 4. Product Goals & Key Performance Indicators (KPIs)
 
-### 4.1 Business & Academic Objectives
+### 4.1 Product Objectives
 * Provide an instantaneous, zero-confusion verification tool for real-world medicine packaging.
 * Eliminate accidental multi-brand duplicate dosing through accurate active salt identification.
-* Achieve high student and evaluator satisfaction during viva examination and clinical demonstrations.
+* Enable patient safety checks by flagging personalized contraindications and drug interactions.
 
 ### 4.2 Measurable Technical KPIs
 1. **End-to-End Processing Latency:** $\le 3.5\text{ seconds}$ from image upload to structured report generation on standard 4G/broadband connections.
@@ -248,25 +248,14 @@ Scenario: Patient with chronic kidney disease scans an NSAID medication
 
 ---
 
-## 9. Out of Scope (Current Version) & Future Roadmap
+## 9. Out of Scope & Future Roadmap
 
-### Out of Scope for Version 2.0:
+### 9.1 Out of Scope for Version 2.0
 * Physical pill shape/color computer vision identification (tablet debossing/imprint recognition).
 * Barcode / 2D DataMatrix scanning for supply-chain batch traceability.
 * Direct e-pharmacy checkout or commercial affiliate purchasing links.
 
-### Future Roadmap (Version 3.0+):
+### 9.2 Future Roadmap (Version 3.0+)
 * **Multilingual Vernacular Audio:** Voice readout of dosage and side effects in regional languages (Hindi, Telugu, Tamil, Bengali, Spanish).
 * **Doctor Prescription OCR Matching:** Upload both doctor's prescription slip and medicine strip to verify accurate dispensing by pharmacists.
 * **Pediatric & Geriatric Dose Adjusters:** Automatic renal/weight-adjusted dose verification calculator.
-
----
-
-## 10. Viva Examination & Evaluation Summary
-
-| Viva / Evaluation Question | MedLens Implementation Justification |
-| :--- | :--- |
-| *Why not just use ChatGPT or Gemini directly?* | LLMs hallucinate dosages, have no OCR bounding audit trail, and cannot deterministically normalize Indian drug trade names. MedLens uses deterministic extraction first, grounding against openFDA/IP monographs before LLM synthesis. |
-| *How do you prevent false reads from damaged strips?* | Multi-tier validation: Laplacian blur check ($\sigma_L^2 \ge 100$), Otsu adaptive binarization to remove blister foil glare, and spatial layout clustering. |
-| *How are drug interactions personalized?* | Real-time cross-referencing between user profile entities (allergies, medical conditions, current drugs) and the canonical INN salt monograph using structured safety rules. |
-| *What is the database architecture?* | Async SQLAlchemy models with support for SQLite (development) and PostgreSQL + pgvector (production), maintaining audit logs, monographs, and salt aliases. |
