@@ -29,6 +29,7 @@ export default function ScanPage() {
   const [keyValidation, setKeyValidation] = useState<VerifyKeyResponse | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showHowToGuide, setShowHowToGuide] = useState(false);
+  const [sampleCategory, setSampleCategory] = useState<string>("All");
 
   // User Health Profile Context
   const [userAllergies, setUserAllergies] = useState<string[]>([]);
@@ -301,117 +302,298 @@ export default function ScanPage() {
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <span style={{ fontSize: "16px" }}>⚡</span>
                       <span style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)" }}>
-                        Don&apos;t have packaging nearby? Test with real blister samples:
+                        Don&apos;t have packaging nearby? Test with authentic blister samples:
                       </span>
                     </div>
                     <span
                       style={{
                         fontSize: "11px",
-                        color: "#475569",
-                        backgroundColor: "#f1f5f9",
+                        color: "#1e40af",
+                        backgroundColor: "#dbeafe",
                         padding: "2px 8px",
                         borderRadius: "10px",
                         fontWeight: 600,
                       }}
                     >
-                      Instant 1-Click Intake
+                      18 Curated Baseline Medicines
                     </span>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px" }}>
+                  {/* Category Filter Pills */}
+                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "12px" }}>
                     {[
+                      "All",
+                      "Pain & Spasm",
+                      "Heart & BP",
+                      "Antibiotics",
+                      "Diabetes & Thyroid",
+                      "Cough & Allergy",
+                    ].map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setSampleCategory(cat)}
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: 600,
+                          padding: "3px 10px",
+                          borderRadius: "14px",
+                          border: sampleCategory === cat ? "1px solid #2563eb" : "1px solid #e2e8f0",
+                          backgroundColor: sampleCategory === cat ? "#2563eb" : "#f8fafc",
+                          color: sampleCategory === cat ? "#ffffff" : "#475569",
+                          cursor: "pointer",
+                          transition: "all 0.15s ease",
+                        }}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+                      gap: "10px",
+                      maxHeight: "340px",
+                      overflowY: "auto",
+                      paddingRight: "4px",
+                    }}
+                  >
+                    {[
+                      {
+                        name: "Zerodol-SP",
+                        salt: "Aceclofenac + Paracetamol + Serratiopeptidase",
+                        category: "Pain & Spasm",
+                        badge: "Triple Salt",
+                        file: "/samples/zerodol_sp.jpg",
+                        color: "#dc2626",
+                      },
                       {
                         name: "Dolo 650",
                         salt: "Paracetamol 650 mg",
-                        category: "Fever & Pain",
+                        category: "Pain & Spasm",
+                        badge: "Analgesic",
                         file: "/samples/dolo_650.jpg",
                         color: "#2563eb",
                       },
                       {
+                        name: "Voveran 50",
+                        salt: "Diclofenac Sodium 50 mg",
+                        category: "Pain & Spasm",
+                        badge: "NSAID Ulcer Risk",
+                        file: "/samples/voveran_50.jpg",
+                        color: "#ea580c",
+                      },
+                      {
+                        name: "Meftal-Spas",
+                        salt: "Mefenamic Acid + Dicyclomine",
+                        category: "Pain & Spasm",
+                        badge: "Antispasmodic",
+                        file: "/samples/meftal_spas.jpg",
+                        color: "#7c3aed",
+                      },
+                      {
+                        name: "Telma 40",
+                        salt: "Telmisartan 40 mg",
+                        category: "Heart & BP",
+                        badge: "Boxed Warning",
+                        file: "/samples/telma_40.jpg",
+                        color: "#e11d48",
+                      },
+                      {
+                        name: "Telma-AM",
+                        salt: "Telmisartan 40mg + Amlodipine 5mg",
+                        category: "Heart & BP",
+                        badge: "Dual BP",
+                        file: "/samples/telma_am.jpg",
+                        color: "#be123c",
+                      },
+                      {
+                        name: "Betaloc 25",
+                        salt: "Metoprolol Succinate 25 mg",
+                        category: "Heart & BP",
+                        badge: "Asthma Risk",
+                        file: "/samples/betaloc_25.jpg",
+                        color: "#4338ca",
+                      },
+                      {
+                        name: "Clopilet 75",
+                        salt: "Clopidogrel 75 mg",
+                        category: "Heart & BP",
+                        badge: "Bleed Risk",
+                        file: "/samples/clopilet_75.jpg",
+                        color: "#b91c1c",
+                      },
+                      {
                         name: "Augmentin 625 Duo",
                         salt: "Amoxicillin + Clavulanate",
-                        category: "Antibiotic Ratio",
+                        category: "Antibiotics",
+                        badge: "Fixed Ratio",
                         file: "/samples/augmentin_625.jpg",
                         color: "#059669",
                       },
                       {
-                        name: "Pan 40",
-                        salt: "Pantoprazole 40 mg",
-                        category: "Acidity / GERD",
-                        file: "/samples/pan_40.jpg",
+                        name: "Ciplox 500",
+                        salt: "Ciprofloxacin 500 mg",
+                        category: "Antibiotics",
+                        badge: "Dairy Chelation",
+                        file: "/samples/ciplox_500.jpg",
+                        color: "#0d9488",
+                      },
+                      {
+                        name: "Oflox-OZ",
+                        salt: "Ofloxacin 200mg + Ornidazole 500mg",
+                        category: "Antibiotics",
+                        badge: "Antimicrobial",
+                        file: "/samples/oflox_oz.jpg",
+                        color: "#0f766e",
+                      },
+                      {
+                        name: "Forcan 150",
+                        salt: "Fluconazole 150 mg",
+                        category: "Antibiotics",
+                        badge: "Statin Hazard",
+                        file: "/samples/forcan_150.jpg",
+                        color: "#047857",
+                      },
+                      {
+                        name: "Glycomet-GP 1",
+                        salt: "Metformin 500mg + Glimepiride 1mg",
+                        category: "Diabetes & Thyroid",
+                        badge: "Hypoglycemia",
+                        file: "/samples/glycomet_gp_1.jpg",
                         color: "#d97706",
                       },
-                    ].map((sample) => (
-                      <button
-                        key={sample.name}
-                        type="button"
-                        onClick={() =>
-                          handleSelectDemoSample(
-                            sample.file,
-                            `${sample.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}.jpg`
-                          )
-                        }
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                          padding: "10px 12px",
-                          borderRadius: "10px",
-                          border: "1px solid #e2e8f0",
-                          backgroundColor: "#f8fafc",
-                          cursor: "pointer",
-                          textAlign: "left",
-                          transition: "all 0.15s ease",
-                        }}
-                        className="hover:border-blue-500 hover:bg-blue-50/50"
-                      >
-                        <div
+                      {
+                        name: "Thyronorm 25",
+                        salt: "Thyroxine Sodium 25 mcg",
+                        category: "Diabetes & Thyroid",
+                        badge: "Empty Stomach",
+                        file: "/samples/thyronorm_25.jpg",
+                        color: "#b45309",
+                      },
+                      {
+                        name: "Pan 40",
+                        salt: "Pantoprazole 40 mg",
+                        category: "Cough & Allergy",
+                        badge: "PPI Acid",
+                        file: "/samples/pan_40.jpg",
+                        color: "#ca8a04",
+                      },
+                      {
+                        name: "Allegra 120",
+                        salt: "Fexofenadine HCl 120 mg",
+                        category: "Cough & Allergy",
+                        badge: "Juice Interaction",
+                        file: "/samples/allegra_120.jpg",
+                        color: "#0284c7",
+                      },
+                      {
+                        name: "Sinarest-AF",
+                        salt: "Phenylephrine + CPM + Citrate",
+                        category: "Cough & Allergy",
+                        badge: "Triple OTC",
+                        file: "/samples/sinarest_af.jpg",
+                        color: "#0369a1",
+                      },
+                      {
+                        name: "Ascoril-D Plus",
+                        salt: "Dextromethorphan + Phenylephrine + CPM",
+                        category: "Cough & Allergy",
+                        badge: "Dry Cough",
+                        file: "/samples/ascoril_d_plus.jpg",
+                        color: "#1d4ed8",
+                      },
+                    ]
+                      .filter((s) => sampleCategory === "All" || s.category === sampleCategory)
+                      .map((sample) => (
+                        <button
+                          key={sample.name}
+                          type="button"
+                          onClick={() =>
+                            handleSelectDemoSample(
+                              sample.file,
+                              `${sample.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}.jpg`
+                            )
+                          }
                           style={{
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "8px",
-                            overflow: "hidden",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            padding: "9px 11px",
+                            borderRadius: "10px",
+                            border: "1px solid #e2e8f0",
+                            backgroundColor: "#f8fafc",
+                            cursor: "pointer",
+                            textAlign: "left",
+                            transition: "all 0.15s ease",
                             position: "relative",
-                            flexShrink: 0,
-                            backgroundColor: "#e2e8f0",
-                            border: "1px solid #cbd5e1",
                           }}
+                          className="hover:border-blue-500 hover:bg-blue-50/50"
                         >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={sample.file}
-                            alt={sample.name}
-                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                          />
-                        </div>
-                        <div style={{ minWidth: 0, flex: 1 }}>
                           <div
                             style={{
-                              fontSize: "13px",
-                              fontWeight: 700,
-                              color: "var(--text-primary)",
+                              width: "38px",
+                              height: "38px",
+                              borderRadius: "8px",
                               overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                              position: "relative",
+                              flexShrink: 0,
+                              backgroundColor: "#e2e8f0",
+                              border: "1px solid #cbd5e1",
                             }}
                           >
-                            {sample.name}
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={sample.file}
+                              alt={sample.name}
+                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
                           </div>
-                          <div
-                            style={{
-                              fontSize: "11px",
-                              color: "var(--text-secondary)",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {sample.salt}
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px" }}>
+                              <span
+                                style={{
+                                  fontSize: "12.5px",
+                                  fontWeight: 700,
+                                  color: "var(--text-primary)",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {sample.name}
+                              </span>
+                              <span
+                                style={{
+                                  fontSize: "9.5px",
+                                  fontWeight: 600,
+                                  padding: "1px 5px",
+                                  borderRadius: "6px",
+                                  backgroundColor: "#f1f5f9",
+                                  color: sample.color,
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {sample.badge}
+                              </span>
+                            </div>
+                            <div
+                              style={{
+                                fontSize: "11px",
+                                color: "var(--text-secondary)",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                marginTop: "1px",
+                              }}
+                            >
+                              {sample.salt}
+                            </div>
                           </div>
-                        </div>
-                        <span style={{ fontSize: "12px", color: sample.color, fontWeight: 700 }}>→</span>
-                      </button>
-                    ))}
+                        </button>
+                      ))}
                   </div>
                 </div>
 
