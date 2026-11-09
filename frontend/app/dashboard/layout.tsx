@@ -54,6 +54,36 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const { user, loading, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isStandaloneMode =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+      setIsStandalone(isStandaloneMode);
+
+      const handler = (e: any) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+      };
+      window.addEventListener("beforeinstallprompt", handler);
+      return () => window.removeEventListener("beforeinstallprompt", handler);
+    }
+  }, []);
+
+  const handleTriggerInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setDeferredPrompt(null);
+      }
+    } else {
+      alert("To install MedLens on mobile:\n• iOS Safari: Tap Share (📤) and choose 'Add to Home Screen' (➕).\n• Android Chrome: Tap menu (⋮) and choose 'Install App' or 'Add to Home Screen'.");
+    }
+  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -162,6 +192,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         <div style={{ padding: "20px 16px", borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "12px" }}>
+          {/* PWA Install Button */}
+          {!isStandalone && (
+            <button
+              type="button"
+              onClick={handleTriggerInstall}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                backgroundColor: "#eff6ff",
+                border: "1px solid #bfdbfe",
+                color: "#2563eb",
+                fontSize: "12.5px",
+                fontWeight: 600,
+                cursor: "pointer",
+                width: "100%",
+                textAlign: "left",
+                transition: "all 0.15s ease",
+              }}
+              className="hover:bg-blue-100/70"
+            >
+              <span style={{ fontSize: "15px" }}>📱</span>
+              <span>Install Mobile App</span>
+            </button>
+          )}
+
           {/* User Profile Mini Card */}
           <Link href="/dashboard/profile" style={{ textDecoration: "none" }}>
             <div style={{
@@ -295,6 +353,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   </Link>
                 );
               })}
+              {!isStandalone && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleTriggerInstall();
+                  }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    padding: "10px 16px",
+                    borderRadius: "8px",
+                    backgroundColor: "#eff6ff",
+                    border: "1px solid #bfdbfe",
+                    color: "#2563eb",
+                    fontWeight: 600,
+                    width: "100%",
+                    textAlign: "left",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{ fontSize: "16px" }}>📱</span>
+                  <span>Install MedLens App</span>
+                </button>
+              )}
+
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
