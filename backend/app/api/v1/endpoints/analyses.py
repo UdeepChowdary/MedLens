@@ -12,7 +12,7 @@ from app.core.auth import get_current_session, verify_analysis_ownership
 from app.database.session import get_db
 from app.models.analysis import Analysis
 from app.repositories.analysis_repository import AnalysisRepository
-from app.schemas.analysis import AnalysisCreateResponse, AnalysisResponse, AnalysisSummary, MultidimensionalConfidence
+from app.schemas.analysis import AnalysisCreateResponse, AnalysisResponse, TextAnalysisRequest, AnalysisSummary, MultidimensionalConfidence
 from app.schemas.ocr import OCRMetadata
 from app.schemas.common import VerificationState, RoleType
 from app.schemas.product import (
@@ -89,6 +89,24 @@ async def create_analysis(
         await repo.create(fallback_record)
 
     return AnalysisCreateResponse(analysis_id=analysis_id, status="received")
+
+
+@router.post("/text", response_model=AnalysisCreateResponse, status_code=status.HTTP_201_CREATED)
+async def create_text_analysis(
+    payload: TextAnalysisRequest,
+    session_id: str = Depends(get_current_session),
+    db: AsyncSession = Depends(get_db),
+) -> AnalysisCreateResponse:
+    """Manual text medicine search/lookup intake fallback (for torn, cut, or damaged blister packs)."""
+    analysis_id = str(uuid.uuid4())
+    service = AnalysisPipelineService(db_session=db)
+    await service.process_text(
+        text_query=payload.query,
+        analysis_id=analysis_id,
+        session_id=session_id,
+    )
+    return AnalysisCreateResponse(analysis_id=analysis_id, status="completed")
+
 
 
 @router.get("", response_model=List[AnalysisSummary])

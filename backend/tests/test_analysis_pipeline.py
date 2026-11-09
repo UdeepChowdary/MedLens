@@ -108,3 +108,38 @@ def test_list_analyses_endpoint(client: TestClient):
         assert "status" in first
         assert "detected_name" in first
         assert "created_at" in first
+
+
+def test_api_post_text_analysis_and_retrieve_report(client: TestClient):
+    """Verifies POST /api/v1/analyses/text handles damaged/cut strips via text search."""
+    res = client.post("/api/v1/analyses/text", json={"query": "Telma 40"})
+    assert res.status_code == 201
+    data = res.json()
+    assert "analysis_id" in data
+    analysis_id = data["analysis_id"]
+
+    # Verify report retrieval
+    get_res = client.get(f"/api/v1/analyses/{analysis_id}")
+    assert get_res.status_code == 200
+    report = get_res.json()
+    assert report["analysis_id"] == analysis_id
+    assert report["product"]["detected_name"] == "Telma 40"
+    assert any("Telmisartan" in ing["canonical_name"] for ing in report["active_ingredients"])
+    assert report["confidence"]["ocr_quality"] == 1.0
+
+
+@pytest.mark.asyncio
+async def test_text_analysis_service_multi_salt(db_session: AsyncSession):
+    """Verifies text processing resolves multi-ingredient products (e.g., Zerodol-SP)."""
+    service = AnalysisPipelineService(db_session=db_session)
+    report = await service.process_text(text_query="Zerodol-SP")
+
+    assert isinstance(report, AnalysisResponse)
+    assert report.product.detected_name == "Zerodol-SP"
+    # Should resolve Aceclofenac, Paracetamol, Serratiopeptidase
+    ingredient_names = [ing.canonical_name for ing in report.active_ingredients]
+    assert "Aceclofenac" in ingredient_names
+    assert "Paracetamol" in ingredient_names
+    assert "Serratiopeptidase" in ingredient_names
+    assert report.confidence.ocr_quality == 1.0
+    assert len(report.safety_profile.contraindications) > 0

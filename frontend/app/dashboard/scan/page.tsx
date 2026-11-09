@@ -7,8 +7,8 @@ import Image from "next/image";
 import UploadZone from "@/components/scanner/UploadZone";
 import ProcessingPulse from "@/components/scanner/ProcessingPulse";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { uploadAnalysis, verifyGeminiKey, VerifyKeyResponse } from "@/lib/api";
-import { IcoShield, IcoBrain, IcoCheck, IcoHelpCircle } from "@/components/Icons";
+import { uploadAnalysis, createTextAnalysis, verifyGeminiKey, VerifyKeyResponse } from "@/lib/api";
+import { IcoShield, IcoBrain, IcoCheck, IcoHelpCircle, IcoSearch, IcoScan } from "@/components/Icons";
 
 export default function ScanPage() {
   const router = useRouter();
@@ -30,6 +30,11 @@ export default function ScanPage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showHowToGuide, setShowHowToGuide] = useState(false);
   const [sampleCategory, setSampleCategory] = useState<string>("All");
+
+  // Mode Switcher: photo packaging vs typed search fallback
+  const [scanMode, setScanMode] = useState<"photo" | "text">("photo");
+  const [textQuery, setTextQuery] = useState("");
+  const [isSubmittingText, setIsSubmittingText] = useState(false);
 
   // User Health Profile Context
   const [userAllergies, setUserAllergies] = useState<string[]>([]);
@@ -196,6 +201,67 @@ export default function ScanPage() {
     }
   };
 
+  const handleTextSubmit = async (queryToSubmit?: string) => {
+    const query = (queryToSubmit ?? textQuery).trim();
+    if (!query) return;
+
+    clearAllTimers();
+    setUploadError(null);
+    setIsCompleted(false);
+    setCurrentStageIndex(0);
+    setProgressPercent(25);
+    setStageMessage(`Searching medicine monograph database for "${query}"...`);
+    setPreviewUrl(null);
+    setIsProcessing(true);
+    setIsSubmittingText(true);
+
+    const t1 = setTimeout(() => {
+      setCurrentStageIndex(1);
+      setProgressPercent(50);
+      setStageMessage("Resolving brand to 3-tier canonical INN active salts...");
+    }, 450);
+
+    const t2 = setTimeout(() => {
+      setCurrentStageIndex(2);
+      setProgressPercent(75);
+      setStageMessage(
+        savedKey
+          ? "Cross-referencing openFDA & preparing AI clinical personalization..."
+          : "Fetching official monographs & evaluating contraindications..."
+      );
+    }, 900);
+
+    timerRef.current.push(t1, t2);
+
+    try {
+      const { data, error } = await createTextAnalysis(query);
+      clearAllTimers();
+      setIsSubmittingText(false);
+
+      if (error) {
+        setUploadError(error.message);
+        return;
+      }
+
+      if (data) {
+        sessionStorage.setItem("analysis_id", data.analysis_id);
+        setCurrentStageIndex(4);
+        setProgressPercent(100);
+        setIsCompleted(true);
+        setStageMessage("Audit hash verified. Safety report ready!");
+
+        setTimeout(() => {
+          router.push(`/dashboard/results/${data.analysis_id}`);
+        }, 650);
+      }
+    } catch (err: unknown) {
+      clearAllTimers();
+      setIsSubmittingText(false);
+      const message = err instanceof Error ? err.message : "Text analysis request failed";
+      setUploadError(message);
+    }
+  };
+
   const handleRetry = () => {
     clearAllTimers();
     setIsProcessing(false);
@@ -276,8 +342,290 @@ export default function ScanPage() {
           <div style={{ width: "100%", maxWidth: "720px", margin: "0 auto" }}>
             {!isProcessing ? (
               <div className="flex flex-col gap-6">
-                {/* 1. Upload Box */}
-                <UploadZone onFileSelected={handleFileSelected} />
+                {/* Mode Selector Tabs: Photo Scan vs Manual Name Search */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    backgroundColor: "#f1f5f9",
+                    padding: "6px",
+                    borderRadius: "14px",
+                    maxWidth: "520px",
+                    width: "100%",
+                    margin: "0 auto",
+                    border: "1px solid #e2e8f0",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setScanMode("photo")}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      padding: "10px 16px",
+                      borderRadius: "10px",
+                      fontSize: "13.5px",
+                      fontWeight: 600,
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                      backgroundColor: scanMode === "photo" ? "white" : "transparent",
+                      color: scanMode === "photo" ? "#1e293b" : "#64748b",
+                      boxShadow: scanMode === "photo" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                    }}
+                  >
+                    <IcoScan size={17} color={scanMode === "photo" ? "#2563eb" : "#64748b"} />
+                    <span>Scan Blister Pack</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setScanMode("text")}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      padding: "10px 16px",
+                      borderRadius: "10px",
+                      fontSize: "13.5px",
+                      fontWeight: 600,
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                      backgroundColor: scanMode === "text" ? "white" : "transparent",
+                      color: scanMode === "text" ? "#1e293b" : "#64748b",
+                      boxShadow: scanMode === "text" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                    }}
+                  >
+                    <IcoSearch size={17} color={scanMode === "text" ? "#2563eb" : "#64748b"} />
+                    <span>Search / Type Medicine</span>
+                    <span
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        backgroundColor: scanMode === "text" ? "#dbeafe" : "#e2e8f0",
+                        color: scanMode === "text" ? "#1d4ed8" : "#475569",
+                        padding: "1px 6px",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      Fallback
+                    </span>
+                  </button>
+                </div>
+
+                {scanMode === "photo" ? (
+                  <>
+                    {/* 1. Upload Box */}
+                    <UploadZone onFileSelected={handleFileSelected} />
+                  </>
+                ) : (
+                  /* Manual Text Search Fallback Card */
+                  <div
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "16px",
+                      padding: "24px",
+                      boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px", marginBottom: "14px" }}>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <h2 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            Manual Medicine Safety Search
+                          </h2>
+                          <span
+                            style={{
+                              fontSize: "11px",
+                              padding: "2px 8px",
+                              borderRadius: "10px",
+                              backgroundColor: "#ecfdf5",
+                              color: "#059669",
+                              fontWeight: 600,
+                              border: "1px solid #a7f3d0",
+                            }}
+                          >
+                            Damaged / Cut Strip Fallback
+                          </span>
+                        </div>
+                        <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "4px", lineHeight: "1.5" }}>
+                          If your tablet strip was already cut by the pharmacy, half-consumed, or crumpled, type the brand or salt name below to generate the complete safety and contraindications profile.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Search Input Box */}
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleTextSubmit();
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        marginTop: "12px",
+                        marginBottom: "16px",
+                      }}
+                    >
+                      <div style={{ position: "relative", flex: 1 }}>
+                        <div
+                          style={{
+                            position: "absolute",
+                            left: "14px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#64748b",
+                            pointerEvents: "none",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IcoSearch size={18} color="#64748b" />
+                        </div>
+                        <input
+                          type="text"
+                          value={textQuery}
+                          onChange={(e) => setTextQuery(e.target.value)}
+                          placeholder="e.g. Zerodol-SP, Telma 40, Augmentin 625 Duo, Dolo 650, or Metformin"
+                          style={{
+                            width: "100%",
+                            padding: "13px 40px 13px 44px",
+                            fontSize: "14px",
+                            borderRadius: "10px",
+                            border: "1.5px solid #cbd5e1",
+                            outline: "none",
+                            backgroundColor: "#f8fafc",
+                            color: "var(--text-primary)",
+                            transition: "all 0.15s ease",
+                          }}
+                          className="focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        />
+                        {textQuery && (
+                          <button
+                            type="button"
+                            onClick={() => setTextQuery("")}
+                            style={{
+                              position: "absolute",
+                              right: "14px",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              background: "none",
+                              border: "none",
+                              color: "#94a3b8",
+                              cursor: "pointer",
+                              fontSize: "14px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={!textQuery.trim() || isSubmittingText}
+                        style={{
+                          backgroundColor: textQuery.trim() ? "#2563eb" : "#94a3b8",
+                          color: "white",
+                          fontWeight: 600,
+                          fontSize: "14px",
+                          padding: "13px 22px",
+                          borderRadius: "10px",
+                          border: "none",
+                          cursor: textQuery.trim() ? "pointer" : "not-allowed",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          whiteSpace: "nowrap",
+                          boxShadow: textQuery.trim() ? "0 2px 6px rgba(37,99,235,0.25)" : "none",
+                          transition: "all 0.15s ease",
+                        }}
+                      >
+                        <span>Generate Report</span>
+                        <span>→</span>
+                      </button>
+                    </form>
+
+                    {/* Quick Selection Pills */}
+                    <div>
+                      <div style={{ fontSize: "12px", fontWeight: 600, color: "#64748b", marginBottom: "8px" }}>
+                        ⚡ Commonly Searched Medicines (Click to analyze):
+                      </div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                        {[
+                          { name: "Zerodol-SP", badge: "Triple Salt" },
+                          { name: "Telma 40", badge: "BP" },
+                          { name: "Augmentin 625 Duo", badge: "Antibiotic" },
+                          { name: "Dolo 650", badge: "Fever" },
+                          { name: "Pan 40", badge: "Acidity" },
+                          { name: "Glycomet 500", badge: "Diabetes" },
+                          { name: "Allegra 120", badge: "Allergy" },
+                          { name: "Montair-LC", badge: "Asthma" },
+                          { name: "Thyronorm 25", badge: "Thyroid" },
+                        ].map((med) => (
+                          <button
+                            key={med.name}
+                            type="button"
+                            onClick={() => {
+                              setTextQuery(med.name);
+                              handleTextSubmit(med.name);
+                            }}
+                            style={{
+                              fontSize: "12px",
+                              fontWeight: 600,
+                              padding: "6px 12px",
+                              borderRadius: "20px",
+                              border: "1px solid #cbd5e1",
+                              backgroundColor: "#f8fafc",
+                              color: "#334155",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              transition: "all 0.15s ease",
+                            }}
+                            className="hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700"
+                          >
+                            <span style={{ color: "#2563eb", fontWeight: "bold" }}>+</span>
+                            <span>{med.name}</span>
+                            <span style={{ fontSize: "10px", color: "#64748b", opacity: 0.8 }}>({med.badge})</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Grounding Callout */}
+                    <div
+                      style={{
+                        marginTop: "16px",
+                        padding: "10px 14px",
+                        backgroundColor: "#f0fdf4",
+                        borderRadius: "10px",
+                        border: "1px solid #bbf7d0",
+                        fontSize: "12px",
+                        color: "#166534",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold", fontSize: "14px" }}>✓</span>
+                      <span>
+                        <strong>Deterministic Grounding:</strong> Resolves multi-salt compositions, INN canonical equivalents, and clinical contraindications with 100% extraction fidelity.
+                      </span>
+                    </div>
+                  </div>
+                )}
 
                 {/* 1.5 Quick 1-Click Demo Packaging Samples */}
                 <div

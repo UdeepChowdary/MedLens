@@ -16,6 +16,11 @@ class MultidimensionalConfidence(BaseModel):
     evidence_coverage: float = Field(ge=0.0, le=1.0, description="Ratio of claims grounded in consulted sources.")
 
 
+class TextAnalysisRequest(BaseModel):
+    """Payload for manual text medicine query (multimodal fallback)."""
+    query: str = Field(..., min_length=2, max_length=255, description="Brand name or generic active salt.")
+
+
 class AnalysisCreateResponse(BaseModel):
     """Initial response returned upon image ingestion."""
     analysis_id: str = Field(description="Unique UUID tracking this analysis.")

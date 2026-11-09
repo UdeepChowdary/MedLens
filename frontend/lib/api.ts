@@ -237,6 +237,16 @@ export async function uploadAnalysis(
   }
 }
 
+/** Analyze medicine directly by typed brand or generic salt name (multimodal fallback). */
+export async function createTextAnalysis(
+  query: string
+): Promise<{ data: AnalysisCreateResponse | null; error: ApiError | null }> {
+  return request<AnalysisCreateResponse>("/analyses/text", {
+    method: "POST",
+    body: JSON.stringify({ query }),
+  });
+}
+
 /** Retrieve a completed analysis report by ID. */
 export async function getAnalysis(
   analysisId: string
