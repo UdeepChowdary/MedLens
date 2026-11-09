@@ -8,6 +8,7 @@ import IngredientCard from "@/components/report/IngredientCard";
 import ExcipientCollapse from "@/components/report/ExcipientCollapse";
 import SafetyModule from "@/components/report/SafetyModule";
 import PersonalizedConsultation from "@/components/report/PersonalizedConsultation";
+import VoiceReadout from "@/components/results/VoiceReadout";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { IcoArrow } from "@/components/Icons";
 import { getAnalysis, AnalysisResponse } from "@/lib/api";
@@ -221,6 +222,13 @@ export default function ResultsPage() {
                   </div>
                 </ScrollReveal>
               )}
+
+              {/* Multilingual Voice Readout / Audio Accessibility */}
+              <ScrollReveal variant="fade-up" delay={85}>
+                <div style={{ marginBottom: "24px" }} className="print-hide">
+                  <VoiceReadout report={report} />
+                </div>
+              </ScrollReveal>
 
               <ScrollReveal variant="fade-up" delay={100}>
                 <div style={{ marginBottom: "32px" }}>

@@ -409,7 +409,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
 
         {/* Page Content */}
-        <main style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
+        <main id="main-content" tabIndex={-1} style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
           {children}
         </main>
       </div>
