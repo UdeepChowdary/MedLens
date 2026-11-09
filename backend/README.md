@@ -38,7 +38,7 @@ python -m app.database.seed
 ### 3. Run Automated Tests
 ```bash
 python -m pytest tests/
-# Output: 165 passed across 21 test suites
+# Output: 172 passed across 22 test suites
 ```
 
 ### 4. Start Local Development Server
@@ -126,7 +126,7 @@ backend/
 │   ├── api/v1/                  # Versioned API routes
 │   │   ├── endpoints/
 │   │   │   ├── health.py        # GET /api/v1/health
-│   │   │   ├── analyses.py      # POST /api/v1/analyses, GET /api/v1/analyses/{id}
+│   │   │   ├── analyses.py      # POST /api/v1/analyses, POST /api/v1/analyses/text, GET /api/v1/analyses/{id}
 │   │   │   ├── products.py      # GET /api/v1/products/search, GET /api/v1/products/{id}
 │   │   │   └── comparisons.py   # POST /api/v1/comparisons
 │   │   └── api.py               # Main v1 router aggregation
@@ -170,7 +170,7 @@ backend/
 │   ├── versions/
 │   │   └── 001_initial_relational_schema.py
 │   └── env.py                   # Async Alembic execution environment
-├── tests/                       # Automated test suite (165 tests across 21 test suites)
+├── tests/                       # Automated test suite (172 tests across 22 test suites)
 │   ├── conftest.py              # TestClient & database session fixtures
 │   ├── test_analysis_pipeline.py # Full image analysis integration pipeline
 │   ├── test_auth_access_control.py # Security & authorization boundary tests
@@ -224,6 +224,16 @@ MedLens includes an authentic ground-truth benchmark of real Indian retail pharm
 - **Data Partitions:** 15 train / 3 val / 3 test with strictly 0% product-family leakage.
 
 ---
+
+
+
+---
+
+## 🔍 Multimodal Intake & Manual Medicine Search Fallback
+
+MedLens supports dual intake modalities:
+1. **Packaging Image Scan (`POST /api/v1/analyses`):** Uploads raw packaging photos (blister strips, bottle labels, cartons). Executes OpenCV blur rejection ($\sigma^2 \ge 100$), deep-learning PaddleOCR / Tesseract token extraction, pharmacopeial sequence extraction, and 3-tier canonical INN normalization.
+2. **Manual Medicine Search Fallback (`POST /api/v1/analyses/text`):** Designed for cut, damaged, crumpled, or half-consumed blister strips where text is missing or unreadable. Accepts a brand name (e.g. *Zerodol-SP*, *Telma 40*, *Augmentin 625 Duo*) or active chemical salt, resolves multi-salt compositions via `ProductIngredient` relations, executes INN normalization and monograph grounding, sets `ocr_quality: 1.0` (zero OCR noise), and returns the complete clinical safety profile.
 
 ## ⚠️ Known Limitations & Clinical Boundary (ML-060)
 

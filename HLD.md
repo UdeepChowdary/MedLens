@@ -176,6 +176,33 @@ sequenceDiagram
     Browser-->>User: Display personalized warning cards (e.g., "Contraindicated with your Peptic Ulcer")
 ```
 
+### 4.3 Manual Medicine Search Intake Sequence (Damaged / Cut Strip Fallback)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Patient / User
+    participant Browser as Next.js 16 Web Client
+    participant Gateway as FastAPI API Gateway
+    participant Service as AnalysisPipelineService
+    participant Repo as Product / Ingredient Repository
+    participant RAG as Clinical Monograph DB
+    participant DB as SQLite / PostgreSQL Database
+
+    User->>Browser: Select "Search / Type Medicine" tab -> Enter "Zerodol-SP"
+    Browser->>Gateway: POST /api/v1/analyses/text {"query": "Zerodol-SP"}
+    Gateway->>Service: process_text(text_query="Zerodol-SP")
+    Service->>Repo: Query Product catalog & ProductIngredient multi-salt composition
+    Repo-->>Service: Resolved actives: Aceclofenac, Paracetamol, Serratiopeptidase
+    Service->>RAG: Ground monographs, indications & contraindications
+    Service->>Service: Compute confidence (optical_quality: 1.0, extraction_quality: 1.0)
+    Service->>DB: Persist Analysis & ExtractedEntity records
+    DB-->>Service: Persisted with analysis_id
+    Service-->>Gateway: AnalysisResponse
+    Gateway-->>Browser: 201 Created {"analysis_id": "...", "status": "completed"}
+    Browser-->>User: Route to /dashboard/results/[id] and render full safety report
+```
+
 ---
 
 ## 5. Data Architecture & Entity-Relationship Model

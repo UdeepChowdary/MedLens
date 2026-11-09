@@ -132,6 +132,10 @@ MedLens operates strictly as an **educational, informational, and verification p
   * Check image resolution (minimum $300 \times 300\text{ px}$).
   * Compute blur variance using the Laplacian operator ($\sigma_L^2$). If $\sigma_L^2 < 100.0$, the system shall reject the image with a descriptive error: `ERR_IMAGE_BLURRY` ("Packaging image is too blurry. Please steady your camera and ensure good lighting").
   * Calculate image SHA-256 digest to prevent duplicate processing of identical uploads.
+* **FR-1.3:** Multimodal Manual Medicine Search Fallback:
+  * The system shall provide an intuitive manual text lookup fallback (`POST /api/v1/analyses/text`) on the scan page for instances where medicine blister strips have been cut by a pharmacy, torn, half-consumed, or missing printed text panels.
+  * The text intake shall resolve brand trade names (e.g., *Zerodol-SP*, *Telma 40*, *Augmentin 625 Duo*, *Dolo 650*) and generic chemical salts into their multi-ingredient active compositions via `ProductIngredient` relations.
+  * The generated report shall conform identically to the optical analysis schema (`AnalysisResponse`), eliminating OCR errors with an assigned optical confidence of $1.0$ while performing canonical INN normalization, boxed warning extraction, and personalized safety cross-checks.
 
 ### FR-2: Optical Character Recognition (OCR) Engine
 * **FR-2.1:** The system shall dispatch preprocessed images through a dual OCR pipeline (PaddleOCR as primary high-precision text detector, with Tesseract OCR fallback).
@@ -219,6 +223,16 @@ Scenario: Patient with chronic kidney disease scans an NSAID medication
   Then the system displays a prominent CRITICAL WARNING banner
   And explains: "Ibuprofen is contraindicated in renal impairment as NSAIDs decrease renal blood flow"
   And advises: "Consult your prescribing nephrologist before administering this formulation."
+```
+
+### User Story 4: Damaged / Cut Blister Strip Fallback
+```gherkin
+Scenario: Patient has a half-consumed blister strip with cut-off text labels
+  Given the patient has an unreadable, cut-off tablet strip but knows the trade name "Zerodol-SP"
+  When the patient switches to the "Search / Type Medicine" tab on the scan page and submits "Zerodol-SP"
+  Then the system resolves all 3 active chemical salts (Aceclofenac 100 mg, Paracetamol 325 mg, Serratiopeptidase 15 mg)
+  And evaluates contraindications against the user's recorded health profile
+  And generates the complete clinical report with 100% extraction fidelity.
 ```
 
 ---

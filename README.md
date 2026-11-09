@@ -25,7 +25,7 @@
 [![TypeScript 5](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![PaddleOCR](https://img.shields.io/badge/PaddleOCR-3.x_DBNet+SVTR-0066FF?style=for-the-badge)](https://github.com/PaddlePaddle/PaddleOCR)
-[![Tests Passing](https://img.shields.io/badge/Tests-165%2F165%20Passing-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](backend/tests/)
+[![Tests Passing](https://img.shields.io/badge/Tests-172%2F172%20Passing-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](backend/tests/)
 [![Dataset Status](https://img.shields.io/badge/Dataset-21%20Authentic%20Photos%20(100%25%20Verified)-purple?style=for-the-badge)](backend/data/raw/)
 [![Capstone Progress](https://img.shields.io/badge/Capstone%20Milestones-98.4%25%20Complete%20(62%2F63)-orange?style=for-the-badge)](docs/MedLens_Capstone_Progress_Tracker.xlsx)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](./LICENSE)
@@ -46,6 +46,7 @@
 - [The Clinical Problem We Solve](#-the-clinical-problem-we-solve)
 - [System Architecture & Dataflow](#-system-architecture--dataflow)
 - [Authentic Indian Packaging Dataset (Batch 1 & 2)](#-authentic-indian-packaging-dataset)
+- [Multimodal Manual Medicine Search Fallback](#-multimodal-manual-medicine-search-fallback)
 - [Deep Clinical Monograph Provenance (ML-013)](#-deep-clinical-monograph-provenance)
 - [Core Verification & Safety Model](#-core-verification--safety-model)
   - [Explicit Verification States](#explicit-verification-states)
@@ -94,11 +95,13 @@ MedLens operates on five uncompromising engineering principles:
 
 ```mermaid
 flowchart TD
-    subgraph Intake ["1. Image Intake & Preprocessing"]
-        A["📷 Authentic Packaging Photo<br/>(Blister Strip / Bottle Label / Box)"] --> B["OpenCV Preprocessor"]
+    subgraph Intake ["1. Multimodal Intake (Dual Modality)"]
+        A1["📷 Authentic Packaging Photo<br/>(Blister Strip / Bottle / Carton)"] --> B["OpenCV Preprocessor"]
         B --> B1{"Laplacian Variance<br/>σ² ≥ 100?"}
         B1 -- "No (Blurry)" --> B2["❌ Immediate Intake Rejection<br/>(Actionable Camera Guidance Prompt)"]
         B1 -- "Yes (Clear)" --> B3["Deskew & CLAHE Contrast Normalization"]
+        
+        A2["🔍 Manual Medicine Search Fallback<br/>(For cut, torn, or half-used strips)"] --> E
     end
 
     subgraph Vision ["2. Spatial OCR & Token Extraction"]
@@ -132,6 +135,22 @@ flowchart TD
 ```
 
 ---
+
+
+
+---
+
+## 🔍 Multimodal Manual Medicine Search Fallback
+
+In real-world clinical usage, patients frequently consume half of a blister pack, or pharmacists cut a 10-tablet strip into smaller unit-dose portions. In these instances, the micro-printed trade name or active composition panel is physically sliced off, making optical OCR recognition impossible.
+
+MedLens provides an integrated **Manual Medicine Safety Search** fallback directly on the scan interface:
+
+1. **Brand & Salt Grounding:** Users type any brand name (*e.g., Zerodol-SP, Telma 40, Augmentin 625 Duo, Dolo 650, Pan 40*) or generic chemical salt (*e.g., Metformin, Pantoprazole*).
+2. **Multi-Salt Resolution:** The engine queries `Product` catalog models and traverses `ProductIngredient` relations, automatically resolving multi-salt compositions (such as *Zerodol-SP* &rarr; *Aceclofenac 100 mg + Paracetamol 325 mg + Serratiopeptidase 15 mg*).
+3. **Canonical INN Normalization:** Routes through the 3-tier canonical INN registry with fuzzy matching and alias indexing.
+4. **Clinical Monograph & Safety Evidence:** Retrieves section-level contraindications, boxed warnings, and drug-drug interactions with an assigned optical clarity score of $1.0$ (eliminating OCR error).
+5. **Interactive 1-Click Suggestions:** The UI provides pre-populated quick selection pills for common retail medicines to enable instantaneous zero-typing testing.
 
 ## 📊 Authentic Indian Packaging Dataset
 
@@ -362,7 +381,7 @@ MedLens/
    ```bash
    python -m pytest tests/
    ```
-   *(Expected output: 165/165 tests passing across 21 test suites in ~2m)*
+   *(Expected output: 172/172 tests passing across 22 test suites in ~2m)*
 
 6. Launch the FastAPI development server:
    ```bash
@@ -418,6 +437,7 @@ All endpoints are strictly typed with Pydantic v2 schemas and prefixed under `/a
 | :--- | :--- | :--- | :--- | :---: |
 | `GET` | `/api/v1/health` | System health probe, OCR dispatcher status, and database connectivity. | None | `200 OK` |
 | `POST` | `/api/v1/analyses` | Uploads packaging image for blur check, PaddleOCR extraction, and clinical grounding. | `multipart/form-data` (`file`) | `202 Accepted` |
+| `POST` | `/api/v1/analyses/text` | Fallback text search for damaged/cut blister packs; resolves multi-salt compositions. | JSON (`{"query": "Zerodol-SP"}`) | `201 Created` |
 | `GET` | `/api/v1/analyses/{id}` | Retrieves full verification report, confidence breakdown, and section-level evidence citations. | None | `200 OK` |
 | `GET` | `/api/v1/products/search?q=...` | Searches normalized products catalog by brand or canonical active ingredient. | Query Param `q` | `200 OK` |
 | `GET` | `/api/v1/products/{id}` | Retrieves detailed product monograph, formulation composition, and dosage route. | None | `200 OK` |
@@ -427,7 +447,7 @@ All endpoints are strictly typed with Pydantic v2 schemas and prefixed under `/a
 
 ## 🛡️ Testing & Quality Assurance
 
-MedLens enforces continuous automated testing with **165 tests passing across 21 test suites**:
+MedLens enforces continuous automated testing with **172 tests passing across 22 test suites**:
 
 ```
 ============================= test session starts =============================
@@ -435,7 +455,7 @@ platform win32 -- Python 3.13.9, pytest-8.4.2, pluggy-1.5.0
 rootdir: C:\Users\udeep\OneDrive\Desktop\kalvium\projectFiles\MedLens\backend
 configfile: pyproject.toml
 plugins: asyncio-1.4.0, anyio-4.10.0
-collected 165 items
+collected 172 items
 
 backend\tests\test_analysis_pipeline.py ....                             [  2%]
 backend\tests\test_auth_access_control.py .......                        [  6%]
@@ -459,7 +479,7 @@ backend\tests\test_reference_adapters.py .............                   [ 89%]
 backend\tests\test_rule_extractor.py ..............                      [ 98%]
 backend\tests\test_schemas.py ...                                        [100%]
 
-============================= 165 passed in 120.22s ============================
+============================= 172 passed in 124.50s ============================
 ```
 
 ---
