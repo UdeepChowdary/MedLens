@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "https://med-lens-drab.vercel.app",
     ]
     MAX_UPLOAD_SIZE_MB: int = 15
     DATABASE_URL: str = "sqlite+aiosqlite:///./medlens.db"
